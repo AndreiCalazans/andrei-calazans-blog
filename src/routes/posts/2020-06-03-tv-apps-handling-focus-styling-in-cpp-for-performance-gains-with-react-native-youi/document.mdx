@@ -11,11 +11,16 @@
 9. [Learn more](#learn_more)
 
 
-<h2 id="Why">Why</h2>
+
+<div>
+  <h2 id="Why">Why</h2>
+</div>
 
 If you are building a TV app on very low-end devices like Fire TV stick and Roku sticks. And you want to animate or change the styling of a React Native item when receiving and losing focus, you might notice a lag if compared to user input. The following solution can fix this lag.
 
-<h2 id="current_scenario">The Current Scenario</h2>
+<div>
+  <h2 id="current_scenario">The Current Scenario</h2>
+</div>
 
 User input is handled first in C++, then the events for `onFocus` and `onBlur` are dispatched for the JavaScript callbacks to be handle them. This results in an inevitable lag. Thus, if you are applying a visual feedback in React when the item receives focus or blur, it will happen after the actual input was handled. 
 
@@ -23,19 +28,23 @@ User input is handled first in C++, then the events for `onFocus` and `onBlur` a
 
 Initially, the difference between when the input is handled in C++ and the dispatch of the events to JavaScript is very little. However, since the JavaScript executor is running in a separate thread, it can be busy when the events are dispatched, thus causing the lag to increase. 
 
-<h2 id="affect_effects">After Effects and Timelines</h2>
+<div>
+  <h2 id="affect_effects">After Effects and Timelines</h2>
+</div>
 
 Since responding to events in C++ will result in a faster response, You.I Engine has a few default timelines in some AE widgets/components which have their timelines handled in C++. For instance, when you make use of the After Effects CYIPushButtonView, it has `FocusIn` and `FocusOut` timelines which you do not have to connect to in JavaScript for them to be played, they are automatically handled  by the Engine in C++ when the events occur. 
 
 There are some cases where using AE is not desired by the team. In these cases you can explore the following alternative to animate your button in response to Focus In and Focus out. 
-
  
-
-<h2 id="styling_in_js">Styling In JavaScript</h2>
+<div>
+  <h2 id="styling_in_js">Styling In JavaScript</h2>
+</div>
 
 What many decide to do is have a local state for focus, and when the button's `onFocus` and `onBlur` update that state to change the styling or trigger an animation. As was stated before this results in a lag. 
 
-<h2 id="styling_in_cpp">Styling in C++</h2>
+<div>
+  <h2 id="styling_in_cpp">Styling in C++</h2>
+</div>
 
 Instead, we can add Signal listeners to the CYISceneView's `GainedFocus` and `LostFocus` .
 
@@ -133,18 +142,26 @@ Result:
 
 <img width="100%" alt='Gif sample of module working' src={require('./border_on_focus.gif')} />
 
-<h2 id="conclusion">Conclusion</h2>
+<div>
+  <h2 id="conclusion">Conclusion</h2>
+</div>
 
 The advantage of You.i Engine over pure React Native solution is the shared codebase **not only in JavaScript but also C++ — this is by default without any extra configuration**. The C++ layer allows you to achieve native performance in your cross-platform code. This advantage contrasts to vanilla React Native since React Native does not offer a single codebase in the native layer, it requires implementation in for each platform's language.
 
-<h2 id="further">Further</h2>
+<div>
+  <h2 id="further">Further</h2>
+</div>
 
 The You.i Engine's API surface in C++ has many capabilities which React Native does not, therefore, you can follow the same approach presented here to extend your components functionality when you need so. See the API Documentation to explore the possibilities: [https://developer.youi.tv/API_Docs/5.15/core/html/index.html](https://developer.youi.tv/API_Docs/5.15/core/html/index.html).
 
-<h2 id="demo_code">Demo Code</h2>
+<div>
+  <h2 id="demo_code">Demo Code</h2>
+</div>
 
 [five_fifteen.zip](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9d4f5a0e-ee8f-406f-9397-537d4ba8df2f/five_fifteen.zip)
 
-<h2 id="learn_more">Learn More</h2>
+<div>
+  <h2 id="learn_more">Learn More</h2>
+</div>
 
 You.i is a closed source SDK that enables you to build to 11+ platforms with a single codebase either in React Native or C++. To learn more [visit them here](https://www.youi.tv/).
