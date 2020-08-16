@@ -26,7 +26,7 @@ export const SetStateExample = () => {
       <p>
         Current state is: <b>{JSON.stringify(state)}</b>
       </p>
-      <Button title="Set State" onClick={() => setState({ age: 12 })} />
+      <Button title="Set State" onClick={() => setState({ age: 12 } as any)} />
     </div>
   );
 };
