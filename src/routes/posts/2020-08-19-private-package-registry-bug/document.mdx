@@ -1,0 +1,102 @@
+1. [The Issue](#issue)
+2. [Things I Learned](#learned)
+3. [Conclusion](#conclusion)
+4. [Notes](#notes)
+
+
+<h2 id="issue">The Issue 😅</h2>
+
+While working on a client project, I ran into an issue with their private registry. I kept seeing the unauthorized error when I ran `yarn install`. It was a weird issue especially because I had all of the correct keys. After some investigation I found out I was using the wrong `_auth` value. 
+
+
+<h2 id="learned">Things I Learned</h2>
+
+1) When you run `yarn install` it searches for `.npmrc` and `.yarnrc` from your directory all the way up to your `~`. You can see this happen by running `yarn install --verbose`.
+
+*Logs from `yarn install --verbose`* 
+```
+yarn install v1.19.1
+verbose 0.18514658 Checking for configuration file "/Users/andrei/youi/sky-native-app/.npmrc".
+verbose 0.185477195 Found configuration file "/Users/andrei/youi/sky-native-app/.npmrc".
+verbose 0.185915158 Checking for configuration file "/Users/andrei/.npmrc".
+verbose 0.186127856 Found configuration file "/Users/andrei/.npmrc".
+verbose 0.186508633 Checking for configuration file "/usr/local/etc/npmrc".
+verbose 0.186738535 Checking for configuration file "/Users/andrei/youi/sky-native-app/.npmrc".
+verbose 0.186919433 Found configuration file "/Users/andrei/youi/sky-native-app/.npmrc".
+verbose 0.187329545 Checking for configuration file "/Users/andrei/youi/.npmrc".
+verbose 0.18754202 Checking for configuration file "/Users/andrei/.npmrc".
+verbose 0.18771867 Found configuration file "/Users/andrei/.npmrc".
+verbose 0.188084114 Checking for configuration file "/Users/.npmrc".
+verbose 0.190795222 Checking for configuration file "/Users/andrei/youi/sky-native-app/.yarnrc".
+verbose 0.190968545 Checking for configuration file "/Users/andrei/.yarnrc".
+verbose 0.191117478 Found configuration file "/Users/andrei/.yarnrc".
+verbose 0.191446104 Checking for configuration file "/usr/local/etc/yarnrc".
+verbose 0.191626166 Checking for configuration file "/Users/andrei/youi/sky-native-app/.yarnrc".
+verbose 0.191789006 Checking for configuration file "/Users/andrei/youi/.yarnrc".
+verbose 0.191952116 Checking for configuration file "/Users/andrei/.yarnrc".
+verbose 0.192109197 Found configuration file "/Users/andrei/.yarnrc".
+verbose 0.192409632 Checking for configuration file "/Users/.yarnrc".
+```
+
+By doing this yarn composes all of the configuration values from `.npmrc` and `.yarnrc` into a single global dictionary which you can verify by running `yarn config list`.
+
+```
+info yarn config
+{
+  'version-tag-prefix': 'v',
+  'version-git-tag': true,
+  'version-commit-hooks': true,
+  'version-git-sign': false,
+  'version-git-message': 'v%s',
+  'init-version': '1.0.0',
+  'init-license': 'MIT',
+  'save-prefix': '^',
+  'bin-links': true,
+  'ignore-scripts': false,
+  'ignore-optional': false,
+  registry: 'https://registry.yarnpkg.com',
+  'strict-ssl': true,
+  'user-agent': 'yarn/1.19.1 npm/? node/v13.6.0 darwin x64',
+  lastUpdateCheck: 1597857181992
+}
+info npm config
+{
+  '@your_company:registry': 'https://your_company.jfrog.io/your_company/api/npm/jspkg/',
+  '//your_company.jfrog.io/your_company/api/npm/jspkg/:_auth' : 'some_secret_token',
+  '//your_company.jfrog.io/your_company/api/npm/jspkg/:always-auth' : true,
+  python: '/usr/bin/python'
+}
+```
+
+The interesting part about this is the overriding behavior of the deeper configs. If you are currently in `~/projects/cool_app/`, the `.npmrc` file in this directory will take priority over the one in `~`.
+
+
+2) Variables Can Be Global And Scoped
+
+Most private registries require a `_password` or `_auth` token to authentiticate. When you set the value to these tokens you can set it globally as follows:
+
+```
+_auth=${REPLACE_WITH_YOUR_AUTH_TOKEN}
+always-auth=true
+```
+
+By doing the above, these values are globally set and every private registry you use will use that `_auth` token. **And this is where many start seeing unauthenticated errors for using the wrong `_auth` token.** 
+
+
+The wrong variable bug can be easily avoided by scoping these values for each registry as follows:
+
+```
+@your_company:registry=https://your_company.jfrog.io/your_company/api/npm/jspkg/
+//your_company.jfrog.io/your_company/api/npm/jspkg/:_auth =${REPLACE_WITH_YOUR_AUTH_TOKEN}
+//your_company.jfrog.io/your_company/api/npm/jspkg/:always-auth=true
+```
+
+<h2 id="conclusion">Conclusion</h2>
+
+Make sure you are scoping these config variables to your registry. You can that by setting as `//${your_company_registry}/:${variable} = ${value}`.
+
+
+<h2 id="notes">Notes</h2>
+
+The money sign plus curly braces(${}) is meant to serve as a placeholder for your values.
+
