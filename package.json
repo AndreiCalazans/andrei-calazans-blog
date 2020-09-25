@@ -5,7 +5,7 @@
   "dependencies": {
     "@types/jest": "24.0.13",
     "@types/node": "12.6.8",
-    "@types/react-dom": "16.8.6",
+    "@types/react-dom": "16.8.5",
     "blueimp-md5": "2.3.0",
     "feed": "2.0.2",
     "import-all.macro": "2.0.3",
