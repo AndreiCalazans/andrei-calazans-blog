@@ -8535,7 +8535,7 @@ natural-orderby@^2.0.1:
   resolved "https://registry.yarnpkg.com/natural-orderby/-/natural-orderby-2.0.3.tgz#8623bc518ba162f8ff1cdb8941d74deb0fdcc016"
   integrity sha512-p7KTHxU0CUrcOXe62Zfrb5Z13nLvPhSWR/so3kFulUQU0sgUll2Z0LwpsLN351eOOD+hRGu/F1g+6xDfPeD++Q==
 
-navi-scripts@^0.13.3:
+navi-scripts@0.13.3:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/navi-scripts/-/navi-scripts-0.13.3.tgz#6ab8e3c84bfdef70a7e55e9f039302571718952e"
   integrity sha512-Qze4d8qOwBM4VKHMKtmj6q0+7xxVdHL28K+qVzMszJitMmzqYz8myREecK+DMzrLV/198HJ5TGYfbIhVoLEt0A==
@@ -8555,10 +8555,10 @@ navi-scripts@^0.13.3:
     raf "^3.4.0"
     serve-static "^1.11.2"
 
-navi@^0.13.3:
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/navi/-/navi-0.13.6.tgz#2ad7859a022222fbdb02b74807755ee914089018"
-  integrity sha512-qZl/TuG7e/AEYHzvrCqVOAv/RPz2U24MvHapMzS+l/fCrn+LtWbCTNIx7kewI7W46Ko5fkI9kQ8kmt9tyVOgWg==
+navi@0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/navi/-/navi-0.13.3.tgz#7ff88271db440d59e20c0c8b160cb92c3e728727"
+  integrity sha512-Y47QvZsaME1zX2kv/jEs8q67Te0hTOrWHIfOewvGFNQ/P/roRRWMnUF4BiwAqcH9XKernsGLTlLnREdBL2XRXg==
   dependencies:
     history "^4.9.0"
 
@@ -10517,18 +10517,18 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-navi-helmet-async@^0.13.3:
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/react-navi-helmet-async/-/react-navi-helmet-async-0.13.6.tgz#c3eec608f6f3d170da1d6c2c63915dbddb29aff5"
-  integrity sha512-M9d1rBPPR8a9bnmL6k+6XsGtG8Jpz4ox/xI3cUvvo01hQNNNMN7fslw2H8vdIUNasdREmQf78JczJuPpJSP7rg==
+react-navi-helmet-async@0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/react-navi-helmet-async/-/react-navi-helmet-async-0.13.3.tgz#a1a61a04acb20e76443212a8e9ed4478ebdfa26a"
+  integrity sha512-AFUwQqmZWzFGzFfz7dCKfHAF1mrjt7Z30E+kUTmmbj7iXl67gmWtfshBG7EuCFuTJ04iCbsraGhbWoZvGtBxzA==
   dependencies:
     "@types/react-helmet" "^5.0.8"
     react-helmet-async "^1.0.2"
 
-react-navi@^0.13.3:
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/react-navi/-/react-navi-0.13.6.tgz#ee0249cb28e961a0af4f2dce459d993d7ff3d50f"
-  integrity sha512-2dG5j5qpxwI5SJru9ilyYxp8Jp3SOB0lkjbshcWv1L5+8Z4fv/UEmAWa5m1v+2We4w8okO4LH5nlgAmG1szlCg==
+react-navi@0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/react-navi/-/react-navi-0.13.3.tgz#f8dbf478173b5995ab271b587b639562084d0b87"
+  integrity sha512-QyagKZtT7XE8bILSp/WsaqESEPv7a2MM3JmrMQDNYux84y4UPdSabR4yagR1sOW3UCAqkjd2WQt8GMdrfWdWnA==
   dependencies:
     "@types/history" "^4.6.2"
 
