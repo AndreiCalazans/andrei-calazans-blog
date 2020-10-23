@@ -6,7 +6,7 @@ interface BioProps {
 }
 
 function Bio(props: BioProps) {
-  let photoURL = 'https://avatars1.githubusercontent.com/u/20777666?s=460&v=4';
+let photoURL = 'https://avatars1.githubusercontent.com/u/20777666?s=460&v=4';
 
   return (
     <div
