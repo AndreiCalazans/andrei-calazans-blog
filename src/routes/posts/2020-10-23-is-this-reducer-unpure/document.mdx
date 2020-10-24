@@ -85,11 +85,6 @@ console.log(b) // { value: 33 }
 
 # Conclusion
 
-The reducer above is not unpure. It does not change the value of the state object, it reassgins it. It would be unpure if it did `state.trivia = newObject`, but it is not the case. 
+The reducer above is not unpure. It does not change the value of the state object, it reassigns it. It would be unpure if it did `state.trivia = newObject`, but it is not the case. 
 
-Some might argue it is best to avoid mutations all together to not end up in these thoughtful conundrums. Nevertheless, one must always have the team's argreement on the approach plus outweigh the pros and cons. There are moments were mutation is desired given it should perform better than constantly creating new object values.  
-
-
-
-
-
+Some might argue it is best to avoid mutations all together to not end up in these thoughtful conundrums. Nevertheless, one must always have the team's agreement on the approach plus outweigh the pros and cons. There are moments were mutation is desired given it should perform better than constantly creating new object values.  
