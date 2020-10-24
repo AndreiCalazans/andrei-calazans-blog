@@ -1,21 +1,29 @@
-import React from 'react'
-import { Link, useCurrentRoute, useView } from 'react-navi'
-import { MDXProvider } from '@mdx-js/react'
-import { Helmet } from 'react-navi-helmet-async'
-import siteMetadata from '../siteMetadata'
-import ArticleMeta from './ArticleMeta'
-import Bio from './Bio'
-import styles from './BlogPostLayout.module.css'
+import React from "react";
+import { Link, useCurrentRoute, useView } from "react-navi";
+import { MDXProvider } from "@mdx-js/react";
+import { Helmet } from "react-navi-helmet-async";
+import siteMetadata from "../siteMetadata";
+import ArticleMeta from "./ArticleMeta";
+import Bio from "./Bio";
+import styles from "./BlogPostLayout.module.css";
 
 interface BlogPostLayoutProps {
-  blogRoot: string
+  blogRoot: string;
 }
 
 function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
-  let { title, data, url } = useCurrentRoute()
-  console.log(data);
-  let { connect, content, head } = useView()!
-  let { MDXComponent, readingTime } = content
+  let { title, data, url } = useCurrentRoute();
+
+  let fullUrl = `https://www.andrei-calazans.com${url.pathname}`;
+  let shareableLink = encodeURIComponent(fullUrl);
+
+  let discussUrl = `https://mobile.twitter.com/search?q=${shareableLink}`;
+  let shareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+    `${title} by @Andrei_Calazans - ${fullUrl}`
+  )}`;
+
+  let { connect, content, head } = useView()!;
+  let { MDXComponent, readingTime } = content;
 
   // The content for posts is an MDX component, so we'll need
   // to use <MDXProvider> to ensure that links are rendered
@@ -30,12 +38,21 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
         <meta property="og:url" content="https://www.andrei-calazans.com/" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={data.spoiler} />
-        <meta property="og:image" content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4" />
+        <meta
+          property="og:image"
+          content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4"
+        />
 
-        <meta property="twitter:url" content="https://www.andrei-calazans.com/" />
+        <meta
+          property="twitter:url"
+          content="https://www.andrei-calazans.com/"
+        />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={data.spoiler} />
-        <meta property="twitter:image" content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4"/>
+        <meta
+          property="twitter:image"
+          content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4"
+        />
       </Helmet>
       {head}
       <article className={styles.container}>
@@ -55,10 +72,20 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
             wrapper: ({ children }) => (
               <div className={styles.content}>{children}</div>
             ),
-          }}>
+          }}
+        >
           <MDXComponent />
         </MDXProvider>
         <footer className={styles.footer}>
+          <p>
+            <a target="_blank" rel="noopener noreferrer" href={shareLink}>
+              Share on Twitter
+            </a>
+            {` • `}
+            <a href={discussUrl} target="_blank" rel="noopener noreferrer">
+              Discuss on Twitter
+            </a>
+          </p>
           <h3 className={styles.title}>
             <Link href={blogRoot}>{siteMetadata.title}</Link>
           </h3>
@@ -67,7 +94,8 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
             {data.previousDetails && (
               <Link
                 className={styles.previous}
-                href={data.previousDetails.href}>
+                href={data.previousDetails.href}
+              >
                 ← {data.previousDetails.title}
               </Link>
             )}
@@ -80,7 +108,7 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
         </footer>
       </article>
     </>
-  )
+  );
 }
 
-export default BlogPostLayout
+export default BlogPostLayout;
