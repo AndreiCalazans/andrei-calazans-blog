@@ -50,3 +50,28 @@
   margin-top: 0;
   margin-bottom: 1.75rem;
 }
+
+:global blockquote {
+  border-left: 4px solid #ff5400;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+
+}
+
+:global blockquote:before {
+  content: open-quote;
+  color: #ff5400;
+}
+
+:global blockquote:after {
+  content: close-quote;
+  color: #ff5400;
+}
+
+:global blockquote p {
+  display: inline;
+  font-style: italic;
+  color: #ff5400;
+}
+
