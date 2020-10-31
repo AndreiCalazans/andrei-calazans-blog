@@ -75,3 +75,45 @@
   color: #ff5400;
 }
 
+
+:global blockquote.comment {
+  border-left: none;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+
+:global blockquote.comment:before  {
+  color: black;
+  font-weight: 900;
+  content: open-quote;
+  font-size: 1.5rem;
+}
+
+:global blockquote.comment p:first-child:after  {
+  color: black;
+  font-weight: 900;
+  content: close-quote;
+  font-size: 1.5rem;
+}
+
+:global blockquote.comment p {
+  color: black;
+  font-weight: 900;
+  display: inline;
+  font-style: italic;
+  font-size: 1.6rem;
+}
+
+:global blockquote.comment p:last-child {
+  display: inline;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+:global .was_said {
+    display: inline;
+    background: #039489;
+    color: white;
+    padding: 2px;
+}
