@@ -117,3 +117,12 @@
     color: white;
     padding: 2px;
 }
+
+:global .buy_me_coffee {
+    color: black;
+    font-weight: 900;
+    background: yellow;
+    padding: 10px;
+    border-radius: 13px;
+    text-decoration: none;
+}

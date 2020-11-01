@@ -85,7 +85,22 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
             <a href={discussUrl} target="_blank" rel="noopener noreferrer">
               Discuss on Twitter
             </a>
+            {` • `}
+            <a
+              className="buy_me_coffee"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.buymeacoffee.com/andreicalazans"
+            >
+              <img
+                style={{ width: 16, height: 16 }}
+                src={require("./BMC_Logo.svg")}
+                alt="Coffee Image"
+              />
+              Buy me coffee = )
+            </a>
           </p>
+          <p></p>
           <h3 className={styles.title}>
             <Link href={blogRoot}>{siteMetadata.title}</Link>
           </h3>
