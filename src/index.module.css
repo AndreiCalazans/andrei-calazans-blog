@@ -84,21 +84,21 @@
 }
 
 :global blockquote.comment:before  {
-  color: black;
+  color: #039489;
   font-weight: 900;
   content: open-quote;
   font-size: 1.5rem;
 }
 
 :global blockquote.comment p:first-child:after  {
-  color: black;
+  color: #039489;
   font-weight: 900;
   content: close-quote;
   font-size: 1.5rem;
 }
 
 :global blockquote.comment p {
-  color: black;
+  color: #039489;
   font-weight: 900;
   display: inline;
   font-style: italic;
