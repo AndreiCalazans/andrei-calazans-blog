@@ -26,12 +26,10 @@ function BlogLayout({ blogRoot, isViewingIndex }: BlogLayoutProps) {
         <meta property="og:url" content="https://www.andrei-calazans.com/" />
         <meta property="og:title" content={siteMetadata.title} />
         <meta property="og:description" content={siteMetadata.description} />
-        <meta property="og:image" content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4" />
 
         <meta property="twitter:url" content="https://www.andrei-calazans.com/" />
         <meta property="twitter:title" content={siteMetadata.title} />
         <meta property="twitter:description" content={siteMetadata.description} />
-        <meta property="twitter:image" content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4"/>
       </Helmet>
     <div className={styles.container}>
       <LoadingIndicator active={!!loadingRoute} />

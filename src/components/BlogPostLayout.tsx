@@ -38,10 +38,6 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
         <meta property="og:url" content="https://www.andrei-calazans.com/" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={data.spoiler} />
-        <meta
-          property="og:image"
-          content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4"
-        />
 
         <meta
           property="twitter:url"
@@ -49,10 +45,6 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
         />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={data.spoiler} />
-        <meta
-          property="twitter:image"
-          content="https://avatars1.githubusercontent.com/u/20777666?s=460&v=4"
-        />
       </Helmet>
       {head}
       <article className={styles.container}>
