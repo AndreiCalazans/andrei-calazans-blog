@@ -1,0 +1,140 @@
+
+Do you need to have tabs in your Next.js app and these tabs need to have links to them? 
+
+## What is the wrong way of doing this?
+
+You know you can use URL query parameters to store which tab is active. Then you think you can just modify the current URL query parameters as the user switches tab. Lastly, you say to yourself you need to store the current query parameters in your local React state so you can decide what data to request and which tab to display.
+
+The above is possible to achieve, and you end up with the following problems:
+
+- Since you duplicate the URL parameters state, you need to write logic to keep your local state in sync with the URL parameters.
+
+- By not using Link + anchor tags to write to the URL parameters, you also lose all of the functionalities anchor tags have. Thus you either ignore them or reimplement them.
+
+- If you do decide to reimplement the anchor tag functionalities, that is also more reinventing the wheel.
+
+
+## What's the right way?
+
+> Use the platform.
+
+This means. Use anchor tags to link to your tabs. And use Next.js' `Link` component to write new query parameters to the URL.
+
+
+**Code Example:**
+
+```jsx
+
+import { useEffect } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import styles from "../styles/Home.module.css";
+
+const Tab = ({ href, isSelected, title }) => (
+    <Link href={href}>
+      <a
+        style={{
+          padding: 5,
+          margin: 5,
+          backgroundColor: isSelected ? "blue" : "transparent",
+        }}
+      >
+        {title}
+      </a>
+    </Link>
+)
+
+export default function Home() {
+  const { query } = useRouter();
+
+  const isTabOneSelected = !!query.tabOne;
+  const isTabTwoSelected = !!query.tabTwo;
+  const isTabThreeSelected = !!query.tabThree;
+
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Your Site</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className={styles.main}>
+        <h1>Title</h1>
+        <Link href="/about">About</Link>
+
+        <nav>
+          <Tab href="/?tabOne=true" title="Tab One" isSelected={isTabOneSelected} /> 
+          <Tab href="/?tabTwo=true" title="Tab Two" isSelected={isTabTwoSelected} /> 
+          <Tab href="/?tabThree=true" title="Tab Three" isSelected={isTabThreeSelected} /> 
+        </nav>
+
+        <section>
+          <p>{JSON.stringify(query)}</p>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+```
+
+**What is going on?**
+
+We use the `useRouter`'s `query` object to read the current URL query parameters.
+
+`const { query } = useRouter();`
+
+
+Then we use Next.js' `<Link href={href}>` component to set the new query parameters `/?tabOne=true` when a tab is selected
+
+Lastly, we check if the current tab is selected by doing `const isTabOneSelected = !!query.tabOne;`. The `query` object will have the `tabOne` key defined only when it is present as a query parameter.
+
+Result
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src={require('./showing_off_tabs_nextjs.mp4')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+*Video of tabs changing URL query parameters*
+
+
+## But, I don't want to push a new route for every tab selection
+
+I noticed some people prefer for every new tab selection for it to not add a new history element.
+
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src={require('./tabs_going_back_nextjs.mp4')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+*Video of going back on selected tabs*
+
+
+Just use the `replace` prop on the `Link` component
+
+`<Link replace href={href}>`
+
+Now changing tabs won't push to the history stack:
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src={require('./tabs_not_going_back_nextjs.mp4')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+*Video of tabs not pushed to history*
+
+
+## This isn't the only way
+
+Case you don't want to use the `Link` component you can still use the `router`'s `push`  method. In this Tweet thread there are some examples of this https://twitter.com/Andrei_Calazans/status/1368976174861455360.
+
+
+
+
+
+
+
+
