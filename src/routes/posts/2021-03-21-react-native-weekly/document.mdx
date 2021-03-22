@@ -1,0 +1,123 @@
+
+_I'm testing a new format of weekly post where I compile list of udpates React Native had, I might also share things about React Native's community as a whole. If you want to stay update subscribe!_
+
+# [React Native Radio Podcast About Flutter V2.0.0](https://reactnativeradio.com/episodes/rnr-193-flutter-2-release)
+
+Infinite Red team went over what is Flutter and what updates it received plus their perspectives on how Flutter compares to React Native.
+
+I wrote a [badly written long text](https://andrei-calazans.com/posts/2019-07-30/choose-between-flutter-react-native) on the what is important to know when comparing Flutter with React Native if you are serious about the comparison.
+
+
+# Check out Moti
+
+This is an awesome library for transitions in React Native.  https://github.com/nandorojo/moti
+
+
+# PressabilityPerformanceEventListener 
+
+[c4c0065b00](https://github.com/facebook/react-native/commit/c4c0065b00) Add PressabilityPerformanceEventEmitter  
+
+Facebook added an event listener that allows you to get touch-related performance events
+
+Events are:
+
+```
+export type PressabilityTouchSignal =
+  | 'DELAY'
+  | 'RESPONDER_GRANT'
+  | 'RESPONDER_RELEASE'
+  | 'RESPONDER_TERMINATED'
+  | 'ENTER_PRESS_RECT'
+  | 'LEAVE_PRESS_RECT'
+  | 'LONG_PRESS_DETECTED';
+```
+
+[source](https://github.com/facebook/react-native/blob/c4c0065b0009ced0049c5abc4dddd327ac638928/Libraries/Pressability/PressabilityTypes.js)
+
+
+
+# LeakChecker
+
+This tool checks for memory leaks in native components when its surface stopped. 
+
+From an internal Facebook commit:
+
+`Introducing LeakChecker. A tool that checks if all native components have been cleaned up when surface is stopped.`
+
+```
+void LeakChecker::checkSurfaceForLeaks(SurfaceId surfaceId) const {
+   auto weakFamilies = registry_.weakFamiliesForSurfaceId(surfaceId);
+   uint numberOfLeaks = 0;
+   for (auto const &weakFamily : weakFamilies) {
+     auto strong = weakFamily.lock();
+     if (strong) {
+       ++numberOfLeaks;
+     }
+   }
+   if (numberOfLeaks > 0) {
+     LOG(ERROR) << "[LeakChecker] Surface with id: " << surfaceId
+                << " has leaked " << numberOfLeaks << " components out of "
+                << weakFamilies.size();
+   }
+```
+
+# Virtualized Default Props Being Removed
+
+This was a suprise to me actually. There wasn't any discussion in the community about it, so I presume it was an internal decision.
+
+[e928f54d76](https://github.com/facebook/react-native/commit/e928f54d76) Remove initialNumToRender defaultProps  
+[f293d41ead](https://github.com/facebook/react-native/commit/f293d41ead) Back out "Update typed export and fix test", Back out "[VirtualizedSectionList] Remove defaultProps", Back out "[VirtualizedList] Remove keyExtractor defaultProps"  
+[f1cf2c39f9](https://github.com/facebook/react-native/commit/f1cf2c39f9) Remove defaultProps  
+[1cbedb95ec](https://github.com/facebook/react-native/commit/1cbedb95ec) Remove keyExtractor defaultProps  
+[76b6a66f4f](https://github.com/facebook/react-native/commit/76b6a66f4f) Remove updateCellsBatchingPeriod defaultProps  
+[b3101457a6](https://github.com/facebook/react-native/commit/b3101457a6) Remove windowSize defaultProps  
+[3c5fa3b642](https://github.com/facebook/react-native/commit/3c5fa3b642) Remove scrollEventThrottle defaultProps  
+[e3c3ef0ace](https://github.com/facebook/react-native/commit/e3c3ef0ace) Remove onEndReachedThreshold defaultProps  
+[69030a480c](https://github.com/facebook/react-native/commit/69030a480c) Remove maxToRenderPerBatch defaultProps  
+[cbc3d90fd4](https://github.com/facebook/react-native/commit/cbc3d90fd4) Remove horizontal from defaultProps  
+[3ff7e86b0f](https://github.com/facebook/react-native/commit/3ff7e86b0f) Remove disableVirtualization from defaultProps  
+
+
+# React Native Commits between 03/15/2021 to 03/21/2021 
+
+
+[eacc94005b](https://github.com/facebook/react-native/commit/eacc94005b) Extend AccessibilityInfo.sendAccessibilityEvent to support 'click' event for Android  
+[3f571203ae](https://github.com/facebook/react-native/commit/3f571203ae) Deploy Flow v0.147.0  
+[629611d65a](https://github.com/facebook/react-native/commit/629611d65a) C4244 possible precision loss warning fix  
+[a0dcc4c51c](https://github.com/facebook/react-native/commit/a0dcc4c51c) Pressability: don't report touch telemetry events when the event doesn't have timestamp associated  
+[ac7ba3ea16](https://github.com/facebook/react-native/commit/ac7ba3ea16) Fix leak checker crash in bridgeless mode  
+[cfb5b5e20a](https://github.com/facebook/react-native/commit/cfb5b5e20a) Add test with Multiple Sticky Headers for ScrollView  
+[feebfe1ef6](https://github.com/facebook/react-native/commit/feebfe1ef6) Fix typo in sendAccessibilityEvent in AccessibilityExample.js  
+[bbf571cf11](https://github.com/facebook/react-native/commit/bbf571cf11) Adapt SectionListExamples  
+[c357cb4bbf](https://github.com/facebook/react-native/commit/c357cb4bbf) Viewability examples  
+[8f2c51bde3](https://github.com/facebook/react-native/commit/8f2c51bde3) Example update to flex 1 and and make visibilityConfig as prop  
+[bcc79bd4c7](https://github.com/facebook/react-native/commit/bcc79bd4c7) Add support for the sampling memory profiler to the Chrome inspector  
+[a9bae13d07](https://github.com/facebook/react-native/commit/a9bae13d07) Add sampling heap profiler APIs to JSI  
+[54f754b390](https://github.com/facebook/react-native/commit/54f754b390) Add LTR and RTL Horizontal ScrollViews for E2E Tests  
+[d40f2a29c6](https://github.com/facebook/react-native/commit/d40f2a29c6) Switch AdsManagerRefreshableScrollView to use ElementConfig instead of ElementProps  
+[f293d41ead](https://github.com/facebook/react-native/commit/f293d41ead) Back out "Update typed export and fix test", Back out "[VirtualizedSectionList] Remove defaultProps", Back out "[VirtualizedList] Remove keyExtractor defaultProps"  
+[729c6d2f41](https://github.com/facebook/react-native/commit/729c6d2f41) Fix accessibilityElement accessibility frame  
+[dbf5fa2d1a](https://github.com/facebook/react-native/commit/dbf5fa2d1a) Workaround for bridge.isInspectable  
+[4079c0454b](https://github.com/facebook/react-native/commit/4079c0454b) Update paper interop lists  
+[85f9b7af36](https://github.com/facebook/react-native/commit/85f9b7af36) React Sync for revisions c3e20f1... c9f6d0a  
+[145110b8d4](https://github.com/facebook/react-native/commit/145110b8d4) Add support for GIFs  
+[4b3c8e76b2](https://github.com/facebook/react-native/commit/4b3c8e76b2) Update typed export and fix test  
+[f1cf2c39f9](https://github.com/facebook/react-native/commit/f1cf2c39f9) Remove defaultProps  
+[1cbedb95ec](https://github.com/facebook/react-native/commit/1cbedb95ec) Remove keyExtractor defaultProps  
+[76b6a66f4f](https://github.com/facebook/react-native/commit/76b6a66f4f) Remove updateCellsBatchingPeriod defaultProps  
+[b3101457a6](https://github.com/facebook/react-native/commit/b3101457a6) Remove windowSize defaultProps  
+[3c5fa3b642](https://github.com/facebook/react-native/commit/3c5fa3b642) Remove scrollEventThrottle defaultProps  
+[e3c3ef0ace](https://github.com/facebook/react-native/commit/e3c3ef0ace) Remove onEndReachedThreshold defaultProps  
+[69030a480c](https://github.com/facebook/react-native/commit/69030a480c) Remove maxToRenderPerBatch defaultProps  
+[34d189ae09](https://github.com/facebook/react-native/commit/34d189ae09) Introducing Leak Checker  
+[529fbc84d5](https://github.com/facebook/react-native/commit/529fbc84d5) ESM-ify VirtualizeUtils and flatten parameters on computeWindowedRenderLimits  
+[e928f54d76](https://github.com/facebook/react-native/commit/e928f54d76) Remove initialNumToRender defaultProps  
+[00bc09c8f7](https://github.com/facebook/react-native/commit/00bc09c8f7) Allow RCTRootView to be initialized with a frame  
+[cbc3d90fd4](https://github.com/facebook/react-native/commit/cbc3d90fd4) Remove horizontal from defaultProps  
+[3ff7e86b0f](https://github.com/facebook/react-native/commit/3ff7e86b0f) Remove disableVirtualization from defaultProps  
+[c4c0065b00](https://github.com/facebook/react-native/commit/c4c0065b00) Add PressabilityPerformanceEventEmitter  
+[9c1926051e](https://github.com/facebook/react-native/commit/9c1926051e) Pass `blockNativeResponder` param to setIsJSResponder  
+[07f9d21131](https://github.com/facebook/react-native/commit/07f9d21131) Simplify YGNodeEmptyContainer / YGNodeWithMeasureFunc / YGNodeFixedSize  
+[3708181ca2](https://github.com/facebook/react-native/commit/3708181ca2) Simplify YGNodeCalculateAvailableInnerDim  
+[eeed7e2e3a](https://github.com/facebook/react-native/commit/eeed7e2e3a) Optimize edge value resolution  
+[e3e7701c14](https://github.com/facebook/react-native/commit/e3e7701c14) Fix react-native-oss-android tests  
