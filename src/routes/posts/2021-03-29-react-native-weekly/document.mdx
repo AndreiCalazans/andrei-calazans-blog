@@ -1,0 +1,122 @@
+
+Welcome to the second edition of React Native Weekly = ) 
+
+Reach out to me via Twitter if you have any feedback and don't forget to subscribe!
+
+_I won't be sending any subscription emails until I have this thing better figured out_
+
+_Note two - my blog doesn't support embedding tweets yet, but it will soon_
+
+
+# Figma to React Native 
+
+[This tool](https://figma-to-react.vercel.app) looks really cool. Convert Figma designs to React code (React Native and Next.js)
+
+[Original Tweet](https://twitter.com/tomsoderlund/status/1375826499438264324?s=20)
+
+
+# TouchableHighlight Now Disables accessbilityState by default if disabled is true
+
+[hf69e096bb4](https://github.com/facebook/react-native/commit/f69e096bb4) `feat: set disabled accessibilityState when TouchableHighlight is disabled (#31135)`
+
+Summary:
+https://github.com/facebook/react-native/issues/30950
+
+Automatically set `disabled` to accessibilityState when TouchableHighlight is disabled.
+
+
+# Fabric Support For Mapbuffer
+
+[91b3f5d48a](https://github.com/facebook/react-native/commit/91b3f5d48a) `Implement and integrate Mapbuffer`
+
+This is not yet fully document, and I'm not 100% I understood it, but what it seems to be is support for you to bridge Mapbuffers via Fabric.
+
+```
++/**
++ * TODO T83483191: add documentation.
++ *
+```
+
+I will keep an eye for when the documentation gets added.
+
+
+
+# Introducing Timeline: A time-travel debugging tool (cross-platform part)
+
+[336876509c](https://github.com/facebook/react-native/commit/336876509c) `Introducing Timeline: A time-travel debugging tool (cross-platform part)`
+
+The `TimelineController` is a C++ class friend of the UIManager class which allows you to rewind the series of UIManager commits with the `TimelineHandler` class.
+
+Remember that the UIManager makes commits to update how the UI looks.
+
+These classes will likely be used in a near future with a debugging tool to allow you to time travel UI updates similar to how Redux can time travel state updates.
+
+
+> This is a core part of the Timeline feature (aka Time Travel Debugger). With these new primitives, any external library can initiate "saving" all the previous interface changes (commits) and unwind to any previous one (in order to introspect and validate visual side-effects).
+
+```
++/*
++ * Provides tools for introspecting the series of commits and associated
++ * side-effects, allowing to "rewind" UI to any particular commit from the past.
++ */
++class TimelineController final : public UIManagerCommitHook {
+```  
+
+# Fix ScrollViewStickyHeader to push up header above it
+
+When there are multiple sticky headers, ScrollViewStickyHeader should push up the header above it when it gets to the top.  This behavior was accidentally changed previously.
+
+[d754bdefc6](https://github.com/facebook/react-native/commit/d754bdefc6) `Fix ScrollViewStickyHeader to push up header above it`
+
+> When there are multiple sticky headers, ScrollViewStickyHeader should push up the header above it when it gets to the top.  This behavior was accidentally changed in D21948830 (https://github.com/facebook/react-native/commit/fa5d3fb6b8c561b749f3e86316d06543a52dcc1c) when this component was fixed to work in Fabric.
+
+
+# Removing More Default Props
+
+Efforts to remove default props from the lists continues.
+
+[5475f29554](https://github.com/facebook/react-native/commit/5475f29554) Reland stack for removing defaultProps from VL and remove breaking FlowFixMe
+
+
+# Weird VirtualizedSectionList Injection
+
+I was curious to see this commit `Refactor renderItem logic and gate changes` but it seems it is pointing to some new `VirtualizedSectionList` that is not public to open source =/
+
+[fda1acec51](https://github.com/facebook/react-native/commit/fda1acec51) Refactor renderItem logic and gate changes
+
+```
++> = VirtualizedSectionListInjection.unstable_VSL ?? VirtualizedSectionList;
+```
+
+# Work Related To Fabric
+
+I noticed a few commits related to Fabric. _You don't have to read these, it just show Fabric continues a WIP_
+
+[3b8fbc336c](https://github.com/facebook/react-native/commit/3b8fbc336c) Use default value instead of abort when parsing color  
+[79090c4802](https://github.com/facebook/react-native/commit/79090c4802) Fabric: Decoupling Telemetry aggregation classes into a separate module  
+[e27ca7f24e](https://github.com/facebook/react-native/commit/e27ca7f24e) Create YogaProps Interface  
+[bfe3cd01bc](https://github.com/facebook/react-native/commit/bfe3cd01bc) Log info when TurboModule cannot be found  
+[e1b6cd3f75](https://github.com/facebook/react-native/commit/e1b6cd3f75) ProGuard: Do not strip anything from FabricUIManager  
+[9ebdf74708](https://github.com/facebook/react-native/commit/9ebdf74708) Remove Unable to get TurboModule for DialogManagerAndroid warning for iOS  
+[3dd92513c5](https://github.com/facebook/react-native/commit/3dd92513c5) Fabric: Aligning `UIManager::startSurface` and `UIManager::stopSurface` signatures  
+[334da89b3d](https://github.com/facebook/react-native/commit/334da89b3d) LayoutAnimation: don't call non-Fabric configurNext if Fabric is installed   
+[37a03ce80f](https://github.com/facebook/react-native/commit/37a03ce80f) Clean up xplat/js/react-native-github/ReactAndroid/src/main/java/com/facebook/react/uimanager/FabricViewStateManager.java  
+
+
+
+# react-native-svg is looking for maintainers. 
+
+https://twitter.com/notbrent/status/1373859373785653254?s=20
+
+# TurboModules Explained 
+
+https://twitter.com/Baconbrix/status/1375918854967341066?s=20
+
+TurboModules are not yet production ready, but the pieces are in if you want to play around said Kevin Gozali
+
+https://twitter.com/fkgozali/status/1375950505420091397?s=20
+
+# Jobs
+
+Shopify is looking for React Native devs https://twitter.com/pedropbuendia/status/1376526791146360833?s=20
+
