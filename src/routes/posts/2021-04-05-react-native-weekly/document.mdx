@@ -76,18 +76,13 @@ Can you call a C++ method from the JavaScript thread and get a return value sync
 
 # What is the Paper rendering system?
 
-I don't know. See the commit message:
+I didn't know until Christoph Nakazawa responded to my tweet about this post 🎉
+https://twitter.com/cpojer/status/1379280990804176897
 
-> Problem: In Paper rendering system, view managers are native modules that are created and retained by the bridge. Whenever rendering layer needs to create a view, it asks the bridge for the view manager. In bridgeless mode, these view managers are never created.
+According to Christoph, Facebook calls the old renderer (prior to Fabric) Paper. 
 
+So, it does not mean they made their own renderer using a Graphics API like Vulkan 😅. And I also remember that this is not likely to happen since [Eli White once said their decision to leverage platform widgets were intentional to the main objectives of creating React Native](/posts/2020-10-20/podcast-eli-white-react-native-principles).
 
-[491ca1d14e](https://github.com/facebook/react-native/commit/491ca1d14e) Create a bridgelessViewManager [2/n]
-
-This likely means Facebook made its own renderer 😮. It could be something that does not leverage OEM widgets and instead renders directly to the screen using a Graphics API like Vulkan. Who knows, I hope they share it someday.
-
-There were more commits related to `Paper`:
-
-[4efdf264d1](https://github.com/facebook/react-native/commit/4efdf264d1) Introducing RCTWeakViewHolder [4/n]
 
 # Add `displayName` to Touchables To Stop Messing Up Jest
 
