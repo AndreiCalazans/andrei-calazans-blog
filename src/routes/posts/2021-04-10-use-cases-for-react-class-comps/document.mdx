@@ -1,0 +1,61 @@
+
+Are there still use cases for React Class components?
+
+The answer is certainly yes.  
+
+This post was motivated by a recently lash of tweets complaining at how hooks introduce unnecessary complexity, and that the Class component model was easier to understand due to its clear lifecycle methods. 
+
+Albeit hooks became wildly popular, no one in the React core team ever mentioned removing class components so it is still a viable option to create apps just with class components.
+
+Futhermore, there are cases where only a class component would actually solve the problem. Let's see them.
+
+# Error Boundaries
+
+The React documention does such a wonderful job at explaining error boundaries that I will just link you to it = )
+
+> Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.
+
+[Source In Docs](https://reactjs.org/docs/react-component.html#error-boundaries)
+
+
+# Running Logic Connected To a Next DOM Update
+
+In React v16.3.0 the Core team added a lifecycle called `getSnapshotBeforeUpdate` that didn't get much attention from everyone.
+
+> Add a new getSnapshotBeforeUpdate() lifecycle. (@bvaughn in #12404)
+
+[Source](https://github.com/facebook/react/blob/7c4e6aae3ef4e77596125f30b801c84800e949a9/CHANGELOG.md)
+
+
+But this lifecycle is useful for layout animations, restoring scroll positions, and focus management.
+
+Sebastian ([`@sebmarkbage`]()) mentions the following on a recent tweet:
+
+> This is useful for things like layout animations, restoring scroll position and can be used for focus management (e.g. figuring out where to move focus after something is deleted based on where it was before it got deleted).
+
+[Tweet](https://twitter.com/sebmarkbage/status/1380539161690640384?s=21)
+
+_If you have any other use cases for `getSnapshotBeforeUpdate` tweet at me = )._
+
+
+# If You Don't Like Hooks = D
+
+<blockquote class="comment">
+<p>
+Is there anyone left outside of Facebook who still likes hooks?
+</p>
+<br/>
+<p>
+<a href="https://twitter.com/AdamRackis/status/1380167664098803712" target="_blank" rel="noopener noreferrer">
+- Tweet From Adam Rackis
+</a>
+</p>
+</blockquote>
+
+
+And maybe you don't like hooks mental model. You can always use classes 😅.  
+
+While reviewing code submissions at G2i, I actually have ran into a few candidates that argued exactly this.
+
+
+
