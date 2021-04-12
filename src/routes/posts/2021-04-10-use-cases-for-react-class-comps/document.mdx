@@ -27,13 +27,25 @@ In React v16.3.0 the Core team added a lifecycle called `getSnapshotBeforeUpdate
 [Source](https://github.com/facebook/react/blob/7c4e6aae3ef4e77596125f30b801c84800e949a9/CHANGELOG.md)
 
 
-But this lifecycle is useful for layout animations, restoring scroll positions, and focus management.
+But [this lifecycle](https://reactjs.org/docs/react-component.html#getsnapshotbeforeupdate) is useful for layout animations, restoring scroll positions, and focus management.
 
 Sebastian ([`@sebmarkbage`]()) mentions the following on a recent tweet:
 
 > This is useful for things like layout animations, restoring scroll position and can be used for focus management (e.g. figuring out where to move focus after something is deleted based on where it was before it got deleted).
 
 [Tweet](https://twitter.com/sebmarkbage/status/1380539161690640384?s=21)
+
+It has a guarantee to run before the `componentDidUpdate` plus pass the return value to the `componentDidUpdate`'s third argument:
+
+> Any value returned by this lifecycle will be passed as a parameter to componentDidUpdate()
+
+[Source](https://reactjs.org/docs/react-component.html#getsnapshotbeforeupdate)
+
+You could possibly recreate this with [useLayoutEffect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect) since it also runs in the updating phase before the DOM mutations are actually painted.
+
+> Updates scheduled inside useLayoutEffect will be flushed synchronously, before the browser has a chance to paint.
+
+[Source](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)
 
 _If you have any other use cases for `getSnapshotBeforeUpdate` tweet at me = )._
 
