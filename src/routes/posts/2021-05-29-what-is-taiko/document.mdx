@@ -1,0 +1,203 @@
+
+
+Do you know what [Taiko](https://taiko.dev) is? 
+
+I ran into it after someone I follow on Github starred the project. I was quite surprised by this technology and how it has not become as popular as [Cypress](https://www.cypress.io/features).
+
+
+Taiko define itself as a "Reliable Browser Automation".  Taiko is an open source node.js library for testing modern web applications.
+
+
+Its differentiator is its declarative API, smart selectors, and interactive recorder. 
+
+You can use it for end-to-end testing, scrapping the Internet, and automating repetitive web tasks.
+
+### Declarative API
+
+```
+
+Browser actions
+    openBrowser, closeBrowser, client, switchTo, intercept, emulateNetwork, emulateDevice, setViewPort, resizeWindow, openTab, closeTab, openIncognitoWindow, closeIncognitoWindow, overridePermissions, clearPermissionOverrides, setCookie, deleteCookies, getCookies, setLocation, clearIntercept
+
+Page actions
+    goto, reload, goBack, goForward, currentURL, title, click, doubleClick, rightClick, dragAndDrop, hover, focus, write, clear, attach, press, highlight, clearHighlights, mouseAction, scrollTo, scrollRight, scrollLeft, scrollUp, scrollDown, screenshot, tap, emulateTimezone
+
+Selectors
+    $, image, link, listItem, button, fileField, timeField, textBox, dropDown, checkBox, radioButton, text, tableCell, color, range
+
+Proximity selectors
+    toLeftOf, toRightOf, above, below, near, within
+
+Events
+    alert, prompt, confirm, beforeunload
+
+Helpers
+    evaluate, to, into, accept, dismiss, setConfig, getConfig, waitFor
+
+Run `.api <name>` for more info on a specific function. For Example: `.api click`.
+Complete documentation is available at https://docs.taiko.dev
+
+```
+
+Without any experience is quite obvious how you can use this, and plus their decision to use promises and the ability to compose functions is just lovely. See:
+
+`await waitFor(listItem("Andrei Calazans"))`
+
+And
+
+`await write("Some description", into(textArea));`
+
+
+Its [API reference](https://docs.taiko.dev/api/reference/) has examples on how to use all of their APIs, which is just blissful.
+
+
+### Smart Selectors
+
+The problem with Cypress is how it bleeds into your codebase. All of the sudden all of your HTML elements have a `data-cy` tags, although this is not the only way - it is how most developers end up doing.
+
+
+Taiko solves this by enabling you to do testing as if your app is a black box, ideal for refactoring code without having to update tests as long as you don't change functionality.
+
+You can just type `write("Something")` and it writes "Something" to the nearest input. See its proximity selectors:
+
+```
+
+await click(link("Block", near("name"))
+
+```
+
+_I probably already said how I like this functional promise based API design 😄_
+
+
+### Interactive Recorder
+
+
+I was able to write two somewhat complex end-to-end tests with Taiko in about one hour likely because of this interactive recorder and of course the declarative APIs.
+
+<img src="https://user-images.githubusercontent.com/44019225/60337143-da31a280-99bf-11e9-80a4-57917d81e0b6.gif" style={{ width: "100%", height: "auto"}} />
+
+Once open, you can just type `.api` to see all of the options and test them out. When using the recorder it executes in headfull mode that means you will see the browser being executed.
+
+
+
+In its site it has more pros listed but I'd argue they crossover with what Cypress also offers.
+
+# In Practice
+
+To get this working with our project it was incredibly fast. I only had to `npm install` and import Taiko into our Jest tests.
+
+After some experimenting with the interactive recorder and typing `.code` in it I pretty much had the test to use.
+
+
+```
+
+const {
+  openBrowser,
+  goto,
+  write,
+  press,
+  click,
+  text,
+  dropDown,
+  checkBox,
+  button,
+  listItem,
+  scrollDown,
+  reload,
+  focus,
+  textBox,
+  waitFor,
+  into,
+  $,
+  closeBrowser
+} = require("taiko");
+
+describe("Taiko with Jest", () => {
+  jest.setTimeout(30000);
+  describe("Developer Profile", () => {
+    test("Can create a new job", async () => {
+      await openBrowser({ headless: false });
+      await goto("https://platform-staging.g2i.co");
+      await write(process.env.QA_EMAIL);
+      await press("Enter");
+      await write(process.env.QA_PASSWORD);
+      await press("Enter");
+      await click("Search Developers");
+      await write("Andrei Calazans");
+      await waitFor(listItem("Andrei Calazans"));
+      await press("ArrowDown");
+      await press("Enter");
+
+      await waitFor(3000);
+      await click("Add Job Profile");
+
+      await focus(textBox());
+      await write("G2i");
+      await press("ArrowDown");
+      await press("Enter");
+      await scrollDown();
+      await click("Create New Job");
+      await reload();
+      await closeBrowser();
+    });
+  });
+
+  describe("Developer Profile", () => {
+    test("Can create a new job", async () => {
+      await openBrowser({ headless: false });
+      await goto("https://platform-staging.g2i.co");
+      await write(process.env.QA_EMAIL);
+      await press("Enter");
+      await write(process.env.QA_PASSWORD);
+      await press("Enter");
+      await waitFor(3000);
+      await click("Jobs");
+      await waitFor("Add Job");
+      await click("Add Job");
+      await waitFor("Create a New Job");
+      await write("Job Created By Taiko");
+      await press("Tab");
+      await press("Tab");
+      await press("Tab");
+      await write("G2i");
+      await waitFor(listItem("G2i"));
+      await click(listItem("G2i"));
+      await press("PageDown");
+
+      const textArea = await $("textarea")
+        .elements()
+        .then(e => e[0]);
+
+      await write("Some description", into(textArea));
+      await click("Create New Job");
+
+      await waitFor(text("Successfully created"));
+      await text("Successfully created").exists();
+    });
+  });
+});
+
+```
+
+
+_Video of test running_
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src={require('./test_running_with_taiko.mp4')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+
+
+
+Note, I had it "headless: false" so I could run the tests and observe the automation tool, by default it runs in headless mode which means it won't trigger the browser.
+
+The interesting thing is if you start testing with `Taiko` is you are likely to make your HTML more semantic. For example I had issues with my input boxes and `textarea` because it is not correctly using `<label>` to identify what it is so I had to hack it away a bit.  
+
+In its docs it also advertises another tool called [Guage](https://gauge.org) to write readable and reusable acceptance tests, but I didn't find enough value up-front to give it a try.
+
+# Taking It To The Next Level
+
+I'm planning a large migration to a new architecture at project I'm part of and I thinking of using Taiko to write end-to-end tests so that I can verify that nothing regressed, if I do I'll make a write-up about my experience.
+
+
