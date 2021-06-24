@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Merriweather:400,400i,700,700i,900|Montserrat:900');
 
 :root {
   --primary-color: rgb(18, 18, 18);
@@ -11,14 +10,13 @@
 
 :global html {
   color: rgba(0, 0, 0, 0.9);
-  font: 100%/1.75 Morriweather, Georgia, serif;
 }
 
 :global body {
   font-kerning: normal;
-  font-family: 'Merriweather','Georgia',serif;
   font-feature-settings: "kern", "liga", "clig", "calt";
   font-weight: 400;
+  font-size: 18px;
   margin: 0;
   padding: 0;
   word-wrap: break-word;
@@ -26,7 +24,6 @@
 
 :global(pre),
 :global(code) {
-  font-family: Consolas, Menlo, Monaco, source-code-pro, "Courier New", monospace;
   font-size: 0.85rem;
   line-height: 1.5;
 }

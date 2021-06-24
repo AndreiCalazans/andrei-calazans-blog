@@ -1,6 +1,4 @@
 
-
-
 I picked a broken service in the company that got ignored because the maintainer left the company, at this point I had no idea how things worked.
 
 The problem seemed to be that we expected an environment variable to be defined within a Github Action task but it was not.
@@ -43,7 +41,7 @@ This makes the secret `API_ENDPOINT` available as a file at  `/run/secrets/API_E
 
 The end resut in my Dockerfile was:
 
-```
+```docker
 RUN --mount=type=secret,id=API_ENDPOINT \
   --mount=type=secret,id=API_PASSWORD \
    export API_ENDPOINT=$(cat /run/secrets/API_ENDPOINT) && \
@@ -56,7 +54,7 @@ RUN --mount=type=secret,id=API_ENDPOINT \
 
 We already had the Github secret set, and we also already knew that `docker/build-push-action@v2`  accepted the field  `secrets:` from Github Actions.
 
-```
+```yaml
 ...
 -
       name: Build and push

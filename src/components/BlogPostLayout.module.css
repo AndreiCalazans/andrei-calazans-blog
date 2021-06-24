@@ -1,5 +1,4 @@
 .title {
-  font-family: Montserrat, sans-serif;
   font-weight: 900;
   line-height: 1.1;
   text-rendering: optimizeLegibility;
@@ -69,7 +68,6 @@
 .content code,
 .content pre {
   color: white;
-  font-family: Consolas,Menlo,Monaco,source-code-pro,Courier New,monospace;
   font-feature-settings: normal;
   text-align: left;
   white-space: pre;
