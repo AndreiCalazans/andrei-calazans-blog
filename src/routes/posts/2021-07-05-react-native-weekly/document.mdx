@@ -1,0 +1,171 @@
+
+
+Welcome to the 16th edition of React Native Weekly = ) 
+
+_This a slow week with less commits than usual._
+
+
+# Specify whether DevMenu is bridgeless or bridge
+
+[The commit message](https://github.com/facebook/react-native/commit/c7d34527c9d) mentions how the Facebook app can have both bridge and bridgeless surfaces in their app, and since the DevMenu for each are different it makes a better developer experience to tag which is which.
+
+This teaches us that there will be a different DevMenu for Fabric mode with the DevMenu called `React Native Debug Menu Bridgeless`
+
+
+```
++  NSString *debugMenuType = self.bridge ? @"Bridge" : @"Bridgeless";
++  NSString *debugMenuTitle = [NSString stringWithFormat:@"React Native Debug Menu (%@)", debugMenuType];
+```
+
+
+
+# Fix CMD + OPT + R with Bridgeless mode only [iOS]
+
+[In this commit](8c746dfc7e6) Ramanpreet Nara <ramanpreet@fb.com> adds a fix for the dev reload shortcut, the code that handles this shortcut in `RCTDevSettings.mm` only worked it was instantiated by the bridge which will no longer exist in Fabric mode. 
+
+The change adds a listener to it that gets setup when the `RCTDevSettings` is first instantiated.
+
+
+
+# Fix crash when PlatformColor is used as backgroundColor
+
+When PlatformColor is used with backgroundColor, this line would throw, as the object type is not convertible to int.
+
+[Commit](https://github.com/facebook/react-native/commit/e6b9508f12f)
+
+
+# Add mechanism to enforce certain Views always being visible in the View hierarchy [Android]
+
+[In this commit](https://github.com/facebook/react-native/commit/34903ba4185), Joshua Gross <joshuagross@fb.com> writes about this addition as an opt-in mechanism to allow native Android Views to be marked as "not clippable", soft exceptions will be logged if these Views are clipped from the View hierarchy.
+
+He notes how telemetry components might rely on the component lifecycle like `onDraw` to work properly and for this reason they can't be clipped. This situation happened more often with Fabric and its View Flattening mechanism.
+
+In JS the solution is to add `collapsable=false` to the parent component of the clipped view, and/or move the View higher up the hierarchy.
+
+
+
+# Added a Pressable Sticky Header Example to RNTester
+
+[Work from](https://github.com/facebook/react-native/commit/40a93914c69) Kacie Bawiec <kacieb@fb.com>:
+
+> Add a test case showing off a pressable sticky header to RNTester.
+
+All you have to do is set which index is the sticky item `stickyHeaderIndices={[0]}`
+
+
+```javascript
+function StickyHeader() {
+  const [backgroundColor, setBackgroundColor] = React.useState('blue');
+  return (
+    <View
+      key={0}
+      style={{
+        backgroundColor: backgroundColor,
+        margin: 10,
+        width: 500,
+        height: 100,
+      }}>
+      <Pressable
+        style={{flex: 1}}
+        onPress={() => {
+          setBackgroundColor(backgroundColor === 'blue' ? 'yellow' : 'blue');
+        }}
+        testID="pressable_header">
+        <Text>Press to change color</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function renderComponent1(i) {
+  return (
+    <View
+      key={i}
+      style={{backgroundColor: 'red', margin: 10, width: 500, height: 100}}
+    />
+  );
+}
+
+export default function ScrollViewPressableStickyHeaderExample(): React.Node {
+  const scrollRef = React.useRef(null);
+  const components = [];
+  for (var i = 1; i < 10; i++) {
+    components.push(renderComponent1(i));
+  }
+  return (
+    <View style={styles.container}>
+      <ScrollView
+        nestedScrollEnabled={true}
+        ref={scrollRef}
+        style={{flex: 1}}
+        stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}
+        testID="scroll_pressable_sticky_header">
+        <StickyHeader />
+        {components}
+      </ScrollView>
+      <View>
+        <Button
+          title="scroll to top"
+          onPress={() => {
+            scrollRef.current?.scrollTo({y: 0});
+          }}
+          testID="scroll_to_top_button"
+        />
+        <Button
+          title="scroll to bottom"
+          onPress={() => {
+            scrollRef.current?.scrollToEnd();
+          }}
+          testID="scroll_to_bottom_button"
+        />
+      </View>
+    </View>
+  );
+}
+
+```
+
+
+# Improvements to the RNTester app
+
+The remaining work of week 27 was related to some clean up and improvements of the RNTester apd.
+
+[c06d8d01ca7](https://github.com/facebook/react-native/commit/c06d8d01ca7) Support 3 levels of navigation
+[8765b93bae1](https://github.com/facebook/react-native/commit/8765b93bae1) Generalize RNTPressableRow
+[9fb2659f56e](https://github.com/facebook/react-native/commit/9fb2659f56e) Move SectionList examples together
+[fd08255b0bc](https://github.com/facebook/react-native/commit/fd08255b0bc) Refactor SectionListExample
+[fa3243ad33c](https://github.com/facebook/react-native/commit/fa3243ad33c) Rename things in RNTester
+
+
+
+
+# Transparent Status / Navigation bar for #ReactNative (Android) apps
+
+From [Max Thirouin](https://twitter.com/MoOx), [repo](https://github.com/MoOx/react-native-transparent-status-and-navigation-bar)
+
+# Expo SDK 42 is here!
+
+Highlights
+
+- Preview release of custom development clients
+- First-party Stripe support
+- Experimental support for Hermes on Android
+- Improved managed apps on EAS Build
+
+[Tweet](https://twitter.com/expo/status/1410751824714362881)
+
+
+# Tweet From Fernando Rojo on Coinbase's Peformance Article
+
+[Fernando posted](https://twitter.com/FernandoTheRojo/status/1411011190361407489?s=20):
+
+> @coinbase Your article on optimizing React Native is a game changer. DeactivateContextOnBlur wildly improved performance for my search screen when editing search filters from global state.
+
+[The article is from last year](https://blog.coinbase.com/optimizing-react-native-7e7bf7ac3a34) and probably worth reading if Fernando said that.
+
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
