@@ -1,0 +1,192 @@
+
+Welcome to the 19th edition of React Native Weekly 😅
+
+This is everything that happened in between 19th and 25th of July 2021.
+
+
+
+Highlights
+
+- Removed default props from FlatList
+- Upgraded Metro to 0.66.2
+- Fix for maintain cursor position on TextInput
+- New FabricUIManager APIs
+
+
+
+# Remove defaultProps from FlatList (#31798)
+
+[Commit](https://github.com/facebook/react-native/commit/7d5895df4e3)
+
+
+# Upgrade metro to 0.66.2
+
+[Commit](https://github.com/facebook/react-native/commit/cfdc4fed0d0)
+
+
+
+# Add unit tests for VirtualizedList render quirks (#31401)
+
+
+[Commit](https://github.com/facebook/react-native/commit/cd785585526) summary:
+
+This change adds a series of snapshot tests to validate the render output of VirtualizedList in mixed scenarios. Jest timer mocks are used to measure rendering at different ticks. These test cases mostly center around realization logic, to help prevent regressions when changing internal state representation.
+
+[Good place to look](https://github.com/facebook/react-native/blob/main/Libraries/Lists/__tests__/VirtualizedList-test.js) if you want to see how to test a FlatList or ScrollView.
+
+
+
+# Composing Animations in Animated API Example
+
+[Charles Dudley <charlesdudley@fb.com> added](https://github.com/facebook/react-native/commit/a8e0438db29) a Animation composing example page with examples for `parallel`, `sequence`, `stagger`, and `delay` to the rn-tester app.
+
+
+
+# Cursor Position Fix on iOS
+
+
+Two commits, [one](https://github.com/facebook/react-native/commit/b0e39b2ed9b) and [two](https://github.com/facebook/react-native/commit/de44184e01d) worked on improving the cursor positon on TextInput for iOS.
+
+
+# Fix for crash when using PlatformColor on TextInput [Android]
+
+The purpose of [this change](https://github.com/facebook/react-native/commit/bc57056cc32) by David Vacca <dvacca@fb.com> is avoid a crash when using PlatformColor on TextInput. He 
+refactored AndroidTextInput.AndroidTextInput.color prop to use SharedColor instead of int.
+
+
+# Fix missing autoCompleteType on TextInput for Android
+
+[Original issue](https://github.com/facebook/react-native/issues/27952). [The change](https://github.com/facebook/react-native/commit/d9e0ea77f01) that fixes it.
+
+The autoCompleteType on the TextInput was missing the AUTOFILL_HINT_NEW_PASSWORD value, which would help the users when signing up to a service tremendously.
+```diff
+diff --git a/Libraries/Components/TextInput/TextInput.js b/Libraries/Components/TextInput/TextInput.js
+index b0227ca0eb5..e25e3011446 100644
+--- a/Libraries/Components/TextInput/TextInput.js
++++ b/Libraries/Components/TextInput/TextInput.js
+@@ -332,18 +332,42 @@ type AndroidProps = $ReadOnly<{|
+    * @platform android
+    */
+   autoCompleteType?: ?(
++    | 'birthdate-day'
++    | 'birthdate-full'
++    | 'birthdate-month'
++    | 'birthdate-year'
+     | 'cc-csc'
+     | 'cc-exp'
++    | 'cc-exp-day'
+     | 'cc-exp-month'
+     | 'cc-exp-year'
+     | 'cc-number'
+     | 'email'
++    | 'gender'
+     | 'name'
++    | 'name-family'
++    | 'name-given'
++    | 'name-middle'
++    | 'name-middle-initial'
++    | 'name-prefix'
++    | 'name-suffix'
+     | 'password'
++    | 'password-new'
++    | 'postal-address'
++    | 'postal-address-country'
++    | 'postal-address-extended'
++    | 'postal-address-extended-postal-code'
++    | 'postal-address-locality'
++    | 'postal-address-region'
+     | 'postal-code'
+     | 'street-address'
++    | 'sms-otp'
+     | 'tel'
++    | 'tel-country-code'
++    | 'tel-national'
++    | 'tel-device'
+     | 'username'
++    | 'username-new'
+     | 'off'
+   ),
+``` 
+
+
+
+# Add INFO, and MENU key event support to Android TV (#31884)
+
+[Commit](https://github.com/facebook/react-native/commit/bb33c1050ba) by Tomáš Havlas <tomas@havlas.me>
+```
+diff --git a/ReactAndroid/src/main/java/com/facebook/react/ReactAndroidHWInputDeviceHelper.java b/ReactAndroid/src/main/java/com/facebook/react/ReactAndroidHWInputDeviceHelper.java
+index 49d3cd2f40a..c73590c7d2a 100644
+--- a/ReactAndroid/src/main/java/com/facebook/react/ReactAndroidHWInputDeviceHelper.java
++++ b/ReactAndroid/src/main/java/com/facebook/react/ReactAndroidHWInputDeviceHelper.java
+@@ -36,6 +36,8 @@ public class ReactAndroidHWInputDeviceHelper {
+           .put(KeyEvent.KEYCODE_DPAD_RIGHT, "right")
+           .put(KeyEvent.KEYCODE_DPAD_DOWN, "down")
+           .put(KeyEvent.KEYCODE_DPAD_LEFT, "left")
++          .put(KeyEvent.KEYCODE_INFO, "info")
++          .put(KeyEvent.KEYCODE_MENU, "menu")
+           .build();
+```
+
+# Flipper Upgrade
+
+[Bump Flipper](https://github.com/facebook/react-native/commit/41f45a77ad0) to 0.99.0
+
+Summary:
+Includes fix included in a Flipper Pod for incorrect timestamps in the Network viewer with iOS apps
+https://github.com/facebook/flipper/commit/1cf745613390e5ce87b72e09016c42784cb0566a
+
+
+
+# Fix testID support for TextInput, Slider and ScrollView component (#31865)
+
+[This is part of a long-standing issue](https://github.com/facebook/react-native/pull/29610) where black-box testing frameworks like Appium and Xamarin UITest have not been able to access the testID view prop on Android.
+
+[This commit](https://github.com/facebook/react-native/commit/efb359f3184) fixes for TextInput, Slider and ScrollView component.
+
+
+
+
+# Expose new API FabricUIManager.getInspectorDataForInstance
+
+This is the last of three changes by David Vacca <dvacca@fb.com> related to exposing React metadata for a Native view:
+
+[43cdd84a22a](https://github.com/facebook/react-native/commit/43cdd84a22a) Expose new API FabricUIManager.getInspectorDataForInstance
+[ff494eece26](https://github.com/facebook/react-native/commit/ff494eece26) Expose new struct InspectorData
+[4208925bbc1](https://github.com/facebook/react-native/commit/4208925bbc1) Expose new API RuntimeExecutor.executeSynchronouslyOnSameThread_CAN_DEADLOCK
+
+
+Commit summary:
+This diff exposes a new API in FabricUIManager called getInspectorDataForInstance. The goal of this method is to return React metadata for a Native view.
+
+This data will be used from partner teams to build tools that uses React metadata in RN.
+
+
+# Rendering thousands of images 
+
+Fernando Rojo demo-ed his work on Beatgig. Pretty impressive rendering of thousands of list items without any flickering.
+
+[His tweet](https://twitter.com/FernandoTheRojo/status/1419069216683184130)
+
+He says his secret is:
+
+- FlatList
+- memoize everything
+- zero logic or functions in the list items
+- react-native-fast-image
+- *tiny* item components
+
+
+# React Native 0.65 RC3 is here, packed with hermes 0.8.1
+
+[Tweet by Thibault Malbranche](https://twitter.com/titozzz/status/1418612002306629639)
+
+# Stripe is hiring a React Native Developer
+
+[Tweet](https://twitter.com/holtbt/status/1417947941520613376?s=20)
+
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+
