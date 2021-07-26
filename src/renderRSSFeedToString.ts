@@ -6,7 +6,7 @@ import ReactDOMServer from 'react-dom/server'
 import siteMetadata from './siteMetadata'
 
 async function renderRSSFeed({ routes }) {
-  let publicURL = process.env.PUBLIC_URL || '/'
+  let publicURL = process.env.PUBLIC_URL || 'https://andrei-calazans.com/'
   let { paths } = await crawl({
     routes,
     root: '/posts',
