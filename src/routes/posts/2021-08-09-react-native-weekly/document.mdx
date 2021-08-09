@@ -1,0 +1,137 @@
+
+
+Welcome to the 21th edition of React Native Weekly! 
+
+This is everything that happened in between 2nd of August and 8th of August 2021.
+
+
+# Allows to set individual (left,top,right,bottom) dotted/dashed borders [Android] [Fix]
+
+With fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com> 's [fixes](https://github.com/facebook/react-native/commit/cb0e1d603aa), on Android, if a single border is specified and the `borderStyle` is dotted or dashed then each border gets drawn taking the border style and thickness into consideration. 
+
+
+| **AFTER** | **AFTER** |
+|:-------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/24992535/84158300-05e05800-aa6c-11ea-96a3-40007b2ca611.png" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/24992535/84158309-07aa1b80-aa6c-11ea-973b-51e8e68b5808.png"  width="300" height="" /> |
+
+| **AFTER** | **AFTER** |
+|:-------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/24992535/84158320-0d9ffc80-aa6c-11ea-9d7f-dfba49fbfe41.png" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/24992535/84158334-11cc1a00-aa6c-11ea-8422-cd5b9384f391.png"  width="300" height="" /> |
+
+| **AFTER** | **AFTER** |
+|:-------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/24992535/84158556-4c35b700-aa6c-11ea-9a4d-eea791b3813a.png" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/24992535/84158574-51930180-aa6c-11ea-8e84-526cfb168f49.png"  width="300" height="" /> |
+
+| **AFTER** | **AFTER** |
+|:-------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/24992535/84158586-55268880-aa6c-11ea-9540-51d79a8e4cb0.png" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/24992535/84158601-5952a600-aa6c-11ea-82e7-85d54b858f1a.png"  width="300" height="" /> |
+
+| **AFTER** | **AFTER** |
+|:-------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/24992535/84158638-62dc0e00-aa6c-11ea-8765-ecba0d9d126f.png" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/24992535/84158652-67a0c200-aa6c-11ea-8336-e6eb8aa52e96.png"  width="300" height="" /> |
+
+| **AFTER** | **AFTER** |
+|:-------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/24992535/84158690-738c8400-aa6c-11ea-9cf1-edec72d27cb7.png" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/24992535/84158912-b6e6f280-aa6c-11ea-94a7-0ee0db685f38.png"  width="300" height="" /> |
+
+
+# Feature Detection Utility Module
+
+[Small module](https://github.com/facebook/react-native/commit/06388891a34) that will currently only encapsulate `isNativeFunction` used in `setUpTimers`, but you can expect more functions to be added to it in the future, like on the next [commit](https://github.com/facebook/react-native/commit/d9a9ae38d15) that adds `hasNativeConstructor` utility function.
+
+
+# Allow resolving view from FabricUIManager [Android]
+
+[Change](https://github.com/facebook/react-native/commit/de255528e0b)
+
+If you ever need to get a React View in the Android native layer this `FabricUIManager` method might be useful.
+```diff
++  /**
++   * Resolves a view based on its reactTag. Do not mutate properties on this view that are already
++   * managed by React, as there are no guarantees this changes will be preserved.
++   *
++   * @throws IllegalViewOperationException if tag could not be resolved.
++   * @param reactTag tag
++   * @return view if found
++   */
++  View resolveView(int reactTag);
++
+
+```
+
+# Extend getInspectorDataForInstance to return props
+
+[Change](https://github.com/facebook/react-native/commit/43a91d03eb8)
+
+```diff
+@@ -216,6 +216,8 @@ InspectorData Scheduler::getInspectorDataForInstance(
+         result.lineNumber = (int)source["lineNumber"].getDouble();
+         result.columnNumber = (int)source["columnNumber"].getDouble();
+         result.selectedIndex = (int)dynamic["selectedIndex"].getDouble();
++        // TODO T97216348: remove folly::dynamic from InspectorData struct
++        result.props = dynamic["props"];
+         auto hierarchy = dynamic["hierarchy"];
+         for (size_t i = 0; i < hierarchy.size(); i++) {
+           auto viewHierarchyValue = hierarchy[i]["name"];
+```
+
+# StatusBarIOS was removed
+
+Case you were stil using `StatusBarIOS`, [it was removed](https://github.com/facebook/react-native/commit/7ce0f40f5cd) from the repo. The main functionalities of this component was merged with the `StatusBar` component back in 2019. 
+
+
+# Nomenclature "Paper" replaced for "old renderer"
+
+[Change](https://github.com/facebook/react-native/commit/91437d65d59), just an evidence that the era of the new asynchronous renderer (Fabric) has come 🙌.
+
+
+# Fix Deadlock in RCTi18nUtil [iOS]
+
+[This change](https://github.com/facebook/react-native/commit/fcead14b0ef) is a good summary about a deadlock bug caused by two threads trying to access the same resource.
+
+Commit message by Saad Najmi <saadnajmi2@gmail.com>:
+
+Internally in Microsoft code, we ran into a deadlock where the main queue and the UIManager queue were both trying to access `[RCTI18nUtil sharedInstance]`, and were blocked on each other. This is similar to an earlier issue with RCTScreenScale decsribed [here](https://github.com/facebook/react-native/issues/18096).
+
+To summarize:
+1- RCTShadowView (on the UIManager queue) and RCTView (on the main queue) both try to access `[RCTI18nUtil sharedInstance]`
+2- The UIManager thread gets there first, and lazily initializes the sharedInstance. Meanwhile, the main thread is waiting on a lock possessed by the UIManager thread
+3- As part of the initialization, we set an NSUserDefault, which seems to require the (blocked) main thread.
+4- Deadlock.
+
+For whatever reason, this only happens on debug. I did not figure out why, but I do know based on [this comment](https://github.com/facebook/react-native/issues/18096#issuecomment-368718081), that the UIManagerQueue should never block the main queue.
+
+The fix is to not use NSUserDefaults, and simpy use atomic properties instead. We get the thread safety for free, and it also simplifies the code somewhat without changing the public API. The downside is values aren't persisted anymore, but I do not think that was necessary / intended.
+
+
+# Taps to overflowed Views [Fix] [Android]
+
+[This is an important fix](https://github.com/facebook/react-native/commit/e35a963bfb9) by Harry Yu <hy.harry.yu@gmail.com>. Previously, on Android, taps to a View that is overflown and had `overflow:visible` did not register the tap. His change fixes this issue.
+
+
+Summary:
+By default, Views in React Native have `overflow: visible`. When a child view is outside of the parent view's boundaries, it's visible on Android, but not tappable. This behaviour is incorrect, and doesn't match iOS behaviour.
+
+- Taps on Views outside the bounds of a parent with `overflow: visible` (or unset) should register
+- Taps on Views outside the bounds of a parent with `overflow: hidden` should continue to not register
+
+
+| Before | After |
+| -- | --- |
+| <img src="https://user-images.githubusercontent.com/2937410/83610933-19079b00-a535-11ea-8add-22daae0191e1.gif" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/2937410/83610583-8830bf80-a534-11ea-97e2-71e180a70343.gif"  width="300" height="" /> |
+
+
+# Expo SDK 43 will support React Native for Web v17
+
+Lots of new features and changes that you can start preparing your projects for now.
+
+This also means upgrading to React and React DOM 17 support, and Babel ^7.12.9
+
+[Source](https://twitter.com/Baconbrix/status/1423661138261155841?s=20)
+
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+
