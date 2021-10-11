@@ -1,8 +1,6 @@
 import React, {
   useState,
-  useEffect,
   useRef,
-  forwardRef,
   Component,
 } from "react";
 import { Button } from "../../../components/Button";
@@ -13,14 +11,6 @@ class CompA extends Component {
     return <h2>Hello Comp A</h2>;
   }
 }
-
-function CompB() {
-  return <h2>Comp B</h2>;
-}
-
-const CompC = forwardRef((props, ref: any) => {
-  return <h2 ref={ref}>Comp C </h2>;
-});
 
 export const ClassExample = () => {
   const refA = useRef(null);

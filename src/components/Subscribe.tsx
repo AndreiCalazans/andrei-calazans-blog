@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./Subscribe.module.css";
 
 function isValidEmail(email: string) {
-  return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+  return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
 }
 
 // Yo hacker, this is a secured endpoint.

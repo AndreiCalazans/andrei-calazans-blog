@@ -88,7 +88,7 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
               <img
                 style={{ width: 16, height: 16 }}
                 src={require("./BMC_Logo.svg")}
-                alt="Coffee Image"
+                alt="Coffee"
               />
               Buy me coffee = )
             </a>
