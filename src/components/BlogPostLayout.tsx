@@ -97,7 +97,7 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
           <h3 className={styles.title}>
             <Link href={blogRoot}>{siteMetadata.title}</Link>
           </h3>
-          <Bio className={styles.bio} />
+          <Bio />
           <section className={styles.links}>
             {data.previousDetails && (
               <Link

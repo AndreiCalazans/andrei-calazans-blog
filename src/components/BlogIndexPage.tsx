@@ -28,6 +28,7 @@ function BlogIndexPage({
         </h1>
         <Bio />
       </header>
+      <hr />
       <ul className={styles.articlesList}>
         {postRoutes.map((route) => (
           <li key={route.url.href}>
@@ -42,38 +43,6 @@ function BlogIndexPage({
           pageNumber={pageNumber}
         />
       )}
-      <footer className={styles.footer}>
-        <div>
-          <a href="./rss.xml" target="_blank" style={{ float: "right" }}>
-            RSS
-          </a>
-          <Link href="./about">About</Link> &bull;{" "}
-          <Link href="./tags">Tags</Link> &bull;{" "}
-          <a
-            href="https://github.com/andreiCalazans"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Github
-          </a>{" "}
-          &bull;{" "}
-          <a
-            href="https://twitter.com/Andrei_Calazans"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Twitter
-          </a>{" "}
-          &bull;{" "}
-          <a
-            href="https://www.linkedin.com/in/andrei-xavier-de-oliveira-calazans-8b1269115"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Linkedin
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

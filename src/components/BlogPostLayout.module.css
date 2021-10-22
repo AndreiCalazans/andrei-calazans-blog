@@ -25,17 +25,14 @@
 .footer .title {
   font-size: 1.44rem;
   margin-top: 0;
-  margin-bottom: 2.4rem;
+  margin-bottom: 0;
 }
 .footer .title > a {
   color: var(--primary-color-light);
 }
 
-.bio {
-  margin-bottom: 7rem;
-}
-
 .links {
+  margin-top: 2rem;
   display: flex;
 }
 
