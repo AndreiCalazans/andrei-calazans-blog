@@ -39,18 +39,17 @@ export function Subscribe() {
 
   return (
     <div className={styles.subscribeContainer}>
-      <input
-        type="email"
-        placeholder="Type your email..."
-        onChange={handleText}
-      />
-      <button disabled={!isValidEmail(email)} onClick={onSubmit}>
-        <label>Subscribe</label>
-      </button>
-      <p className={styles.subscribeInfo}>
-        If you want to receive updates from my blog go ahead and subscribe. I
-        plan to send out updates only once a month
-      </p>
+      <h3>STAY UP TO DATE BY SUBSCRIBING</h3>
+      <div>
+        <input
+          type="email"
+          placeholder="Type your email..."
+          onChange={handleText}
+        />
+        <button disabled={!isValidEmail(email)} onClick={onSubmit}>
+          <label>Subscribe</label>
+        </button>
+      </div>
     </div>
   );
 }
