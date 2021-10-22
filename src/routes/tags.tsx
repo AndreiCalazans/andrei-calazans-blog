@@ -72,7 +72,7 @@ const tagRoutes = compose(
             tags={tags.map(name => ({
               name,
               href: join(req.mountpath, name.toLowerCase()),
-              count: (tagRoutes[name] || []).length,
+              count: (tagRoutes[name.toLowerCase()] || []).length,
             }))}
           />
         )
