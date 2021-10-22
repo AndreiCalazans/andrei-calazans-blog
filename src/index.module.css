@@ -1,125 +1,25 @@
 
-:root {
-  --primary-color: rgb(18, 18, 18);
-  --primary-color-light: rgb(100, 100, 100);
+body {
+  max-width: 70ch;
+  padding: 3em 1em;
+  margin: auto;
+  line-height: 1.75;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-:global * {
-  box-sizing: border-box;
+@media (min-width: 750px) { 
+  body {
+    font-size: 1.20em;
+  }
 }
 
-:global html {
-  color: rgba(0, 0, 0, 0.9);
+blockquote {
+	padding: .5em;
+	background-color: #f6ebc1;
+  border-left: 5px solid #fce27c;
+  margin-inline-end: 0;
 }
 
-:global body {
-  font-kerning: normal;
-  font-feature-settings: "kern", "liga", "clig", "calt";
-  font-weight: 400;
-  font-size: 18px;
-  margin: 0;
-  padding: 0;
-  word-wrap: break-word;
-}
-
-:global(pre),
-:global(code) {
-  font-size: 0.85rem;
-  line-height: 1.5;
-}
-:global pre {
-  border-radius: 10px;
-  overflow: auto;
-  padding: 1em;
-}
-
-:global a {
-  color: var(--primary-color);
-}
-:global a:hover {
-  text-decoration: none;
-}
-
-:global p,
-:global pre,
-:global ul,
-:global ol {
-  margin-top: 0;
-  margin-bottom: 1.75rem;
-}
-
-:global blockquote {
-  border-left: 4px solid #ff5400;
-  margin: 1.5em 10px;
-  padding: 0.5em 10px;
-  quotes: "\201C""\201D""\2018""\2019";
-
-}
-
-:global blockquote:before {
-  content: open-quote;
-  color: #ff5400;
-}
-
-:global blockquote:after {
-  content: close-quote;
-  color: #ff5400;
-}
-
-:global blockquote p {
-  display: inline;
-  font-style: italic;
-  color: #ff5400;
-}
-
-
-:global blockquote.comment {
-  border-left: none;
-  margin: 1.5em 10px;
-  padding: 0.5em 10px;
-  quotes: "\201C""\201D""\2018""\2019";
-}
-
-:global blockquote.comment:before  {
-  color: #039489;
-  font-weight: 900;
-  content: open-quote;
-  font-size: 1.5rem;
-}
-
-:global blockquote.comment p:first-child:after  {
-  color: #039489;
-  font-weight: 900;
-  content: close-quote;
-  font-size: 1.5rem;
-}
-
-:global blockquote.comment p {
-  color: #039489;
-  font-weight: 900;
-  display: inline;
-  font-style: italic;
-  font-size: 1.6rem;
-}
-
-:global blockquote.comment p:last-child {
-  display: inline;
-  font-style: italic;
-  font-size: 1rem;
-}
-
-:global .was_said {
-    display: inline;
-    background: #039489;
-    color: white;
-    padding: 2px;
-}
-
-:global .buy_me_coffee {
-    color: black;
-    font-weight: 900;
-    background: yellow;
-    padding: 10px;
-    border-radius: 13px;
-    text-decoration: none;
+blockquote p {
+	margin: 0;
 }

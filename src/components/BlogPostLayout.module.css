@@ -37,11 +37,15 @@
 
 .links {
   display: flex;
-  justify-content: space-between;
 }
-.links .next {
-  flex-grow: 1;
-  flex-shrink: 1;
+
+.links *:nth-child(1) {
+  flex: 1;
+  text-align: left;
+}
+
+.links *:nth-child(2) {
+  flex: 1;
   text-align: right;
 }
 

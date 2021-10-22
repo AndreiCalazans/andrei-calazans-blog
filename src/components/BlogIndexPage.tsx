@@ -48,7 +48,7 @@ function BlogIndexPage({
             RSS
           </a>
           <Link href="./about">About</Link> &bull;{" "}
-          <Link href="./tags">Tags</Link> &bull; : blogRoot{" "}
+          <Link href="./tags">Tags</Link> &bull;{" "}
           <a
             href="https://github.com/andreiCalazans"
             target="_blank"

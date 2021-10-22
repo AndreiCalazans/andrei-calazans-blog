@@ -31,7 +31,7 @@ function BlogLayout({ blogRoot, isViewingIndex }: BlogLayoutProps) {
         <meta property="twitter:title" content={siteMetadata.title} />
         <meta property="twitter:description" content={siteMetadata.description} />
       </Helmet>
-    <div className={styles.container}>
+    <div>
       <LoadingIndicator active={!!loadingRoute} />
 
       {// Don't show the header on index pages, as it has a special
