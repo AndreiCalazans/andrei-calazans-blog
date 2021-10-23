@@ -264,6 +264,21 @@ const cachedGetUser = cacheResource(getUser, 'user'); // (id: string) => Promise
 
 [Playground](https://www.typescriptlang.org/play?#code/FAFwngDgpgBASlEBXATgOwAooPYFsCWAzlACqRQA8JMUAHiFGgCaEwAUAdFwIYoDmhAFwxuaMAEoYAXgB8MLHiKVRYGXKkxqdBs1ace-ISLGTZ8nAWIV8aAGZQU8OQH54MYSoDcwYAGNsaIQgML7cvgAWUAiE2Ki+sBoUAMLcADapAEZhANYAYkhoviD4ATT0jCzsXBy8Ah5iANoAuqZyCpbKYmpsoelZvtnCKX05+YXFAQA0MNlQYMJBKDZ8rSKEYIVVBnXyvNy4iA6EyWmZowVFJWgy4sLtShQIyOj3xGTQJyMDY5cBatJyADewBgoJCASCMCY3BA3GkIgA7tx8MFemcBvoaoZxN4wTAUIhUGgoTDuN4AL4+fyBYJ8RAAVWIjg0bHwTAWICWaBWAPMimIHAJMVSADcoGxATA0PsoMIAOQAESQTCgcpg5JxVIhqLCkSYAHEGUz4aEIlEoDE4uK6SBGQ5pnKkEy5TiYAB6N3sNkcrk8syvSiS6UHH3LTzqmTAIA)
 
+
+# Update
+
+When I shared this post on Twitter, [Mauro Titimoli](https://twitter.com/maurotitimoli) pointed out another way to solve it as well:
+
+```typescript
+type Fn<TArgs extends any[], TResult> = (...args: TArgs) => TResult;
+
+const test = <TArgs extends any[], TResult extends Promise<any>>(fn: Fn<TArgs, TResult>) => (...args: TArgs) => fn(...args);
+```
+
+[Playground](https://www.typescriptlang.org/play?#code/C4TwDgpgBAYgdgHgCoEEBOBzAzlCAPYCOAExwEM4QBtAXQBookAlCLAVwBtgA+KAXigAKAHSiymLAC5G6bAEp+vZq07AA3ACgNAYwD2cLMCiFD-KMlk58hEuUq0Gy9l1wEipKAAU0ugLYBLLAgEChBubkEAMzhpeAsJRxZnHgU+XhExCWlUCVTeaIzhcXlNHX1TNBUXARNgQUEwAAZpQzR-OAwGMABGaTg2XwAjCDQ8rx8AoOFKrF0OADcIBu65OUEAImA0Ngh1hm7GuS0gA)
+
+His approach helps TypeScript to infer the arguments and return of the callback function by connecting the generics together `TArgs extends any[], TResult extends Promise<any>` and `Fn<TArgs, TResult>`. This teaches us a lesson about TypeScript's inference engine, it can infer if you can tie the generics together.
+
 # That is it 😅
 
 If read the whole thing you should pat yourself in the back, you now have a better understanding of TypeScript's generics, function types, `Parameters` and `ReturnType` utility, and might be able to figure out how inference works if you paid attention to `ReturnPromiseType`. Congratulations.
