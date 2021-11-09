@@ -1,7 +1,7 @@
 
 Welcome to the 33rd edition of React Native Weekly! 
 
-This is week 45 of 2021: November 1st to 7th.
+The week 45 of 2021 was a slower than usual week, it contains all the work in-between: November 1st to 7th.
 
 # Workflow for version labels
 
@@ -30,6 +30,39 @@ somena1 <sophiaesiri.ee@gmail.com> fixed an issue related to split screen Androi
 > When switching between split screen or resizing the screen window on Android causes a restart by reconstructing the app components as described on this issue https://github.com/facebook/react-native/issues/25040
 
 The fix is to add `screenLayout` and `smallestScreenSize` to `AndroidManifest`'s `android:configChanges`
+
+
+# Remove iOS 11 availability check
+
+[This commit](https://github.com/facebook/react-native/commit/9b059b67092) by Ken Tominaga <ken.for.develop@gmail.com> is a good reminder that React Native mininum iOS deployment target is iOS 11.
+
+
+
+# Check for double dispose when sending touch event [Android]
+
+Andrei Shikov <ashikov@fb.com> [found a double dispatching](https://github.com/facebook/react-native/commit/deb6fbd9291) issue with touch events on Android.
+
+```java
+-      TouchesHelper.sendTouchEventModern(rctEventEmitter, this, /* useDispatchV2 */ true);
++      if (verifyMotionEvent()) {
++        TouchesHelper.sendTouchEventModern(rctEventEmitter, this, /* useDispatchV2 */ true);
++      }
+```
+
+# Ensure WritableMap is copied before consuming object
+
+[In another commit](https://github.com/facebook/react-native/commit/5c045861b98) Andrei Shikov <ashikov@fb.com> also fixed an issue with touch events where the touch objects would cause crash in production due to high-firing conditions for CANCEL events.
+
+And this was caused by the `WritableMap` object not being properly copied over.
+
+
+# Allow setting architecture in RNTester and release builds
+
+[Commit](https://github.com/facebook/react-native/commit/43c38cdc8e3) by Neil Dhar <neildhar@fb.com>
+
+You can now do specify the native debug architecture when building the rn-tester:
+
+`./gradlew  -PreactNativeDebugArchitectures=x86_64 :packages:rn-tester:android:app:installJscDebug`
 
 
 # Community
