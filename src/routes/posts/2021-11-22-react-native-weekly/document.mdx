@@ -1,0 +1,208 @@
+Welcome to the 35th edition of React Native Weekly! 
+
+This is week 47 of 2021: November 15th to 21st.
+
+
+
+# Add onScroll event to the Fabric TextInput
+
+Phillip Pan <phillippan@fb.com> added the missing `onScroll` event to the Fabric TextInput component on iOS.
+
+He [first added the missing](https://github.com/facebook/react-native/commit/9822464c991) `onScroll` event to the TextInputEventEmitter [then hooked it up](https://github.com/facebook/react-native/commit/437b06f3974) to the `RCTTextInputComponentView.mm`:
+
+```Objc
++- (void)scrollViewDidScroll:(UIScrollView *)scrollView
++{
++  if (_eventEmitter) {
++    std::static_pointer_cast<TextInputEventEmitter const>(_eventEmitter)->onScroll([self _textInputMetrics]);
++  }
++}
++
+```
+
+
+# Option to support monorepo/custom location of node_modules [Codegen]
+
+Sota Ogo <sota@fb.com> [added an option](https://github.com/facebook/react-native/commit/5e93cf68856) to set where the codegen config files are location, this is specially important for Monorepos.
+
+```
++  .option('c', {
++    alias: 'configFileDir',
++    default: '',
++    description:
++      'Path where codegen config files are located (e.g. node_modules dir).',
++  })
+```
+
+
+# Refactor native Android ScrollView animation code into helper 
+
+Refactor done by Xin Chen <xch@fb.com>, [he organized and extracted the common logic](https://github.com/facebook/react-native/commit/073195991bf) used by the vertical and horizontal scroll views on Android into a helper - `ReactScrollViewHelper`. 
+
+This reduces code duplication and makes the helper share impact surface.
+
+
+
+# Add volta support to find-node.sh
+
+[This commit](https://github.com/facebook/react-native/commit/765844055ba) adds support for [Volta](https://volta.sh/) the tooling manager that can enforce that everyone uses the same tooling versions. I honestly didn't know of this tool.
+
+
+
+# Remove soft error when creating preallocated view
+
+While [this change](https://github.com/facebook/react-native/commit/db21584ba01) by Andrei Shikov <ashikov@fb.com> seems little, he shares some interesting context around it.
+
+> This is expected with Suspense/CM enabled. We are measuring the perf impact of extra CREATE instructions atm, and will revert the change if it regresses too much.
+
+
+# Experiment for running JS on view creation
+
+Jimmy Lai <feedthejim@fb.com> launched an experiment to see if they can start the JavaScript work earlier instead of waiting for the View.onMeasure call on Android. 
+
+[This change](https://github.com/facebook/react-native/commit/2dd33b16df1) starts the JavaScript work on view creation.
+
+If this goes well it could mean a potential start-up improvement on Android.
+
+
+
+
+
+Update ViewConfigs to support onEnter/onExit/onMove events
+
+Summary:
+This diff updates the ViewConfigs in RN Android to add support for onEnter/onExit/onMove events.
+
+Open questions:
+
+- Should we just remove the override for RN VR: https://www.internalfb.com/code/ovrsource/[c82b81893393ad0c6f8c6e7f347e82bba39dc8cc]/arvr/js/libraries/reactvr/VrShellPanelLib/rn-support/setUpViewConfigOverrides.js
+
+- Should we use w3c naming now (e.g. onPointerEnter / onPointerExit / onPointerMove) ? or should we migrate to it later? what would be the effort for VR to migrate now to onPointerEnter / onPointerExit / onPointerMove?
+
+
+26e30a5ee9e Fix incorrect ViewFlattening for views that were listening for a JS event
+34a5158ec81 Update Fabric to suport onEnter/onExit/onMove events
+a9ccdcace53 Store metadata to determine if a view is listening for a JS event
+44143b50fdc Update ViewConfigs to support onEnter/onExit/onMove events
+
+
+
+# Extending Fabric & ViewConfig to support onEnter/onExit/onMove events
+
+This is a series of work done by David Vacca <dvacca@fb.com> to support these events for React Native VR (Virtual Reality). 
+
+While it does not include the implementation of the events yet, maybe to come?, it does the work of:
+
+- [updating the ViewConfigs](https://github.com/facebook/react-native/commit/44143b50fdc), 
+- [storing metadata on Android](https://github.com/facebook/react-native/commit/a9ccdcace53) to know if a view is listening to these events, 
+- [updating the Fabric supported events](https://github.com/facebook/react-native/commit/34a5158ec81), 
+- and finally fixing an error where to [avoid View flattening if the view is listening to these events](https://github.com/facebook/react-native/commit/26e30a5ee9e).  
+
+
+**Note about View Flattening**
+
+View Flattening was introduced to improve performance and reduce out-of-memory/stack-overflow errors on Android, with Fabric iOS got it for free since the logic got moved to C++. 
+
+It's good see what disables View flattening, for instance setting `collapsable={false}` to a component will force it and its children to not be flattened. 
+
+You can see the full list of props/settigns that will disable view flattening [here](https://github.com/facebook/react-native/blob/main/ReactCommon/react/renderer/components/view/ViewShadowNode.cpp#L34-L54)
+
+
+# Complete Fabric Native Component Example
+
+Sota Ogo <sota@fb.com> adds a Fabric Component examples that takes a native View component and extends it to add a `callNativeMethodToChangeBackgroundColor` method.
+
+See complete directory [here](https://github.com/facebook/react-native/tree/main/packages/rn-tester/NativeComponentExample)
+
+
+By looking at this implementation you will notice a few things:
+
+**1) MyNativeViewNativeComponent.js defines the JSI layer**
+
+```javascript
+interface NativeCommands {
+  +callNativeMethodToChangeBackgroundColor: (
+    viewRef: React.ElementRef<MyNativeViewType>,
+    color: string,
+  ) => void;
+}
+
+export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
+  supportedCommands: ['callNativeMethodToChangeBackgroundColor'],
+});
+
+export default (codegenNativeComponent<NativeProps>(
+  'RNTMyNativeView',
+): MyNativeViewType);
+```
+
+**2) RNTMyNativeViewComponentView.mm implements the native callNativeMethodToChangeBackgroundColor using Fabric**
+
+```objc
+- (void)callNativeMethodToChangeBackgroundColor:(NSString *)colorString
+{
+  UIColor *color = [self UIColorFromHexString:std::string([colorString UTF8String])];
+  _view.backgroundColor = color;
+}
+```
+
+The Fabric version of `callNativeMethodToChangeBackgroundColor` is much simpler because you don't need to find the View counterpart and also parsing the NSString color is simplified by UIColorFromHexString.
+
+**3) RNTMyNativeViewManager.mm implements the native callNativeMethodToChangeBackgroundColor using the bridge**
+
+```objc
+RCT_EXPORT_METHOD(callNativeMethodToChangeBackgroundColor : (nonnull NSNumber *)reactTag color : (NSString *)color)
+{
+  [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    UIView *view = viewRegistry[reactTag];
+    if (!view || ![view isKindOfClass:[UIView class]]) {
+      RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
+      return;
+    }
+
+    unsigned rgbValue = 0;
+    NSString *colorString = [NSString stringWithCString:std::string([color UTF8String]).c_str()
+                                               encoding:[NSString defaultCStringEncoding]];
+    NSScanner *scanner = [NSScanner scannerWithString:colorString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+
+    view.backgroundColor = [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16) / 255.0
+                                           green:((rgbValue & 0xFF00) >> 8) / 255.0
+                                            blue:(rgbValue & 0xFF) / 255.0
+                                           alpha:1.0];
+  }];
+}
+```
+
+**4) The podspec call the codegen generator**
+
+```
+# Enable codegen for this library
+  use_react_native_codegen!(s, {
+    :library_name => "MyNativeViewSpec",
+    :react_native_path => "../../../",
+    :js_srcs_dir => "./js",
+    :library_type => "components"
+  })
+```
+
+I think Sota implemented the bridge example alongside to as an example and also to support for the RN-Tester to work if Fabric is disabled.
+
+
+# 1200+ React Native Screens 
+
+[Josh tweeted](https://twitter.com/joshuaisgross/status/1461118142248222725) the Facebook app now has 1200+ screens. 
+
+
+# Community
+
+- [This week in React](https://www.getrevue.co/profile/thisweekinreact) by Sébastien Lorber
+- [onPress not working on Android device while debugging tip by Mike](https://twitter.com/mcavaliere/status/1460634087236976641?s=20)
+- [Satya reminds you how peer-dependencies work](https://twitter.com/satya164/status/1460929480248152068?s=20)
+- [Post - Dont use the wrong JDK for React Native if you are on Mac M1 by Jamon](https://twitter.com/jamonholmgren/status/1461855809671819270?s=20)
+- [react-three-fiber now supports react-native](https://twitter.com/0xca0a/status/1460569744185217026)
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )Sa
