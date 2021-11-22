@@ -2,8 +2,6 @@ Welcome to the 35th edition of React Native Weekly!
 
 This is week 47 of 2021: November 15th to 21st.
 
-
-
 # Add onScroll event to the Fabric TextInput
 
 Phillip Pan <phillippan@fb.com> added the missing `onScroll` event to the Fabric TextInput component on iOS.
@@ -64,29 +62,6 @@ Jimmy Lai <feedthejim@fb.com> launched an experiment to see if they can start th
 
 If this goes well it could mean a potential start-up improvement on Android.
 
-
-
-
-
-Update ViewConfigs to support onEnter/onExit/onMove events
-
-Summary:
-This diff updates the ViewConfigs in RN Android to add support for onEnter/onExit/onMove events.
-
-Open questions:
-
-- Should we just remove the override for RN VR: https://www.internalfb.com/code/ovrsource/[c82b81893393ad0c6f8c6e7f347e82bba39dc8cc]/arvr/js/libraries/reactvr/VrShellPanelLib/rn-support/setUpViewConfigOverrides.js
-
-- Should we use w3c naming now (e.g. onPointerEnter / onPointerExit / onPointerMove) ? or should we migrate to it later? what would be the effort for VR to migrate now to onPointerEnter / onPointerExit / onPointerMove?
-
-
-26e30a5ee9e Fix incorrect ViewFlattening for views that were listening for a JS event
-34a5158ec81 Update Fabric to suport onEnter/onExit/onMove events
-a9ccdcace53 Store metadata to determine if a view is listening for a JS event
-44143b50fdc Update ViewConfigs to support onEnter/onExit/onMove events
-
-
-
 # Extending Fabric & ViewConfig to support onEnter/onExit/onMove events
 
 This is a series of work done by David Vacca <dvacca@fb.com> to support these events for React Native VR (Virtual Reality). 
@@ -110,10 +85,9 @@ You can see the full list of props/settigns that will disable view flattening [h
 
 # Complete Fabric Native Component Example
 
-Sota Ogo <sota@fb.com> adds a Fabric Component examples that takes a native View component and extends it to add a `callNativeMethodToChangeBackgroundColor` method.
+Sota Ogo <sota@fb.com> added a Fabric Component example that takes a native View component and extends it to add a `callNativeMethodToChangeBackgroundColor` method.
 
-See complete directory [here](https://github.com/facebook/react-native/tree/main/packages/rn-tester/NativeComponentExample)
-
+See complete directory [here](https://github.com/facebook/react-native/tree/main/packages/rn-tester/NativeComponentExample) and [commit](https://github.com/facebook/react-native/commit/d29f3d2a6b8).
 
 By looking at this implementation you will notice a few things:
 
