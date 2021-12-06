@@ -1,0 +1,172 @@
+
+
+Welcome to the 37th edition of React Native Weekly! 
+
+This is week 49 of 2021: November 29th to December 5th.
+
+
+# Fix crash on ReactEditText with AppCompat 1.4.0 [Android]
+
+According to Nicola Corti <ncor@fb.com>:
+
+> This Diff fixes a crash happening as the user uses AppCompat 1.4.0 as a dependency in their App and uses a `TextInput` component.  The crash happens as `mFabricViewStateManager` is accessed during the constructor of the superclass, and is not yet initialized.
+
+[Commit](https://github.com/facebook/react-native/commit/e21f8ec3498)
+
+# Make fling animator customizable
+
+[This change](https://github.com/facebook/react-native/commit/3352b57a6fa) by Xin Chen <xch@fb.com> surfaces the work going on with VR.
+
+Xin attempts to fix the fling animation when you overscroll, he mentions that on VR due to the joystick events it is more evident how the animation is unexpected despite that on mobile it being almost unnoticeable. 
+
+For now he only refactored the code to allow for a custom interface to override the fling animation and recommended the in the future the animation gets properly fixed for mobile. And [also introduced some fixes to the Android](https://github.com/facebook/react-native/commit/f70018b3753) implementation to resolve some unexpected bounce-back effect.
+
+
+# Automating the release cycle
+
+Luna Wei <luwe@fb.com> has made multiple changes in the effort of automating the release process, this will enable React Native to ship more versions since today's process is very manual. 
+
+The goal is to be able to publish directly to NPM by running a Circle CI build when there is a push to a release branch.
+
+This is still a work in progress but you can see the progress happening in the below commits:
+
+- [583471bc48a](https://github.com/facebook/react-native/commit/583471bc48a) Fix workflow for automating version bumps
+- [8cc80a843a1](https://github.com/facebook/react-native/commit/8cc80a843a1) isTaggedVersion checks if the commit has a version tag on it
+- [90f0de99ada](https://github.com/facebook/react-native/commit/90f0de99ada) Remove warning against PR for release branch
+- [94abcffe2fd](https://github.com/facebook/react-native/commit/94abcffe2fd) Update CircleCI to auto-deploy release branch on push
+- [f4314c2b44b](https://github.com/facebook/react-native/commit/f4314c2b44b) Extract logic from bump-oss-version specific to prod releases
+- [ea6e34da772](https://github.com/facebook/react-native/commit/ea6e34da772) Extract release agnostic logic in bump-oss-version to set-rn-version
+- [c611ed1b932](https://github.com/facebook/react-native/commit/c611ed1b932) Add getNextVersionFromTags
+
+
+# Fix eslint no-shadow issue with TypeScript enums (#32644)
+
+[Commit](https://github.com/facebook/react-native/commit/722a0ff6f88) by Tom Spencer <tom.spencer@studiozeffa.com>
+
+> The current ESLint config includes a rule for `no-shadow`. When authoring using TypeScript, the [typescript-eslint docs](https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-shadow.md) mention that the base `no-shadow` rule should be disabled in favour of `typescript-eslint/no-shadow`, otherwise false positives can be reported. In my case, I was experiencing the same symptoms as described in [this issue](https://github.com/typescript-eslint/typescript-eslint/issues/2552).
+
+<img width="350" alt="Screenshot 2021-11-22 at 21 02 31" src="https://user-images.githubusercontent.com/820863/142934803-ef1343d6-46ab-4495-9ea5-957f7ec404fc.png" /> 
+
+After changes:
+
+<img width="350" alt="Screenshot 2021-11-22 at 21 03 28" src="https://user-images.githubusercontent.com/820863/142934914-a151656a-a37e-4ffb-9db5-ed9fb93543c7.png" />
+
+
+# Support queuing accessibility announcements [iOS]
+[Change](https://github.com/facebook/react-native/commit/4d1357918a4) by Peter Carpenter <peterc1731@gmail.com>
+
+> The current implementation of `AccessibilityInfo.announceForAccessibility` will immediately interrupt any existing in progress speech with the announcement. Sometimes this is desirable behaviour, but often you will want to wait until existing speech is finished before reading the new announcement. This change gives us that option.
+
+The new NativeAccessibilityManager.announceForAccessibilityWithOptions method: 
+
+```
+diff --git a/Libraries/Components/AccessibilityInfo/NativeAccessibilityManager.js b/Libraries/Components/AccessibilityInfo/NativeAccessibilityManager.js
+index 9ee2403e372..78dc83170ad 100644
+--- a/Libraries/Components/AccessibilityInfo/NativeAccessibilityManager.js
++++ b/Libraries/Components/AccessibilityInfo/NativeAccessibilityManager.js
+@@ -52,6 +52,10 @@ export interface Spec extends TurboModule {
+   |}) => void;
+   +setAccessibilityFocus: (reactTag: number) => void;
+   +announceForAccessibility: (announcement: string) => void;
++  +announceForAccessibilityWithOptions?: (
++    announcement: string,
++    options: {queue?: boolean},
++  ) => void;
+ }
+```
+
+
+# Use same implementation for `performance.now()` on iOS and Android
+
+Marc Rousavy <me@mrousavy.com> [refactored the internals](https://github.com/facebook/react-native/commit/1721efb54ff) of `iosPerformanceNowBinder` and  `reactAndroidNativePerformanceNowHook` to have the same logic based on Chrono API.
+
+```cpp
+    auto time = std::chrono::system_clock::now().time_since_epoch();
+    return std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
+```
+
+```typescript
+const now = global.performance.now()
+console.log(`${Platform.OS}: ${now}`)
+```
+
+
+# Introduce `cleanAll` Top Level Gradle task.
+
+Nicola Corti <ncor@fb.com> [introduced](https://github.com/facebook/react-native/commit/fab4752e1f4) the `cleanAll` task in Gradle, use this task clean up any left over files. 
+
+```
+diff --git a/build.gradle.kts b/build.gradle.kts
+index cab3029de00..edc42530435 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -47,3 +47,16 @@ allprojects {
+         ext["ANDROID_NDK_PATH"] =  System.getenv("ANDROID_NDK")
+     }
+ }
++
++tasks.register("cleanAll", Delete::class.java) {
++    description = "Remove all the build files and intermediate build outputs"
++    dependsOn(gradle.includedBuild("react-native-gradle-plugin").task(":clean"))
++    delete(allprojects.map { it.buildDir })
++    delete(rootProject.file("./ReactAndroid/.cxx"))
++    delete(rootProject.file("./ReactAndroid/src/main/jni/prebuilt/lib/arm64-v8a/"))
++    delete(rootProject.file("./ReactAndroid/src/main/jni/prebuilt/lib/armeabi-v7a/"))
++    delete(rootProject.file("./ReactAndroid/src/main/jni/prebuilt/lib/x86/"))
++    delete(rootProject.file("./ReactAndroid/src/main/jni/prebuilt/lib/x86_64/"))
++    delete(rootProject.file("./packages/react-native-codegen/lib"))
++    delete(rootProject.file("./packages/rn-tester/android/app/.cxx"))
++}
+```
+
+
+
+# Move preallocation calls to background [Android]
+
+Andrei Shikov <ashikov@fb.com> is running an experiment to [try to preallocate the views](https://github.com/facebook/react-native/commit/290dae9df56) in a background thread on Android. 
+
+> Preallocation can take 10-20% of time when creating new nodes. (according to systrace measurements). At the moment, we are executing all preallocation calls in JS thread, potentially slowing down the progress there. Moving them to bg thread is a simple micro-optimization that ensures we return the node to JS as soon as possible.
+
+```diff
++  if (dispatchPreallocationInBackground_) {
++    auto backgroundExecutor = backgroundExecutor_->get();
++    backgroundExecutor([this, surfaceId, shadowView = std::move(shadowView)] {
++      preallocateShadowView(surfaceId, shadowView);
++    });
++  } else {
++    preallocateShadowView(surfaceId, shadowView);
++  }
+```
+
+
+# Enable Fabric by default inside RN-Tester
+
+Fabric is now enabled by default on Android for the rn-tester. [Commit](https://github.com/facebook/react-native/commit/f1a673b49ba).
+
+# Introduce TextInput.setSelection method 
+
+[This change](https://github.com/facebook/react-native/commit/771ca921b59) introduced the imperative alternative to the [TextInput selection prop](https://reactnative.dev/docs/textinput#selection). This way you don't need to store local state for the start and end values. 
+
+> The start and end of the text input's selection. Set start and end to the same value to position the cursor.
+
+```javascript
+this._textInput?.setSelection(start, end)
+```
+
+# Community
+
+- Is Moti the best animation package for React Native? [This person thinks yes](https://twitter.com/BCorzah/status/1467519935450656772?s=20)
+- Catalin recently posted a [video tutorial](https://twitter.com/mironcatalin/status/1465690123421425671?s=20) that uses Moti 
+- [Pytorch React Native SDK](https://twitter.com/reactnative/status/1466263054035742722?s=20)
+- [Nice thread](https://twitter.com/sebastienlorber/status/1465376972322791428) on why React Native did not use Rust instead of C or C++?
+- Jamon Holmgren [live-stream](https://www.twitch.tv/videos/1222927020) about React Native Performance, they talk about `react-native-performance`, RN Devtools, profiling & flame graphs, and comments on the COntext API.
+- [React Native Gesture 2.0](https://twitter.com/swmansion/status/1466051838071951365)
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+# Partners
+
+- [This week in React](https://www.getrevue.co/profile/thisweekinreact) by Sébastien Lorber
+
