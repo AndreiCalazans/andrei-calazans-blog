@@ -27,7 +27,7 @@ export const SiteNav = () => {
       </a>{" "}
       &bull;{" "}
       <a
-        href="https://www.linkedin.com/in/andrei-xavier-de-oliveira-calazans-8b1269115"
+        href="www.linkedin.com/in/andrei-calazans"
         target="_blank"
         rel="noopener noreferrer"
       >
