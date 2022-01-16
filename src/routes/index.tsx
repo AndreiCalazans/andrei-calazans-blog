@@ -37,6 +37,9 @@ let chunkPagePairs = chunks.map((chunk, i) => [
       }),
     )
 
+    // @ts-ignore
+    postRoutes = postRoutes.filter(route => !route.data.tags.includes("react-native-weekly"));
+
     // Only add a page number to the page title after the first index page.
     let pageTitle = siteMetadata.title
     if (i > 0) {
