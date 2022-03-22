@@ -79,7 +79,6 @@ function BlogPostLayout({ blogRoot }: BlogPostLayoutProps) {
               Discuss on Twitter
             </a>
           </p>
-          <Subscribe />
           <h3 className={styles.title}>
             <Link href={blogRoot}>{siteMetadata.title}</Link>
           </h3>
