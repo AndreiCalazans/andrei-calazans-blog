@@ -4,7 +4,6 @@ import { MDXProvider } from "@mdx-js/react";
 import { Helmet } from "react-navi-helmet-async";
 import siteMetadata from "../siteMetadata";
 import ArticleMeta from "./ArticleMeta";
-import { Subscribe } from "./Subscribe";
 import Bio from "./Bio";
 import styles from "./BlogPostLayout.module.css";
 
