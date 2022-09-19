@@ -10,6 +10,7 @@ export const SiteNav = () => {
       <Link href="/about">About</Link> &bull;{" "}
       <Link href="/tags/react-native-weekly">React Native Weekly</Link> &bull;{" "}
       <Link href="/tags/til">TIL</Link> &bull;{" "}
+      <Link href="/daily">Dailies</Link> &bull;{" "}
       <Link href="/tags">Tags</Link>{" "}
       &bull;{" "}
       <a

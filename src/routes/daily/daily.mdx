@@ -1,0 +1,34 @@
+
+# Daily
+
+A place where I write public daily thoughts.
+
+_ps: eventually this will be split our by year or perhaps quarter, for now it's a single file._
+
+## 19th September, 2022
+
+Hello world. It was on my TODO list that I was going to get this done. So, I'm done = ).
+
+But, here are some random thoughts:
+
+
+**1) There are no reliable dev environment in the finance industry**
+
+I've been working in the Crypto space for a year now and this is a huge pain point for us. Researching about the topic I learned it is a shared pain due to the number of external integrations with legacy bank systems. Plus, it is hard to maintain fakers for every API you have. 
+
+**2) Handling app errors gracefully**
+
+This has been a recorrent topic at work. The app grew and an initial pattern implemented in the early days of the app is becoming bad user experience - full screen errors. 
+
+Over the years I noticed a few patterns emerge while building apps. The first is fully neglecting errors and letting apps just crash. The second pattern is typically a solution for the first which is a generic error screen that serves as a catch all, this is the stage where the current app I work with is at. And perhaps the last stage is pushing error handling closer to the leaf UI elements that cause them in the UI tree with addition to proper reaction mechanisms such as retries.
+
+
+In hingsight it feels like if we instead started backwards - that is handling errors only at the leaf nodes before going higher up the UI tree, this could make it easier over time to deliver a better UX.
+
+But why doesn't that happen? 
+
+I don't know the answer. But, I would think that the clear lack of paved road in this area makes for less experienced developers to simply neglect error handling as a whole.
+
+
+
+
