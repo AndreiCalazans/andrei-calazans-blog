@@ -3,9 +3,61 @@
 
 A place where I write public daily thoughts.
 
-_ps: eventually this will be split out by year or perhaps quarter, for now it's a single file._
 
-## 19th September, 2022
+<h2 id="09-20-2022" ><a href="#09-20-2022">20th September, 2022</a></h2>
+
+Today I had to patch react-native's source code to fix an Android issue.
+
+Turns out by default react-native only compiles its native code when the new Fabric architecture is enabled else it uses a prebuilt lib.
+
+To turn on compilation of react-native's source code you need to remove the following if checks in [build.gradle](https://github.com/facebook/react-native/blob/bcb58089c4723a005326cb7a8b44e349c6a9a451/template/android/app/build.gradle) and [settings.gradle](https://github.com/facebook/react-native/blob/bcb58089c4723a005326cb7a8b44e349c6a9a451/template/android/settings.gradle):
+
+```gradle
+M src/packages/app/android/app/build.gradle
+@@ -423,7 +423,7 @@ dependencies {
+     implementation 'com.google.android.play:core:1.8.0'
+ }
+ 
+-if (isNewArchitectureEnabled()) {
++// if (isNewArchitectureEnabled()) {
+     // If new architecture is enabled, we let you build RN from source
+     // Otherwise we fallback to a prebuilt .aar bundled in the NPM package.
+     // This will be applied to all the imported transtitive dependency.
+@@ -437,7 +437,7 @@ if (isNewArchitectureEnabled()) {
+             //         .because("On New Architecture we're building Hermes from source")
+         }
+     }
+-}
++// }
+ 
+ apply from: file("$nodeModulesPath/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+```
+
+
+```gradle
+M src/packages/app/android/settings.gradle
+@@ -7,11 +7,12 @@ apply from: file("$nodeModulesPath/@react-native-community/cli-platform-android/
+ include ':app'
+ includeBuild("$nodeModulesPath/react-native-gradle-plugin")
+ 
++include(":ReactAndroid")
++project(":ReactAndroid").projectDir = file("$nodeModulesPath/react-native/ReactAndroid")
++
+ if (settings.hasProperty("newArchEnabled") && settings.newArchEnabled == "true") {
+-    include(":ReactAndroid")
+-    project(":ReactAndroid").projectDir = file("$nodeModulesPath/react-native/ReactAndroid")
+-    include(":ReactAndroid:hermes-engine")
+-    project(":ReactAndroid:hermes-engine").projectDir = file("$nodeModulesPath/react-native/ReactAndroid/hermes-engine")
++	include(":ReactAndroid:hermes-engine")
++	project(":ReactAndroid:hermes-engine").projectDir = file("$nodeModulesPath/react-native/ReactAndroid/hermes-engine")
+ }
+```
+
+
+Once I compiled its source code I could debug it with Android Studio and find where to fix the issue. I'll post about the issue on another day.
+
+
+<h2 id="09-19-2022" ><a href="#09-19-2022">19th September, 2022</a></h2>
 
 Hello world. It was on my TODO list that I was going to get this done. So, I'm done = ).
 
