@@ -3,6 +3,28 @@
 
 A place where I write public daily thoughts.
 
+
+<h2 id="09-22-2022" ><a href="#09-22-2022">22nd September, 2022</a></h2>
+
+There are days we spin our wheels and accomplish almost nothing. 
+
+Today was a day I had to remind myself how to find specific files and search for certain patterns. Over time I am more and more convinced that it is better to learn the lower level commands on the CLI than to rely on any IDE feature for common search and edit file or file contents.
+
+How do you find an apk file within your directory? 
+
+`find . -type file -name "*.apk"`
+
+
+How do you find a file that imports a module named "config" which is imported from "mobule-b"? 
+
+Turns out "config" is quite a common word and "mobule-b" might be imported 100s of times. 
+
+The following can do that for you:  
+`rg -U 'import.*config.*mobule-b'`
+
+The trick here is enabling multiline grep with the `-U` option.
+
+
 <h2 id="09-21-2022" ><a href="#09-21-2022">21th September, 2022</a></h2>
 
 Today was a long day. I had a nice opportunity to improve React Native's horizontal scroll view. I found an edge case where the snap to animation was very slow/sluggish. [See PR here](https://github.com/facebook/react-native/pull/34756).
