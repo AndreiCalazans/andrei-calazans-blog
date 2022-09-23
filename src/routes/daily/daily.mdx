@@ -3,6 +3,32 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="09-23-2022" ><a href="#09-23-2022">23rd September, 2022</a></h2>
+
+In big tech companies, nothing will get built if it moves no key result (OKR). Today I heard someone say I'm not sure we want to prioritize a given task simply because there is no KR tracking given result.
+
+---------------
+
+**A better useEffect** for when you need to react to a state change.
+
+```typescript
+import { useRef } from 'react';
+
+const useOnUpdated = (cb: () => void, dependency: any) => {
+  const last = useRef<any>(undefined);
+
+  if (dependency !== last.current) {
+    last.current = dependency;
+    cb();
+  }
+};
+
+```
+
+But why? 
+
+Well, useEffect is often called more times than you expect. This hooks adds simplicity and predictability over behavior. Plus, the single dependency is intentional to make sure we are only doing one thing instead of many things - you would prefer multiple useOnUpdated which will result in easier to maitain code.
+
 
 <h2 id="09-22-2022" ><a href="#09-22-2022">22nd September, 2022</a></h2>
 
