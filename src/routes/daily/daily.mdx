@@ -3,6 +3,43 @@
 
 A place where I write public daily thoughts.
 
+
+<h2 id="09-24-2022" ><a href="#09-24-2022">24th September, 2022</a></h2>
+
+Today I spent some time trying to figure out why Amplify was stuck on this `Resource is not in the state stackUpdateComplete` error.
+
+**Error:**
+
+```cli
+✖ An error occurred when pushing the resources to the cloud
+🛑 An error occurred during the push operation: /
+["Index: 0 State: {\"deploy\":\"waitingForDeployment\"} Message: Resource is not in the state stackUpdateComplete"]
+⚠️ Review the Amplify CLI troubleshooting guide for potential next steps: https://docs.amplify.aws/cli/project/troubleshooting/
+````
+
+At first, without much AWS experience this kind of error is quite bizarre. Well, after a lots of digging you start to learn the following:
+
+1) Amplify automates creation of resources  
+2) This automation is done by CloudFormation's stacks  
+3) The "resource is not in the state stackUpdateComplete" refers to a stack resource in CloudFormation.  
+
+After understanding the following I finally started looking in the right place. CloudFormation's stack display exactly which stack had an error. In my case, it was some DynamoDB table that was stuck.
+
+A common issue with CloudFormation is configuration drift - this is when your automated configs are different from the actual resources because someone changed something through the UI instead of your config code (in my case these configs are managed by Amplify).
+
+The drift issue is so common [they have an entire section/UI dedicated to identifying such issues](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/detect-drift-stack.html).
+
+Once I got to the drift problem I was able to rapidly identified one of the resources that drifted. But how do I revert this issue?
+
+You can resolve the drift by either:
+
+1) Manually reverting the change you did via UI   
+2) Updating the CloudFormation's stack template (I did this via its change set feature).  
+
+I chose the second option since I couldn't find the UI option that triggered the initial change.
+
+Another tip is to look for the actual failing resource within the stacks, you are likely to find a log there that can help. For my case we were having the [GSI error issue described here](https://stackoverflow.com/questions/62976032/how-can-i-update-dynamodb-gsi-when-projection-type-is-changed).
+
 <h2 id="09-23-2022" ><a href="#09-23-2022">23rd September, 2022</a></h2>
 
 In big tech companies, nothing will get built if it moves no key result (OKR). Today I heard someone say I'm not sure we want to prioritize a given task simply because there is no KR tracking given result.
