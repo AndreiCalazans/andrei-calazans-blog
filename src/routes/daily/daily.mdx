@@ -4,6 +4,21 @@
 A place where I write public daily thoughts.
 
 
+<h2 id="09-25-2022" ><a href="#09-25-2022">25th September, 2022</a></h2>
+
+A few months ago I integrated Amplify into a [Remix.run](https://remix.run/) app and today I [saw an example that took a different approach by using AppSync with ApolloGraphQL](https://github.com/aaronksaunders/amplify-remix-todos-1).
+
+I felt that approach was a bit overkill. The only trick to get [Amplify's `withSSRContext`](https://docs.amplify.aws/lib/ssr/q/platform/js/) working is to properly map Remix's request object to the one `withSSRContext` expects, which I do as follow:
+
+
+```javascript
+const client = withSSRContext({
+  req: { headers: { cookie: args.request.headers.get("cookie") } },
+});
+```
+
+The above code would be in a Remix loader function.
+
 <h2 id="09-24-2022" ><a href="#09-24-2022">24th September, 2022</a></h2>
 
 Today I spent some time trying to figure out why Amplify was stuck on this `Resource is not in the state stackUpdateComplete` error.
