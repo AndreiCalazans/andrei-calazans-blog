@@ -3,6 +3,33 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="09-26-2022" ><a href="#09-26-2022">26th September, 2022</a></h2>
+
+I'm becoming more and more convinced to rely less on IDE features and instead leverage lower level commands using the terminal. Why do that? because your IDE will always be constrained by its UI, even with Vim/Neovim. In the terminal you can compose different commands and get different results specific to your desire, the limit boundary is way bigger than an UI. 
+
+Here are some flows you do in an IDE that you can do with a terminal: 
+
+**Search for file**
+
+`find src -type file -name "Root*"`
+
+_find in directory src a file named Root plus whatever._
+
+**Find matches of a pattern**
+
+`rg -e "Bugsnag\.notify\("`
+
+**Get a list of all files that has the matching pattern**
+
+`rg -e "Bugsnag\.notify\(" -c`
+
+**Find how many total matches a given pattern had**
+
+`rg -e "Bugsnag\.notify\(" | wc -l`
+
+
+I'll be reviewing more and more of these commands as I improve my arsenal.
+
 
 <h2 id="09-25-2022" ><a href="#09-25-2022">25th September, 2022</a></h2>
 
