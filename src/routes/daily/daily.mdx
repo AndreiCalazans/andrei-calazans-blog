@@ -3,6 +3,26 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="09-27-2022" ><a href="#09-27-2022">27th September, 2022</a></h2>
+
+Not very inspired today. I am always curious in ways of improving my Vim experience. Today I found out there is a nice way to edit commands you wrote within Vim.
+
+The way command mode works in Vim is as follow:
+
+1) You execute some command, let's say you type `:echo hello` within Vim.
+2) If you want to repeat that command you always type `@:`. 
+3) But if you want to edit any of the previous command you can type `:` then press `<ctrl>-f` to enter "command mode" which puts you in normal mode but with all your previous commands in the buffer. You can edit any of the lines and pressing enter on a line executes the command. 
+
+Why do I like this so much? 
+
+I typically repeat commands with some variations and having the ability to quickly edit a past command like that with Vim's normal and insert mode makes this much easier.
+
+[Stackoverflow about command mode.](https://stackoverflow.com/questions/39168379/vim-how-to-move-one-word-left-in-command-mode)
+
+**Small rant about Relay**
+
+Relay is missing a retry mechanism for its hooks. I will likely implement one. But it surprises me that it doesn't have one.
+
 <h2 id="09-26-2022" ><a href="#09-26-2022">26th September, 2022</a></h2>
 
 I'm becoming more and more convinced to rely less on IDE features and instead leverage lower level commands using the terminal. Why do that? because your IDE will always be constrained by its UI, even with Vim/Neovim. In the terminal you can compose different commands and get different results specific to your desire, the limit boundary is way bigger than an UI. 
