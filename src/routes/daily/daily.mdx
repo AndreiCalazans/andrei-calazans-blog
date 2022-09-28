@@ -3,6 +3,41 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="09-28-2022" ><a href="#09-28-2022">28th September, 2022</a></h2>
+
+On a side project I have I decided to use Amplify. A few months in this and I regret my decision. Here is a list of why:
+
+0) Quick to get started, slow to do anything complex
+
+As probably most low code or no-code solutions. It's quick to get you started, but the more you need to customize it the more it slows you down. Below I list a few problems I ran into with Amplify that will backup this argument.
+
+1) Amplify abstracts away many services within Amazon.   
+
+Any issues within these services you need domain knowledge of them to figure it out. Not so bad, but has a high a learning cost. Expect to learn CloudFormation, DynamoDB, Lmabda services, IAM policies, and more.
+
+2) Amplify's GraphQL layer is limiting
+
+Examples of this include:
+
+- filtering only works at the parent query and not its nested items;  
+- its many-to-many relationships are a bit limited and you will find yourself creating many global secondary indexes (GSI) to make any real world query;  
+- also creating and updating GSIs are brittle, you can't update a GSI, you have to delete it first, fully deploy, then recreate it with your changed attributes;  
+
+
+3) Deploying is slow
+
+With Amplify you have a GraphQL schema that dictates the structure of your database. Changing the schema then publishing it requires you to deploy your services through `yarn amplify push` which takes about 20-30 minutes. 
+
+
+4) Auth layer doesn't integrate well with the GraphQL layer
+
+If GraphQL is my querying layer and I want to get user information plus data related to that user you would think this should all come from GraphQL right? Well, for Amplify creators it was not ¯\_(ツ)_/¯.  
+
+
+Would I recommend Amplify to anyone? Yes, do you have a clearly constrained case where you need a data store for non-nested data and auth integrated? Amplify could be a solution here because of its comes with an Auth UI out of the box plus some other UI components for easy integration.
+
+ps: Last paragraph it is me being nice.
+
 <h2 id="09-27-2022" ><a href="#09-27-2022">27th September, 2022</a></h2>
 
 Not very inspired today. I am always curious in ways of improving my Vim experience. Today I found out there is a nice way to edit commands you write within Vim.
