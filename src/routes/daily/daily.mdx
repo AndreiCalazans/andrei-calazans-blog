@@ -3,6 +3,35 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="09-29-2022" ><a href="#09-29-2022">29th September, 2022</a></h2>
+
+Hey, I am on vacation but since I on a writing streak (10 days now) I'm going to try to write my dailies until I run out of ideas.
+
+A little bit about wy we are having issues with Relay's lack of a retry mechanism. 
+
+At work we are trying to improve error handling overall. The goal is to stop showing users full screen errors. While initially you would think that the easy solution is to simply stop having errors, that my friend is not possible. 
+
+Services has some expected error rate. I have seen services with a 4% error rate for every request - this forces the client to be obliged to deal with them.
+
+Our strategy to improve error handling is to push it down to the leaf components instead of root screen wrappers.
+
+_**let me explain the app I am working...**_
+
+Typically when you load a screen you load all of your data upfront in a single place. However, with React and GraphQL (Relay) it is known to be a better pattern to colocate data requests alongside their consuming components. Thus with a typical GraphQL Relay app, data is not requested within the root of the screen, further with data masking - a Relay feature, the root parent component is not even aware of its child's data requirements. 
+
+_**a bit more about Relay's GraphQL pattern...**_
+
+Why colocate the data requests and use data masking? This decouples the components and makes them easier to be refactored, This sets a limited impact boundary for your components.
+
+_**back to error handling...**_
+
+With colocated data requests/requirements you can also handle the loading state and error at the component level, making for instance Screen B to render even if one of its child broke.
+
+Our goal is to handle breakage at each component level, gracefully handling the error and giving the user the ability to retry it.  
+
+But, with Relay, today you need to refetch the entire query when a fragment (a child component's data requirements in GraphQL) fails. This is why I am looking into a better way to retry a fragment query.
+
+
 <h2 id="09-28-2022" ><a href="#09-28-2022">28th September, 2022</a></h2>
 
 On a side project I have I decided to use Amplify. A few months in this and I regret my decision. Here is a list of why:
