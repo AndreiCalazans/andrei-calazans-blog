@@ -3,6 +3,27 @@
 
 A place where I write public daily thoughts.
 
+
+<h2 id="10-18-2022" ><a href="#10-18-2022">18th October, 2022</a></h2>
+
+A few notes about the recent rant against React hooks.
+
+I was thinking how it feels like all of the issues with modern React with hooks stems from the fact that someone decided to rely on a construct not supported by JavaScript - persistent function closures.   
+
+What I mean here is hooks introduce a way to persist a closure within a function. It expands the natural lifetime of a function in JavaScript. And thinking about it makes me wonder why would someone want this rather than just a fetiche for using functions? I couldn’t think of a reason of my own right now, maybe succinctness? not sure.  
+
+This sole idea required React Core team to introduce hooks. The explanation of how hooks work feels more like a language construct, specially how magical it is since it defies how the JavaScript language works.  
+
+Note that I am not a PL researcher to understand where these ideas came from. 
+
+Of course in hindsight it is easy to spot this issue and this makes me think that when the idea was presented it either a) was very convincing, possibly because the presenter was very eloquent and smart or b) no one dared push against the idea due to the author being a senior important figure in the team. Note that I do not know who had the original idea, so take this as purely speculative.   
+
+Futher thoughts in hindsight, it seems like not a good idea to introduce such large changes to an established framework such as React was at the time. Second, React Hooks didn’t really introduce any new features but rather just a second alternative to do most of the same thing with less code.  
+
+Where does this leave us? Well, in the same place. I do not intend to propose an alternative, for me React Native made React so beneficial overall for teams bulding for Web and Mobile apps that the pros easily outweighs the cons here. I do hope that these recent writings on the issues with React instigate curiosity and motivation for the React team to think of how they can further improve React as a framework. 
+
+
+
 <h2 id="10-08-2022" ><a href="#10-08-2022">8th October, 2022</a></h2>
 
 Still on a vacation.
