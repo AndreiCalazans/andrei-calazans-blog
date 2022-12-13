@@ -3,6 +3,36 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="12-13-2022" ><a href="#12-13-2022">13th December, 2022</a></h2>
+
+And I am back, as you can see I have not written since 18th October, life has not been very motivating. 
+
+Quick note on an interesting way to explore different directories in Vim/Neovim.
+
+**Use case:** how can I change to a differrent directory, let's say a node_module dir, while in Vim to search and explore that project, while not losing my project directory scope.
+
+The way I am doing this is with a combination of tabs and `:tcd` (change directory command for a tab scope, see `:h tcd`).
+
+**Flow goes as:**
+
+1. I am in /my_project_dir
+2. I want to explore /my_project_dir/node_modules/react
+3. To not lose my current context, I create a new tab by running `:tabe`
+4. In this new tab, I `:lcd node_modules/react`
+5. Now I can do whatever I like in the react directory such as search for code.
+6. To change back I switch tabs with `:tabp` or `:tabn`
+
+**Last notes:**
+
+I tend to prefer typing out commands as full instead of using shortcuts. This is part of my minimalistic approach.
+
+_Lastly, why is this useful?_
+
+I often need to search for code in different directories. Using something like Fzf will only search within your project scope and it also ignores files that are part of your .gitignore. So to properly search within `node_modules/react` I need to change Vim's current directory to that folder.
+
+Doing this flow also enables me to narrow down searches within some directories.
+
+I hope you find this useful too. 
 
 <h2 id="10-18-2022" ><a href="#10-18-2022">18th October, 2022</a></h2>
 
