@@ -3,6 +3,40 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-03-2023" ><a href="#01-03-2023">3rd January, 2023</a></h2>
+
+Happy new year!
+
+As typical of every year, with renewed hopes and goals here I am with the goal of writing my dailies on every workday.
+
+Quick learnings:
+
+**Vim's :normal command**
+
+I recently learned about [`:normal` command in Vim](https://learnvimscriptthehardway.stevelosh.com/chapters/29.html)
+
+Try the following to add "-" on everyline of the highlighted text in Vim:
+
+1. Highlight text in visual mode
+2. Then type `:norm i-`
+
+The above tells Vim to go into insert mode and types "-" to everyline of the highlighted text.
+
+I found this so powerful.
+
+
+**git grep's limitation**
+
+Git grep is super fast but it sucks that it doesn't support multiline matching. Like for instance, I would like
+to match a Regex as follow  `/import.*from.*somelib/` but this won't work when you have imports formatted into 
+multiple lines.
+
+It seems that this should work: 
+
+`git grep --all-match -e 'import' -e 'from.*somelib'`
+
+But it does not. I was hoping to run this in a Linux machine thus I don't have access to fancy new tools like Ripgrep. If you know how to do this with `git grep` let me know.
+
 <h2 id="12-13-2022" ><a href="#12-13-2022">13th December, 2022</a></h2>
 
 And I am back, as you can see I have not written since 18th October, life has not been very motivating. 
