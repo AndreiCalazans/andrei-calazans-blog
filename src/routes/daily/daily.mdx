@@ -3,6 +3,24 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-04-2023" ><a href="#01-04-2023">4th January, 2023</a></h2>
+
+I figured out the git grep limitation I ran into. Yesterday I wanted to do multiline Regex matching and I failed to figure it out. Today I [re-read Git docs on git grep](https://git-scm.com/docs/git-grep) and learned a bit more.
+
+I wanted to find out if I have a given import happening in my code. Let's say I am interested if relay-test-utils is imported anywhere.
+
+This can be done by:
+
+`git grep --all-match -e import -e from -e relay-test-utils -- '*.ts' '*.tsx'`
+
+- '--all-match' will extend the multiple matches to the entire file.
+- '-e' allows for you to create multiple string matches as I have.
+- The `-- '*.ts' '*.tsx'` tells Git's pathspec which files to consider.
+
+[This is a good reference](https://css-tricks.com/git-pathspecs-and-how-to-use-them/) on the pathspec.
+
+[This other blogpost](https://irian.to/blogs/learn-git-grep-to-boost-your-command-line-search/) was also very helpful. Tomorrow I will write a bullet list of some advanced commands using git grep plus git rev-list. 
+
 <h2 id="01-03-2023" ><a href="#01-03-2023">3rd January, 2023</a></h2>
 
 Happy new year!
