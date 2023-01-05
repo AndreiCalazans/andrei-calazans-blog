@@ -1,9 +1,48 @@
-
 # Daily
 
 A place where I write public daily thoughts.
 
-<h2 id="01-04-2023" ><a href="#01-04-2023">4th January, 2023</a></h2>
+<h2 id="01-05-2023">
+  <a href="#01-05-2023">5th January, 2023</a>
+</h2>
+
+This week I am working on a script that finds if we have any unused NPM dependencies. I plan on writing a separate post solely on how to do that, but let me highlight some interesting commands I learned while doing this.
+
+**Node.js path**
+
+Node.js' path module has a few useful methods you can use like `path.join` and `path.basename`.
+
+- You can join two paths using `path.join('/src/module', '/more')`. This returns 'src/module/more'.
+
+- `path.basename` returns the name of the file in a path.
+
+Example: `path.basename('/src/module/package.json') // returns 'package.json' `
+
+There are more, check out [path's documentation](https://nodejs.org/api/path.html).
+
+**Git grep & rev-parse & ls-files**
+
+Git has some awesome commands for you to find and search files.
+
+Some examples:
+
+- Find all package.json files in a project (common in Monorepos):
+
+`git ls-files --full-name ':/**/package.json'`
+
+- Find where the root of your Git project lives:
+
+`git rev-parse --show-toplevel`
+
+- Search some element within somes files
+
+In this case I'm looking for any file that has ModuleA imported or required from in a given folder.
+
+`git grep -e "from 'ModuleA" --or -e "require('ModuleA -- path/to/folder`
+
+<h2 id="01-04-2023">
+  <a href="#01-04-2023">4th January, 2023</a>
+</h2>
 
 I figured out the git grep limitation I ran into. Yesterday I wanted to do multiline Regex matching and I failed to figure it out. Today I [re-read Git docs on git grep](https://git-scm.com/docs/git-grep) and learned a bit more.
 
@@ -19,9 +58,11 @@ This can be done by:
 
 [This is a good reference](https://css-tricks.com/git-pathspecs-and-how-to-use-them/) on the pathspec.
 
-[This other blogpost](https://irian.to/blogs/learn-git-grep-to-boost-your-command-line-search/) was also very helpful. Tomorrow I will write a bullet list of some advanced commands using git grep plus git rev-list. 
+[This other blogpost](https://irian.to/blogs/learn-git-grep-to-boost-your-command-line-search/) was also very helpful. Tomorrow I will write a bullet list of some advanced commands using git grep plus git rev-list.
 
-<h2 id="01-03-2023" ><a href="#01-03-2023">3rd January, 2023</a></h2>
+<h2 id="01-03-2023">
+  <a href="#01-03-2023">3rd January, 2023</a>
+</h2>
 
 Happy new year!
 
@@ -42,22 +83,23 @@ The above tells Vim to go into insert mode and types "-" to everyline of the hig
 
 I found this so powerful.
 
-
 **git grep's limitation**
 
 Git grep is super fast but it sucks that it doesn't support multiline matching. Like for instance, I would like
-to match a Regex as follow  `/import.*from.*somelib/` but this won't work when you have imports formatted into 
+to match a Regex as follow `/import.*from.*somelib/` but this won't work when you have imports formatted into
 multiple lines.
 
-It seems that this should work: 
+It seems that this should work:
 
 `git grep --all-match -e 'import' -e 'from.*somelib'`
 
 But it does not. I was hoping to run this in a Linux machine thus I don't have access to fancy new tools like Ripgrep. If you know how to do this with `git grep` let me know.
 
-<h2 id="12-13-2022" ><a href="#12-13-2022">13th December, 2022</a></h2>
+<h2 id="12-13-2022">
+  <a href="#12-13-2022">13th December, 2022</a>
+</h2>
 
-And I am back, as you can see I have not written since 18th October, life has not been very motivating. 
+And I am back, as you can see I have not written since 18th October, life has not been very motivating.
 
 Quick note on an interesting way to explore different directories in Vim/Neovim.
 
@@ -84,42 +126,45 @@ I often need to search for code in different directories. Using something like F
 
 Doing this flow also enables me to narrow down searches within some directories.
 
-I hope you find this useful too. 
+I hope you find this useful too.
 
-<h2 id="10-18-2022" ><a href="#10-18-2022">18th October, 2022</a></h2>
+<h2 id="10-18-2022">
+  <a href="#10-18-2022">18th October, 2022</a>
+</h2>
 
 A few notes about the recent rant against React hooks.
 
-I was thinking how it feels like all of the issues with modern React with hooks stems from the fact that someone decided to rely on a construct not supported by JavaScript - persistent function closures.   
+I was thinking how it feels like all of the issues with modern React with hooks stems from the fact that someone decided to rely on a construct not supported by JavaScript - persistent function closures.
 
-What I mean here is hooks introduce a way to persist a closure within a function. It expands the natural lifetime of a function in JavaScript. And thinking about it makes me wonder why would someone want this rather than just a fetiche for using functions? I couldn’t think of a reason of my own right now, maybe succinctness? not sure.  
+What I mean here is hooks introduce a way to persist a closure within a function. It expands the natural lifetime of a function in JavaScript. And thinking about it makes me wonder why would someone want this rather than just a fetiche for using functions? I couldn’t think of a reason of my own right now, maybe succinctness? not sure.
 
-This sole idea required React Core team to introduce hooks. The explanation of how hooks work feels more like a language construct, specially how magical it is since it defies how the JavaScript language works.  
+This sole idea required React Core team to introduce hooks. The explanation of how hooks work feels more like a language construct, specially how magical it is since it defies how the JavaScript language works.
 
-Note that I am not a PL researcher to understand where these ideas came from. 
+Note that I am not a PL researcher to understand where these ideas came from.
 
-Of course in hindsight it is easy to spot this issue and this makes me think that when the idea was presented it either a) was very convincing, possibly because the presenter was very eloquent and smart or b) no one dared push against the idea due to the author being a senior important figure in the team. Note that I do not know who had the original idea, so take this as purely speculative.   
+Of course in hindsight it is easy to spot this issue and this makes me think that when the idea was presented it either a) was very convincing, possibly because the presenter was very eloquent and smart or b) no one dared push against the idea due to the author being a senior important figure in the team. Note that I do not know who had the original idea, so take this as purely speculative.
 
-Futher thoughts in hindsight, it seems like not a good idea to introduce such large changes to an established framework such as React was at the time. Second, React Hooks didn’t really introduce any new features but rather just a second alternative to do most of the same thing with less code.  
+Futher thoughts in hindsight, it seems like not a good idea to introduce such large changes to an established framework such as React was at the time. Second, React Hooks didn’t really introduce any new features but rather just a second alternative to do most of the same thing with less code.
 
-Where does this leave us? Well, in the same place. I do not intend to propose an alternative, for me React Native made React so beneficial overall for teams bulding for Web and Mobile apps that the pros easily outweighs the cons here. I do hope that these recent writings on the issues with React instigate curiosity and motivation for the React team to think of how they can further improve React as a framework. 
+Where does this leave us? Well, in the same place. I do not intend to propose an alternative, for me React Native made React so beneficial overall for teams bulding for Web and Mobile apps that the pros easily outweighs the cons here. I do hope that these recent writings on the issues with React instigate curiosity and motivation for the React team to think of how they can further improve React as a framework.
 
-
-
-<h2 id="10-08-2022" ><a href="#10-08-2022">8th October, 2022</a></h2>
+<h2 id="10-08-2022">
+  <a href="#10-08-2022">8th October, 2022</a>
+</h2>
 
 Still on a vacation.
 
 Rencetly, While I was thinking about the retry mechanism on Relay I realized how this could be solved purely at the Suspense level. Relay makes use of Suspense to a) trigger data requests and b) handle loading and error boundaries. This made me realize that we could retry a failed request by re-mounting that given component. I wrote the following [blogpost to POC this idea](/posts/2022-10-03/retriable-suspense-wrapper).
 
-
-<h2 id="09-29-2022" ><a href="#09-29-2022">29th September, 2022</a></h2>
+<h2 id="09-29-2022">
+  <a href="#09-29-2022">29th September, 2022</a>
+</h2>
 
 Hey, I am on vacation but since I on a writing streak (10 days now) I'm going to try to write my dailies until I run out of ideas.
 
-A little bit about wy we are having issues with Relay's lack of a retry mechanism. 
+A little bit about wy we are having issues with Relay's lack of a retry mechanism.
 
-At work we are trying to improve error handling overall. The goal is to stop showing users full screen errors. While initially you would think that the easy solution is to simply stop having errors, that my friend is not possible. 
+At work we are trying to improve error handling overall. The goal is to stop showing users full screen errors. While initially you would think that the easy solution is to simply stop having errors, that my friend is not possible.
 
 Services has some expected error rate. I have seen services with a 4% error rate for every request - this forces the client to be obliged to deal with them.
 
@@ -127,7 +172,7 @@ Our strategy to improve error handling is to push it down to the leaf components
 
 _**let me explain the app I am working...**_
 
-Typically when you load a screen you load all of your data upfront in a single place. However, with React and GraphQL (Relay) it is known to be a better pattern to colocate data requests alongside their consuming components. Thus with a typical GraphQL Relay app, data is not requested within the root of the screen, further with data masking - a Relay feature, the root parent component is not even aware of its child's data requirements. 
+Typically when you load a screen you load all of your data upfront in a single place. However, with React and GraphQL (Relay) it is known to be a better pattern to colocate data requests alongside their consuming components. Thus with a typical GraphQL Relay app, data is not requested within the root of the screen, further with data masking - a Relay feature, the root parent component is not even aware of its child's data requirements.
 
 _**a bit more about Relay's GraphQL pattern...**_
 
@@ -137,61 +182,61 @@ _**back to error handling...**_
 
 With colocated data requests/requirements you can also handle the loading state and error at the component level, making for instance Screen B to render even if one of its child broke.
 
-Our goal is to handle breakage at each component level, gracefully handling the error and giving the user the ability to retry it.  
+Our goal is to handle breakage at each component level, gracefully handling the error and giving the user the ability to retry it.
 
 But, with Relay, today you need to refetch the entire query when a fragment (a child component's data requirements in GraphQL) fails. This is why I am looking into a better way to retry a fragment query.
 
-
-<h2 id="09-28-2022" ><a href="#09-28-2022">28th September, 2022</a></h2>
+<h2 id="09-28-2022">
+  <a href="#09-28-2022">28th September, 2022</a>
+</h2>
 
 On a side project I have I decided to use Amplify. A few months in this and I regret my decision. Here is a list of why:
 
-0) Quick to get started, slow to do anything complex
+0. Quick to get started, slow to do anything complex
 
 As probably most low code or no-code solutions. It's quick to get you started, but the more you need to customize it the more it slows you down. Below I list a few problems I ran into with Amplify that will backup this argument.
 
-1) Amplify abstracts away many services within Amazon.   
+1. Amplify abstracts away many services within Amazon.
 
 Any issues within these services you need domain knowledge of them to figure it out. Not so bad, but has a high a learning cost. Expect to learn CloudFormation, DynamoDB, Lmabda services, IAM policies, and more.
 
-2) Amplify's GraphQL layer is limiting
+2. Amplify's GraphQL layer is limiting
 
 Examples of this include:
 
-- filtering only works at the parent query and not its nested items;  
-- its many-to-many relationships are a bit limited and you will find yourself creating many global secondary indexes (GSI) to make any real world query;  
-- also creating and updating GSIs are brittle, you can't update a GSI, you have to delete it first, fully deploy, then recreate it with your changed attributes;  
+- filtering only works at the parent query and not its nested items;
+- its many-to-many relationships are a bit limited and you will find yourself creating many global secondary indexes (GSI) to make any real world query;
+- also creating and updating GSIs are brittle, you can't update a GSI, you have to delete it first, fully deploy, then recreate it with your changed attributes;
 
+3. Deploying is slow
 
-3) Deploying is slow
+With Amplify you have a GraphQL schema that dictates the structure of your database. Changing the schema then publishing it requires you to deploy your services through `yarn amplify push` which takes about 20-30 minutes.
 
-With Amplify you have a GraphQL schema that dictates the structure of your database. Changing the schema then publishing it requires you to deploy your services through `yarn amplify push` which takes about 20-30 minutes. 
+4. Auth layer doesn't integrate well with the GraphQL layer
 
-
-4) Auth layer doesn't integrate well with the GraphQL layer
-
-If GraphQL is my querying layer and I want to get user information plus data related to that user you would think this should all come from GraphQL right? Well, for Amplify creators it was not ¯\_(ツ)_/¯.  
-
+If GraphQL is my querying layer and I want to get user information plus data related to that user you would think this should all come from GraphQL right? Well, for Amplify creators it was not ¯\_(ツ)\_/¯.
 
 Would I recommend Amplify to anyone? Yes, do you have a clearly constrained case where you need a data store for non-nested data and auth integrated? Amplify could be a solution here because of its comes with an Auth UI out of the box plus some other UI components for easy integration.
 
 ps: Last paragraph it is me being nice.
 
-<h2 id="09-27-2022" ><a href="#09-27-2022">27th September, 2022</a></h2>
+<h2 id="09-27-2022">
+  <a href="#09-27-2022">27th September, 2022</a>
+</h2>
 
 Not very inspired today. I am always curious in ways of improving my Vim experience. Today I found out there is a nice way to edit commands you write within Vim.
 
 The way command mode works in Vim is as follow:
 
-1) You execute some command, let's say you type `:echo hello` within Vim.  
+1. You execute some command, let's say you type `:echo hello` within Vim.
 
-2) If you want to repeat that command you always type `@:`.   
+2. If you want to repeat that command you always type `@:`.
 
-3) Editing commands in normal mode
+3. Editing commands in normal mode
 
-But if you want to edit any of the previous command you can type `:` then press `<ctrl>-f` to enter "command mode" which puts you in normal mode but with all your previous commands in the buffer. You can edit any of the lines and pressing enter on a line executes the command.   
+But if you want to edit any of the previous command you can type `:` then press `<ctrl>-f` to enter "command mode" which puts you in normal mode but with all your previous commands in the buffer. You can edit any of the lines and pressing enter on a line executes the command.
 
-Why do I like this so much? 
+Why do I like this so much?
 
 I typically repeat commands with some variations and having the ability to quickly edit a past command like that with Vim's normal and insert mode makes this much easier.
 
@@ -201,11 +246,13 @@ I typically repeat commands with some variations and having the ability to quick
 
 Relay is missing a retry mechanism for its hooks. I will likely implement one. But it surprises me that it doesn't have one.
 
-<h2 id="09-26-2022" ><a href="#09-26-2022">26th September, 2022</a></h2>
+<h2 id="09-26-2022">
+  <a href="#09-26-2022">26th September, 2022</a>
+</h2>
 
-I'm becoming more and more convinced to rely less on IDE features and instead leverage lower level commands using the terminal. Why do that? because your IDE will always be constrained by its UI, even with Vim/Neovim. In the terminal you can compose different commands and get different results specific to your desire, the limit boundary is way bigger than an UI. 
+I'm becoming more and more convinced to rely less on IDE features and instead leverage lower level commands using the terminal. Why do that? because your IDE will always be constrained by its UI, even with Vim/Neovim. In the terminal you can compose different commands and get different results specific to your desire, the limit boundary is way bigger than an UI.
 
-Here are some flows you do in an IDE that you can do with a terminal: 
+Here are some flows you do in an IDE that you can do with a terminal:
 
 **Search for file**
 
@@ -225,16 +272,15 @@ _find in directory src a file named Root plus whatever._
 
 `rg -e "Bugsnag\.notify\(" | wc -l`
 
-
 I'll be reviewing more and more of these commands as I improve my arsenal.
 
-
-<h2 id="09-25-2022" ><a href="#09-25-2022">25th September, 2022</a></h2>
+<h2 id="09-25-2022">
+  <a href="#09-25-2022">25th September, 2022</a>
+</h2>
 
 A few months ago I integrated Amplify into a [Remix.run](https://remix.run/) app and today I [saw an example that took a different approach by using AppSync with ApolloGraphQL](https://github.com/aaronksaunders/amplify-remix-todos-1).
 
 I felt that approach was a bit overkill. The only trick to get [Amplify's `withSSRContext`](https://docs.amplify.aws/lib/ssr/q/platform/js/) working is to properly map Remix's request object to the one `withSSRContext` expects, which I do as follow:
-
 
 ```javascript
 const client = withSSRContext({
@@ -244,7 +290,9 @@ const client = withSSRContext({
 
 The above code would be in a Remix loader function.
 
-<h2 id="09-24-2022" ><a href="#09-24-2022">24th September, 2022</a></h2>
+<h2 id="09-24-2022">
+  <a href="#09-24-2022">24th September, 2022</a>
+</h2>
 
 Today I spent some time trying to figure out why Amplify was stuck on this `Resource is not in the state stackUpdateComplete` error.
 
@@ -255,13 +303,13 @@ Today I spent some time trying to figure out why Amplify was stuck on this `Reso
 🛑 An error occurred during the push operation: /
 ["Index: 0 State: {\"deploy\":\"waitingForDeployment\"} Message: Resource is not in the state stackUpdateComplete"]
 ⚠️ Review the Amplify CLI troubleshooting guide for potential next steps: https://docs.amplify.aws/cli/project/troubleshooting/
-````
+```
 
 At first, without much AWS experience this kind of error is quite bizarre. Well, after a lots of digging you start to learn the following:
 
-1) Amplify automates creation of resources  
-2) This automation is done by CloudFormation's stacks  
-3) The "resource is not in the state stackUpdateComplete" refers to a stack resource in CloudFormation.  
+1. Amplify automates creation of resources
+2. This automation is done by CloudFormation's stacks
+3. The "resource is not in the state stackUpdateComplete" refers to a stack resource in CloudFormation.
 
 After understanding the following I finally started looking in the right place. CloudFormation's stack display exactly which stack had an error. In my case, it was some DynamoDB table that was stuck.
 
@@ -273,23 +321,25 @@ Once I got to the drift problem I was able to rapidly identified one of the reso
 
 You can resolve the drift by either:
 
-1) Manually reverting the change you did via UI   
-2) Updating the CloudFormation's stack template (I did this via its change set feature).  
+1. Manually reverting the change you did via UI
+2. Updating the CloudFormation's stack template (I did this via its change set feature).
 
 I chose the second option since I couldn't find the UI option that triggered the initial change.
 
 Another tip is to look for the actual failing resource within the stacks, you are likely to find a log there that can help. For my case we were having the [GSI error issue described here](https://stackoverflow.com/questions/62976032/how-can-i-update-dynamodb-gsi-when-projection-type-is-changed).
 
-<h2 id="09-23-2022" ><a href="#09-23-2022">23rd September, 2022</a></h2>
+<h2 id="09-23-2022">
+  <a href="#09-23-2022">23rd September, 2022</a>
+</h2>
 
 In big tech companies, nothing will get built if it moves no key result (OKR). Today I heard someone say I'm not sure we want to prioritize a given task simply because there is no KR tracking given result.
 
----------------
+---
 
 **A better useEffect** for when you need to react to a state change.
 
 ```typescript
-import { useRef } from 'react';
+import { useRef } from "react";
 
 const useOnUpdated = (cb: () => void, dependency: any) => {
   const last = useRef<any>(undefined);
@@ -299,36 +349,36 @@ const useOnUpdated = (cb: () => void, dependency: any) => {
     cb();
   }
 };
-
 ```
 
-But why? 
+But why?
 
 Well, useEffect is often called more times than you expect. This hooks adds simplicity and predictability over behavior. Plus, the single dependency is intentional to make sure we are only doing one thing instead of many things - you would prefer multiple useOnUpdated which will result in easier to maitain code.
 
+<h2 id="09-22-2022">
+  <a href="#09-22-2022">22nd September, 2022</a>
+</h2>
 
-<h2 id="09-22-2022" ><a href="#09-22-2022">22nd September, 2022</a></h2>
-
-There are days we spin our wheels and accomplish almost nothing. 
+There are days we spin our wheels and accomplish almost nothing.
 
 Today was a day I had to remind myself how to find specific files and search for certain patterns. Over time I am more and more convinced that it is better to learn the lower level commands on the CLI than to rely on any IDE feature for common search and edit file or file contents.
 
-How do you find an apk file within your directory? 
+How do you find an apk file within your directory?
 
 `find . -type file -name "*.apk"`
 
+How do you find a file that imports a module named "config" which is imported from "mobule-b"?
 
-How do you find a file that imports a module named "config" which is imported from "mobule-b"? 
-
-Turns out "config" is quite a common word and "mobule-b" might be imported 100s of times. 
+Turns out "config" is quite a common word and "mobule-b" might be imported 100s of times.
 
 The following can do that for you:  
 `rg -U 'import.*config.*mobule-b'`
 
 The trick here is enabling multiline grep with the `-U` option.
 
-
-<h2 id="09-21-2022" ><a href="#09-21-2022">21th September, 2022</a></h2>
+<h2 id="09-21-2022">
+  <a href="#09-21-2022">21th September, 2022</a>
+</h2>
 
 Today was a long day. I had a nice opportunity to improve React Native's horizontal scroll view. I found an edge case where the snap to animation was very slow/sluggish. [See PR here](https://github.com/facebook/react-native/pull/34756).
 
@@ -336,7 +386,9 @@ This was part of yesterday's work and why I had to run my app by compiling react
 
 I wrote a [TIL about git diff's file filtering feature](/posts/2022-09-21/til-git-diff-file-filter).
 
-<h2 id="09-20-2022" ><a href="#09-20-2022">20th September, 2022</a></h2>
+<h2 id="09-20-2022">
+  <a href="#09-20-2022">20th September, 2022</a>
+</h2>
 
 Today I had to patch react-native's source code to fix an Android issue.
 
@@ -349,7 +401,7 @@ M src/packages/app/android/app/build.gradle
 @@ -423,7 +423,7 @@ dependencies {
      implementation 'com.google.android.play:core:1.8.0'
  }
- 
+
 -if (isNewArchitectureEnabled()) {
 +// if (isNewArchitectureEnabled()) {
      // If new architecture is enabled, we let you build RN from source
@@ -361,17 +413,16 @@ M src/packages/app/android/app/build.gradle
      }
 -}
 +// }
- 
+
  apply from: file("$nodeModulesPath/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 ```
-
 
 ```gradle
 M src/packages/app/android/settings.gradle
 @@ -7,11 +7,12 @@ apply from: file("$nodeModulesPath/@react-native-community/cli-platform-android/
  include ':app'
  includeBuild("$nodeModulesPath/react-native-gradle-plugin")
- 
+
 +include(":ReactAndroid")
 +project(":ReactAndroid").projectDir = file("$nodeModulesPath/react-native/ReactAndroid")
 +
@@ -385,31 +436,28 @@ M src/packages/app/android/settings.gradle
  }
 ```
 
-
 Once I compiled its source code I could debug it with Android Studio and find where to fix the issue. I'll post about the issue on another day.
 
-
-<h2 id="09-19-2022" ><a href="#09-19-2022">19th September, 2022</a></h2>
+<h2 id="09-19-2022">
+  <a href="#09-19-2022">19th September, 2022</a>
+</h2>
 
 Hello world. It was on my TODO list that I was going to get this done. So, I'm done = ).
 
 But, here are some random thoughts:
 
-
 **1) There are no reliable dev environments in the finance industry**
 
-I've been working in the Crypto space for a year now and this is a huge pain point for us. Researching about the topic I learned it is a shared pain due to the number of external integrations with legacy bank systems. Plus, it is hard to maintain fakers for every API you have. 
+I've been working in the Crypto space for a year now and this is a huge pain point for us. Researching about the topic I learned it is a shared pain due to the number of external integrations with legacy bank systems. Plus, it is hard to maintain fakers for every API you have.
 
 **2) Handling app errors gracefully**
 
-This has been a recorrent topic at work. The app grew and an initial pattern implemented in the early days of the app is becoming bad user experience - full screen errors. 
+This has been a recorrent topic at work. The app grew and an initial pattern implemented in the early days of the app is becoming bad user experience - full screen errors.
 
 Over the years I noticed a few patterns emerge while building apps. The first is fully neglecting errors and letting apps just crash. The second pattern is typically a solution for the first which is a generic error screen that serves as a catch all, this is the stage where the current app I work with is at. And perhaps the last stage is pushing error handling closer to the leaf UI elements that cause them in the UI tree with addition to proper reaction mechanisms such as retries.
 
-
 In hingsight it feels like if we instead started backwards - that is handling errors only at the leaf nodes before going higher up the UI tree, this could make it easier over time to deliver a better UX.
 
-But why doesn't that happen? 
+But why doesn't that happen?
 
 I don't know the answer. But, I would think that the clear lack of paved road in this area makes for less experienced developers to simply neglect error handling as a whole.
-
