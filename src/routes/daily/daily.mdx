@@ -2,6 +2,53 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-06-2023">
+  <a href="#01-06-2023">6th January, 2023</a>
+</h2>
+
+Today I spent time wrapping my head around Relay.js' APIs for query preloading. Below are some of my notes, I won't explain each of these APIs, if you are curious read [Relay.js' documentation](https://relay.dev/docs/api-reference).
+
+Query preloading is an way for you to implement both preloading mechanism and also **"render-as-you-fetch"** approach.
+
+[According to Relay.js' docs](https://relay.dev/docs/api-reference/use-preloaded-query/), the right way to do this is to use a combination of two hooks: **useQueryLoader** and **usePreloadedQuery**.
+
+However, by default Relay uses a cache strategy called **"store-or-network"** which will only fetch the data if not available in its in-memory store. This allows you to use a combination of useQueryLoader and useLazyLoadQuery for a simple preloading strategy that does not include smart in-flight request reuse.
+
+The thing is, usePreloadedQuery is not very developer ergonomic. It requires a bit of an imperative management of the request by calling a query laoder with the correct variables even when it goes stale. 
+
+Essentially usePreloadedQuery is a reader API that reads from a preloaded request reference often called **queryReference**.
+
+**Points about using loadQuery + useLazyLoadQuery:**
+
+- ❌ No request in-flight mechanism.
+- ❌ useLazyLoadQuery without loadQuery is render-then-fetch.
+- ✅ Easier to reason. Simply call loadQuery.
+- ✅ useLazyLoadQuery refreshes on input changes.
+- ❌ Does not do "render-as-you-fetch", loadQuery must fully resolved before mounting a useLazyLoadQuery.
+
+**Points to using loadQuery + usePreloadedQuery:**
+
+- ✅ preloaded request is reused.
+- ✅ fully compatible with "render-as-you-fetch" approach.
+- ❌ Must share queryReference
+- ❌ Not easy to reason about due to our lack of pattern (can't use navigation params in React Native)
+- ❌ usePreloadedQuery does not take variables, on input change you must imperatively call loadQuery again.
+
+**What about the EntryPoint API?**
+
+It's still a bit early to reason about the EntryPoint API. Relay doc's are incomplete. From the examples existent in the relay-examples repo we can derive the following information:
+
+The API includes a way to not only preload a query but also its counterpart JavaScript module. The preloading of the counterpart module makes sense for lazy loading the JavaScript code related to the screen that will use the usePreloadedQuery.
+
+Based on the TodoApp in the relay-examples you can see:
+
+- [Place where the preload happens using loadEntryPoint](https://github.com/relayjs/relay-examples/blob/8cd2a13057304abb3be6866ea794875d09f0a4ee/todo/js/app.js#L51-L58)
+- [Where the EntryPointContainer gets rendered](https://github.com/relayjs/relay-examples/blob/main/todo/js/app.js#L63)
+- [A EntryPoint component definition.](https://github.com/relayjs/relay-examples/blob/main/todo/js/entrypoints/TodoApp.entrypoint.js#L10-L33)
+- [TodoApp - the underlying component that gets lazily requested](https://github.com/relayjs/relay-examples/blob/main/todo/js/components/TodoApp.js#L17-L27)
+
+From analyzing that code, we can say that the EntryPoint API introduces an extra feature to the loadQuery + usePreloadedQuery strategy, that is the ability to lazily load the JavaScript resources related to that preloaded screen - see this snippet of where that happens.
+
 <h2 id="01-05-2023">
   <a href="#01-05-2023">5th January, 2023</a>
 </h2>
