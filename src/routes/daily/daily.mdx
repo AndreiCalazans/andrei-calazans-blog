@@ -2,6 +2,88 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-09-2023">
+  <a href="#01-09-2023">9th January, 2023</a>
+</h2>
+
+Notes on memoizing callbacks within callbacks in React plus a personal preference of using `React.ComponentProps<typeof YourComponent>` to type drilled down props.
+
+
+**Memoizing callbacks within callbacks**
+
+Agree with it or not, with React hooks, memoization became the default behavior many teams adopt with React. 
+
+Memoizing values within callbacks is not obvious when the callback needs to return a component.
+
+Callbacks that return a component include:
+
+1. List components like React Native's FlatList.
+2. Any component implementing [Function as a Child Component](https://reactpatterns.js.org/docs/function-as-child-component/) pattern. ps: please don't do this anymore.
+
+So for instance, if you want to memoize map's callback here:
+
+```typescript
+const renderItem = useCallback(({ item: row }) => {
+  return (
+    <HStack gap={2} spacingBottom={2} flexShrink={1}>
+      {(row as NftsListItemProps[]).map((rowItem) => (
+        <NftsListItem key={rowItem.id} {...rowItem} />
+      ))}
+    </HStack>
+  );
+}, []);
+```
+
+You would need to extract that as a component itself and do memoization at that level like:
+
+```typescript
+type NftsProps = { nfts: NftsListProps["data"] };
+function NftList({ nfts }: NftsProps) {
+  const list = useMemo(() => {
+    return nfts.map((rowItem) => (
+      <NftsListItem key={rowItem.id} {...rowItem} />
+    ));
+  }, [nfts]);
+
+  return <>{list}</>;
+}
+
+// renderItem is within a component.
+const renderItem = useCallback(
+  ({ item: row }: { item: NftsListProps["data"] }) => {
+    return (
+      <HStack gap={2} spacingBottom={2} flexShrink={1}>
+        <NftList nfts={row} />
+      </HStack>
+    );
+  },
+  []
+);
+```
+
+So the lesson is to simply restructure the component and push down the logic to a component layer.
+
+**Using ComponentProps**
+
+One thing you will notice in the above example is the usage of `NftsListProps["data"]`. This is done simply because that type definition is within the same file. 
+
+But what if you are in another file consuming a component called `NftList` and you want to enforce another value to match a prop that `NftList` takes?
+
+The typicaly solution often is importing `NftList`'s prop type definition like: `import type { NftListProps } from 'w.e';`.
+
+However, did you know React has a helper called `ComponentProps`?
+
+`import type { ComponentProps } from 'react';`
+
+With `ComponentProps` you can do `type myData = ComponentProps<typeof NftList>['someFieldWithinNftListProps'];`. 
+
+I prefer this pattern because:
+
+1. It couples the type definition with the Component props definition
+2. You have a single import, the component. 
+3. Changes to the component props automatically synchronizes with the consumers.
+
+
 <h2 id="01-06-2023">
   <a href="#01-06-2023">6th January, 2023</a>
 </h2>
@@ -14,7 +96,7 @@ Query preloading is an way for you to implement both preloading mechanism and al
 
 However, by default Relay uses a cache strategy called **"store-or-network"** which will only fetch the data if not available in its in-memory store. This allows you to use a combination of useQueryLoader and useLazyLoadQuery for a simple preloading strategy that does not include smart in-flight request reuse.
 
-The thing is, usePreloadedQuery is not very developer ergonomic. It requires a bit of an imperative management of the request by calling a query laoder with the correct variables even when it goes stale. 
+The thing is, usePreloadedQuery is not very developer ergonomic. It requires a bit of an imperative management of the request by calling a query laoder with the correct variables even when it goes stale.
 
 Essentially usePreloadedQuery is a reader API that reads from a preloaded request reference often called **queryReference**.
 
