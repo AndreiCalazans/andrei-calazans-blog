@@ -2,6 +2,40 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-10-2023">
+  <a href="#01-10-2023">10th January, 2023</a>
+</h2>
+
+On I wrote about a <a href="#09-23-2022">useOnUpdated</a> hook which did not make use of useEffect and was more predictable. I have also started using a useOnMount hook with similar characteristics.
+
+**useOnMount**
+
+```typescript
+function useOnMount(cb: () => void) {
+  const isNotMounted = useRef(true);
+
+  if (isNotMounted.current) {
+    isNotMounted.current = false;
+    cb();
+  }
+}
+```
+
+You could abstract just the clean up phase:
+
+```typescript
+function useCleanUpOnUnmount(cb: () => void) {
+  return useEffect(() => () => cb(), []);
+}
+```
+
+**But why do this?**
+
+Narrowing down an API interface to do a single thing makes it more predictable. 
+
+Predictable APIs are easier to maintain and use. The `useEffect` API can do too many things making it bug prone.
+
+
 <h2 id="01-09-2023">
   <a href="#01-09-2023">9th January, 2023</a>
 </h2>
