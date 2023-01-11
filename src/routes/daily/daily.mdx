@@ -2,11 +2,119 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-11-2023">
+  <a href="#01-11-2023">11th January, 2023</a>
+</h2>
+
+While we wait for official ways from React to create our own Suspense APIs. How
+could you create a Suspenseful resource plus why would you want to do this? 
+
+First, why do this? Well, the answer might be because useEffect is not an ideal
+API for asynchronous operations. Second, by using this concept of a Suspenseful
+Resource you could easily implement a "render-as-you-fetch" pattern. Third, 
+using Suspense for handling data loading and error states makes for a nice 
+component UI pattern, decoupling loading and error state from fetching.
+
+_Before you proceed please be warned this is not based on React team's
+recommendation and bound to break in future React versions, use it at your own
+responsibility_.
+
+
+**A Suspenseful Resource**
+
+What if you could handle asynchronous data as a Resource that is either loading or loaded in memory:
+
+```typescript
+const MyDataComp = () => {
+  const { data, refresh } = useResource(Resource);
+  return (
+    <>
+      <p>Data is: {data}</p>
+      <button onClick={refresh}>Reload</button>
+    </>
+  )
+}
+
+...
+
+<Suspense fallback={<p>loading...</p>}>
+  <MyDataComp />
+</Suspense>
+```
+
+Well you can of can if you throw a Promise and keep it cached in memory: 
+
+```typescript
+const fakeGetData = () => new Promise(res => setTimeout(() => res('ASYNC_REQUESTED_DATA'), 1000));
+
+export const Resource = {
+  data: null,
+  promiseState: 'pending',
+  promise: undefined,
+  load() {
+    this.promise = new Promise((resolve) => {
+      this.promiseState = 'pending';
+
+      fakeGetData()
+        .then((data) => {
+          this.data = data;
+          this.promiseState = 'fulfilled';
+        })
+        .catch((e) => {
+          this.promiseState = 'rejected';
+          throw new Error(e);
+        })
+        .finally(() => {
+          resolve();
+        });
+    });
+  },
+  read() {
+    if (this.promiseState !== 'pending') {
+      return this.data;
+    }
+
+    if (!this.promise) {
+      this.load();
+    }
+
+    throw this.promise;
+  },
+  reset() {
+    this.promiseState = 'pending';
+    this.promise = undefined;
+    this.data = null;
+  },
+};
+
+const useResource = (resource) => {
+  const [state, setState] = useState(0);
+  const data = resource.read();
+  return {
+    data,
+    refresh: () => {
+      resource.reset();
+      setState(e => ++e);
+    }
+  }
+}
+```
+
+I don't have time today, but you can turn this Resource into an abstract class
+with reusable methods for you to implement other Resources without code
+duplication. We also need to add proper type definitions. I'll try to improve it
+during this week and post on my next daily. 
+
+[Full Codesandbox of the above code](https://codesandbox.io/s/suspense-resource-example-qvh8g9?file=/src/App.tsx)
+
+
 <h2 id="01-10-2023">
   <a href="#01-10-2023">10th January, 2023</a>
 </h2>
 
-On another daily I wrote about a <a href="#09-23-2022">useOnUpdated</a> hook which did not make use of useEffect and was more predictable. I have also started using a useOnMount hook with similar characteristics.
+On another daily I wrote about a <a href="#09-23-2022">useOnUpdated</a> hook
+which did not make use of useEffect and was more predictable. I have also
+started using a useOnMount hook with similar characteristics.
 
 **useOnMount**
 
