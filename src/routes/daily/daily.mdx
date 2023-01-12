@@ -2,23 +2,69 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-12-2023">
+  <a href="#01-12-2023">12th January, 2023</a>
+</h2>
+
+I almost logged out today without writing my daily dev.
+
+Since I didn't think about what I wanted to write today, here is a glimpse of
+what I'm working on, this is still incomplete:
+
+```typescript
+/*
+ * The purpose of OnlyPrimitives is to disallow non-serializable values in navigation
+ * params. We serialize navigation state for deeplinking navigation state restore.
+ * */
+export type DisallowedParam = "NON-PRIMITIVE PARAMS ARE NOT ALLOWED IN NAVIGATION";
+export type Primitive = string | boolean | number | symbol | undefined | null;
+export type OnlyPrimitives<TObj> = TObj extends Primitive
+  ? TObj
+  : TObj extends (infer TArray)[]
+  ? OnlyPrimitives<TArray>[]
+  : TObj extends (...args: unknown[]) => unknown
+  ? DisallowedParam
+  : TObj extends Record<string | number | symbol, unknown>
+  ? {
+      [key in keyof TObj]: OnlyPrimitives<TObj[key]>;
+    }
+  : TObj extends PreloadedQuery<OperationType, unknown>
+  ? DisallowedParam
+  : TObj;
+```
+
+In react-navigation, it is a bad idea to put non-serializable values in your
+navigation params because we usually serialize your navigation state for to
+restore a session or when we what to deeplink somewhere.
+
+This OnlyPrimitives generic type takes a union of all screens Params and makes breaks
+any param value that is a function or an instance of PrelaodedQuery.
+
+The reason I'm breaking the type definition of only these two values is because these
+are 100% the type of non-serializable values we are passing in the app I work with.
+
+And checking for all non-primitives caused a few problems that included:
+breaking union types; having false positives with places that did not include
+proper types; and some other issues.
+
+I'm still trying to figure out how to make this exactly as I want.
+
 <h2 id="01-11-2023">
   <a href="#01-11-2023">11th January, 2023</a>
 </h2>
 
 While we wait for official ways from React to create our own Suspense APIs. How
-could you create a Suspenseful resource plus why would you want to do this? 
+could you create a Suspenseful resource plus why would you want to do this?
 
 First, why do this? Well, the answer might be because useEffect is not an ideal
 API for asynchronous operations. Second, by using this concept of a Suspenseful
-Resource you could easily implement a "render-as-you-fetch" pattern. Third, 
-using Suspense for handling data loading and error states makes for a nice 
+Resource you could easily implement a "render-as-you-fetch" pattern. Third,
+using Suspense for handling data loading and error states makes for a nice
 component UI pattern, decoupling loading and error state from fetching.
 
 _Before you proceed please be warned this is not based on React team's
 recommendation and bound to break in future React versions, use it at your own
 responsibility_.
-
 
 **A Suspenseful Resource**
 
@@ -42,26 +88,27 @@ const MyDataComp = () => {
 </Suspense>
 ```
 
-Well you can of can if you throw a Promise and keep it cached in memory: 
+Well you can of can if you throw a Promise and keep it cached in memory:
 
 ```typescript
-const fakeGetData = () => new Promise(res => setTimeout(() => res('ASYNC_REQUESTED_DATA'), 1000));
+const fakeGetData = () =>
+  new Promise((res) => setTimeout(() => res("ASYNC_REQUESTED_DATA"), 1000));
 
 export const Resource = {
   data: null,
-  promiseState: 'pending',
+  promiseState: "pending",
   promise: undefined,
   load() {
     this.promise = new Promise((resolve) => {
-      this.promiseState = 'pending';
+      this.promiseState = "pending";
 
       fakeGetData()
         .then((data) => {
           this.data = data;
-          this.promiseState = 'fulfilled';
+          this.promiseState = "fulfilled";
         })
         .catch((e) => {
-          this.promiseState = 'rejected';
+          this.promiseState = "rejected";
           throw new Error(e);
         })
         .finally(() => {
@@ -70,7 +117,7 @@ export const Resource = {
     });
   },
   read() {
-    if (this.promiseState !== 'pending') {
+    if (this.promiseState !== "pending") {
       return this.data;
     }
 
@@ -81,7 +128,7 @@ export const Resource = {
     throw this.promise;
   },
   reset() {
-    this.promiseState = 'pending';
+    this.promiseState = "pending";
     this.promise = undefined;
     this.data = null;
   },
@@ -94,19 +141,18 @@ const useResource = (resource) => {
     data,
     refresh: () => {
       resource.reset();
-      setState(e => ++e);
-    }
-  }
-}
+      setState((e) => ++e);
+    },
+  };
+};
 ```
 
 I don't have time today, but you can turn this Resource into an abstract class
 with reusable methods for you to implement other Resources without code
 duplication. We also need to add proper type definitions. I'll try to improve it
-during this week and post on my next daily. 
+during this week and post on my next daily.
 
 [Full Codesandbox of the above code](https://codesandbox.io/s/suspense-resource-example-qvh8g9?file=/src/App.tsx)
-
 
 <h2 id="01-10-2023">
   <a href="#01-10-2023">10th January, 2023</a>
@@ -139,10 +185,9 @@ function useCleanUpOnUnmount(cb: () => void) {
 
 **But why do this?**
 
-Narrowing down an API interface to do a single thing makes it more predictable. 
+Narrowing down an API interface to do a single thing makes it more predictable.
 
 Predictable APIs are easier to maintain and use. The `useEffect` API can do too many things making it bug prone.
-
 
 <h2 id="01-09-2023">
   <a href="#01-09-2023">9th January, 2023</a>
@@ -150,10 +195,9 @@ Predictable APIs are easier to maintain and use. The `useEffect` API can do too 
 
 Notes on memoizing callbacks within callbacks in React plus a personal preference of using `React.ComponentProps<typeof YourComponent>` to type drilled down props.
 
-
 **Memoizing callbacks within callbacks**
 
-Agree with it or not, with React hooks, memoization became the default behavior many teams adopt with React. 
+Agree with it or not, with React hooks, memoization became the default behavior many teams adopt with React.
 
 Memoizing values within callbacks is not obvious when the callback needs to return a component.
 
@@ -207,7 +251,7 @@ So the lesson is to simply restructure the component and push down the logic to 
 
 **Using ComponentProps**
 
-One thing you will notice in the above example is the usage of `NftsListProps["data"]`. This is done simply because that type definition is within the same file. 
+One thing you will notice in the above example is the usage of `NftsListProps["data"]`. This is done simply because that type definition is within the same file.
 
 But what if you are in another file consuming a component called `NftList` and you want to enforce another value to match a prop that `NftList` takes?
 
@@ -217,14 +261,13 @@ However, did you know React has a helper called `ComponentProps`?
 
 `import type { ComponentProps } from 'react';`
 
-With `ComponentProps` you can do `type myData = ComponentProps<typeof NftList>['someFieldWithinNftListProps'];`. 
+With `ComponentProps` you can do `type myData = ComponentProps<typeof NftList>['someFieldWithinNftListProps'];`.
 
 I prefer this pattern because:
 
 1. It couples the type definition with the Component props definition
-2. You have a single import, the component. 
+2. You have a single import, the component.
 3. Changes to the component props automatically synchronizes with the consumers.
-
 
 <h2 id="01-06-2023">
   <a href="#01-06-2023">6th January, 2023</a>
