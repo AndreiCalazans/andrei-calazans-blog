@@ -2,6 +2,60 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-13-2023">
+  <a href="#01-13-2023">13th January, 2023</a>
+</h2>
+
+Hey, happy Friday 13th! For some this is a spooky date.
+
+Did you know you can't type a named function in TypeScript with an alias type?
+
+A common pattern we have is to create a function type as follows:
+
+`type someFn = (argOne: string, argTwo: number) => number`
+
+The thing is we can't use that alias type `someFn` to type a named function.
+
+Take `myOtherFn` that implements `someFn`:
+
+```typescript
+// I can use a variable defined with any type of function:
+const myOtherFn: someFn = (argOne, argTwo) => 12; // OK
+```
+
+The above variable definition can contain any type of function, but if you did:
+
+```typescript
+// No way to type a named function like this with an alias type
+function myOtherFn(argOne, argTwo) {
+  return 12;
+}
+```
+
+But why does this matter? Well, in some codebases using only named function can
+be useful specially to get stacktraces of callbacks.
+
+So how can you reuse the `someFn` type definition of your named functions?
+
+The answer is you can't but you can compose your named function type definition by
+using [`Parameters`](https://www.typescriptlang.org/docs/handbook/utility-types.html#parameterstype) and [`ReturnType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype) utilities from TypeScript
+
+```typescript
+// No way to type a named function like this with an alias type
+function myOtherFn(...args: Parameters<someFn>): ReturnType<someFn> {
+  const [argOne, argTwo] = args;
+  return 12;
+}
+```
+
+It's not clean and does require you to change how you consume the arguments but it is what it is.
+
+Why do `(...args: Parameters<someFn>)` instead of `(argOne: Parameters<someFn>[0], argTwo: Parameters<someFn>[1])`?
+
+Well, if you defined each argument, you would have to change this function
+everytime `someFn` changed? Not a big deal, so up to you if you prefer it that
+way.
+
 <h2 id="01-12-2023">
   <a href="#01-12-2023">12th January, 2023</a>
 </h2>
