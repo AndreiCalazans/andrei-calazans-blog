@@ -2,6 +2,54 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-17-2023">
+  <a href="#01-17-2023">17th January, 2023</a>
+</h2>
+
+Few quick learnings:
+
+**Get the current file version in another branch**
+
+Without changing branches, how do you get the version of file B on branch C?
+
+`git show branch_c:file_b`
+
+If you are using Vim and Vim Fugitive you can just do this within Vim.
+
+**Changing 1000 files with Vim + Quickfix + cfdo**
+
+Vim is quite powerful for file editing, I had the following work today:
+
+Replaces all instances of `const SomeComp: Component<Props> = memo(...)` for `const SomeComp = memo<Props>(...)`
+
+There some variations to the above, but that was the main part of it.
+
+**How did I do it?**
+
+1. Using Telescope grep files I found all instances of this and places it in Vim's Quickfix list.
+
+2. Run your replacement command on each file
+
+`cfdo %s/: Component<\(.*\)> =\n.*memo/ = memo<\1>/ge | %s/: Component<\(.*\)>.*memo/ = memo<\1>/ge | %s/: Component<\(.*\)>.*=.*\n.*\n.*memo/ = memo<\1>/ge | %s/import.*Component.*@core.*\n//ge | update | :bd`
+
+**Some of the basics**
+
+- "cfdo" will run the command on each file.
+- the "| update" and "| :bd" at the end is for saving the file and lastly closing the buffer that was opened
+
+_note that Vim will hang and have problems if you open 1000+ buffers, by default ":cfdo" will leave the buffer open if you modified it._
+
+- I'm using the ":s" command to find instances of the Component type and replace it.
+
+**Explanation of `%s/: Component<\(.*\)> =\n.*memo/ = memo<\1>/ge`**
+
+"%s" will search entire file, works as "%s/match_some_pattern/replace_for_this_pattern/flags"
+Note that I used "ge" as flags, "g" means global and "e" tells it to surpress errors.
+
+The match is ": Component<\(.*\)> =\n.*memo" which is replaced by " = memo<\1>". Do note "\1" is referencing the captured group caught by the parenthesis in the matching pattern.
+
+This was slightly complex but very powerful thing. Hope you find it useful. Tweet at me if you have any questions.
+
 <h2 id="01-13-2023">
   <a href="#01-13-2023">13th January, 2023</a>
 </h2>
