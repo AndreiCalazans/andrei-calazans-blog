@@ -2,6 +2,32 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-18-2023">
+  <a href="#01-18-2023">18th January, 2023</a>
+</h2>
+
+One of things I learned from [The Missing Semester
+course](/posts/2023-01-03/the-missing-semester-review) is jobs in the terminal.
+
+I found it interesting to be able to background something, and bring it back. For instance
+with React Native, I typically run the Metro server, however, I don't want to keep a terminal
+pane open just for that, with "bg", "jobs", and "fg" command I can keep it in the background.
+
+Do this: 
+
+- Start Metro server in the background by doing: `yarn start &` or `nohup yarn start &`
+
+> ps: You could also do `yarn start` then type `Ctrl-Z` to suspend that process
+> and finally continue it in the background by doing `bg %<job_number>`, but it's
+> easier to use the "&" shortcut at the end
+
+- Bring it back when you need it: `fg`
+- See all jobs in the background with: `jobs`
+
+Even though I use Tmux, sometimes I still use these backgrounding tricks to not
+need to switch my current context.
+
+
 <h2 id="01-17-2023">
   <a href="#01-17-2023">17th January, 2023</a>
 </h2>
