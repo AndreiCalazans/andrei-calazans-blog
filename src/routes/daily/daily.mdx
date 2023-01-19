@@ -2,6 +2,54 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-19-2023">
+  <a href="#01-19-2023">19th January, 2023</a>
+</h2>
+
+For the first time in my career I used "git bisect" to find an issue.
+
+**Where it started**
+
+While trying to fix something I noticed the screen I was working on had a broken
+feature. At first I thought this was the result of my change, but it clearly was 
+unrelated. 
+
+When I looked at the Git history of where that screen's component was it had not
+been changed for over a month. So this is indicative that whatever broke was
+with one of its dependencies.
+
+**Why git bisect would be useful?**
+
+In this situation, I couldn't jump into every depedency imported within that
+folder to find if any correlated code had been recently changed to try to spot
+where the bug came from. And this is where "git bisect" shines. 
+
+Despite having never used "git bisect" I was quite aware of its feature and how it works.
+
+**Using git bisect**
+
+This is how I found the culprit code/commit.
+
+1. Start by doing "git bisect start"
+2. Git checkout to a commit about a month ago. 
+3. Test if the feature works.
+4. If it did, do "git bisect good"
+5. Now git bisect will checkout until another commit for you to test
+6. if good you do "git bisect good" if bad you do "git bisect bad"
+
+It will continue changing commits until it is down to zero revisions. At the end
+it will log the commit which caused the regression.
+
+And this is exactly how it worked for me. 
+
+**Manual vs. Automated testing**
+
+I did the testing process fully manual since this was a UI feature that I did
+not have a unit test for.
+
+But if you can automate the check with a script you could have [Git bisect also
+run](https://git-scm.com/docs/git-bisect#_bisect_run) that test for you and verify automatically, this is much faster.
+
 <h2 id="01-18-2023">
   <a href="#01-18-2023">18th January, 2023</a>
 </h2>
