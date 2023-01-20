@@ -2,6 +2,29 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-20-2023">
+  <a href="#01-20-2023">20th January, 2023</a>
+</h2>
+
+**A Non-obvious JS error**
+
+Today I ran into a non-obvious error:
+
+`null is not an object (evaluating 'iter[symbol.iterator]')`
+
+This error happens when you try to spread an undefined value as if it was an Object or Array (or any other iterator).
+
+Think this:
+
+```
+const someArray = remoteData.could?.be?.anArray;
+
+return [...someArray]; // this will crash when someArray is undefined
+```
+
+While working with React Native, I had this crash and because the stack-trace
+sucked it was a bit difficult to figure out where it came from.
+
 <h2 id="01-19-2023">
   <a href="#01-19-2023">19th January, 2023</a>
 </h2>
