@@ -2,6 +2,47 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-23-2023">
+  <a href="#01-23-2023">23rd January, 2023</a>
+</h2>
+
+**Notes on building software**
+
+[I saw this tweet](https://twitter.com/gordonphayes/status/1617535312313610247)
+on someone advertising [Rive for animations](https://rive.app/) while comparing
+its usage in a Flutter, SwiftUI, and React Native app.
+
+One thing came to mind on how picking the framework to use does not impact
+product quality. [I tweeted about this
+too](https://twitter.com/Andrei_Calazans/status/1617622516406841344).
+
+Than, What impacts product quality?
+
+**User Experience**
+
+As a user, I think apps often fail at providing their core feature a single step
+away from you. Instead they add a bunch of things in the middle for no added
+value.
+
+Think a banking app, sending and receiving money should always be one press
+away. This is often not true.
+
+**Latency**
+
+Latency is usually everywhere including in a framework you might choose,
+however, from my personal experience, 99% of software latency is tipically found
+in network requests.
+
+How can network requests be slow?
+
+There a multiple reasons but some might be:
+
+1. A bad fetching strategy like waterfall requests.
+2. No smart use of caching layers like CDNs.
+3. Slow back-ends?
+
+There are definitely more things to this topic.
+
 <h2 id="01-20-2023">
   <a href="#01-20-2023">20th January, 2023</a>
 </h2>
@@ -34,8 +75,8 @@ For the first time in my career I used "git bisect" to find an issue.
 **Where it started**
 
 While trying to fix something I noticed the screen I was working on had a broken
-feature. At first I thought this was the result of my change, but it clearly was 
-unrelated. 
+feature. At first I thought this was the result of my change, but it clearly was
+unrelated.
 
 When I looked at the Git history of where that screen's component was it had not
 been changed for over a month. So this is indicative that whatever broke was
@@ -45,7 +86,7 @@ with one of its dependencies.
 
 In this situation, I couldn't jump into every depedency imported within that
 folder to find if any correlated code had been recently changed to try to spot
-where the bug came from. And this is where "git bisect" shines. 
+where the bug came from. And this is where "git bisect" shines.
 
 Despite having never used "git bisect" I was quite aware of its feature and how it works.
 
@@ -54,7 +95,7 @@ Despite having never used "git bisect" I was quite aware of its feature and how 
 This is how I found the culprit code/commit.
 
 1. Start by doing "git bisect start"
-2. Git checkout to a commit about a month ago. 
+2. Git checkout to a commit about a month ago.
 3. Test if the feature works.
 4. If it did, do "git bisect good"
 5. Now git bisect will checkout until another commit for you to test
@@ -63,7 +104,7 @@ This is how I found the culprit code/commit.
 It will continue changing commits until it is down to zero revisions. At the end
 it will log the commit which caused the regression.
 
-And this is exactly how it worked for me. 
+And this is exactly how it worked for me.
 
 **Manual vs. Automated testing**
 
@@ -84,7 +125,7 @@ I found it interesting to be able to background something, and bring it back. Fo
 with React Native, I typically run the Metro server, however, I don't want to keep a terminal
 pane open just for that, with "bg", "jobs", and "fg" command I can keep it in the background.
 
-Do this: 
+Do this:
 
 - Start Metro server in the background by doing: `yarn start &` or `nohup yarn start &`
 
@@ -97,7 +138,6 @@ Do this:
 
 Even though I use Tmux, sometimes I still use these backgrounding tricks to not
 need to switch my current context.
-
 
 <h2 id="01-17-2023">
   <a href="#01-17-2023">17th January, 2023</a>
