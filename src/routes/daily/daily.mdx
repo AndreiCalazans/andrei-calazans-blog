@@ -2,6 +2,39 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="01-31-2023">
+  <a href="#01-31-2023">31st January, 2023</a>
+</h2>
+
+Last day of the month is here!
+
+**Android Cache**
+
+I spend an awful amount of time trying to fix local compilation of an Android app today. Some commands that might help you:
+
+You can clean your build cache by doing `./gradlew clean` in your Android folder. But sometimes this is not enough.
+
+You can also purge global cache by `rm -rf ~/.gradle/caches/`.
+
+Some recommend you also stop any running Gradle Daemons before you purge cache by doing: `./gradlew --stop`.
+
+[This is a nice article on cleaning up all the generated cache from Android Studio](https://engineering.backmarket.com/put-your-android-studio-on-a-diet-fa4d364acb05).
+
+In my case, turns out react-native-v8 outputs some build cache inside node_module so you might also need to make sure you purge any cache within node_modules.
+
+I had to remove the build folder in v8 by `rm -rf node_modules/react-native-v8/android/build` before rerunning build. This what caused the issue I had.
+
+**Random Links and Posts I Read Today**
+
+[Blogpost on generative
+AI](https://a16z.com/2022/11/17/the-generative-ai-revolution-in-games/) is
+pretty good and fully agree on how generative AI reduces the cost of
+development of games. This will enable a next wave of games.
+
+[This post on how someone lost $209,640](https://www.mostlymetrics.com/p/i-lost-209640-of-my-own-money-trying?utm_source=profile&utm_medium=reader2) starting a business is a great story full of lessons, worth the read.
+
+[This is nice introductory course on AWS and everything related it, hashtag CDK and Infra as Code](https://awsfundamentals.com/)
+
 <h2 id="01-23-2023">
   <a href="#01-23-2023">23rd January, 2023</a>
 </h2>
