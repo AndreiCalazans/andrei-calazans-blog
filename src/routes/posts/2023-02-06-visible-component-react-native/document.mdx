@@ -20,6 +20,7 @@ export function Visible({ isVisible, children }: VisibleProps) {
       style={isVisible ? styles.opacityOne : styles.opacityNone}
       // Using pointerEvents  in style does work.
       pointerEvents={isVisible ? 'auto' : 'none'}
+      aria-hidden={!isVisible}
     >
       {children}
     </View>
