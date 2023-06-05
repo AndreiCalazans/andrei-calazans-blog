@@ -30,7 +30,7 @@ export const SiteNav = () => {
       </a>{" "}
       &bull;{" "}
       <a
-        href="www.linkedin.com/in/andrei-calazans"
+        href="https://www.linkedin.com/in/andrei-calazans"
         target="_blank"
         rel="noopener noreferrer"
       >
