@@ -2,6 +2,20 @@
 
 A place where I write public daily thoughts.
 
+<h2 id="10-12-2023">
+  <a href="#10-12-2023">12th October, 2023</a>
+</h2>
+
+Did you know that the way React Native Native Modules are implemented on Android makes the `getConstants` call synchronous in the JS thread?
+
+Why does that matter? well, if you are doing something expensive during that step it can block your JS thread when you import that native module via NativeModules.\<your native module name\>.
+
+This is based on an investigation on why our JS thread was blocked for 400ms.
+
+After investigation we found it was [jail-monkey's getConstants call](https://github.com/GantMan/jail-monkey/blob/72ae35eeffec3c981b3497af364605e6e289da05/android/src/main/java/com/gantix/JailMonkey/JailMonkeyModule.java#L70-L82). Which is doing the Rooted device check within their getConstants call instead of relying on an asynchronous pattern.
+
+I'll write a blogpost soon about this finding.
+
 <h2 id="10-11-2023">
   <a href="#10-11-2023">10th October, 2023</a>
 </h2>
