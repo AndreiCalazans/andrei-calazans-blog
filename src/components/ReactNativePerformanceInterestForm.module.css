@@ -1,0 +1,39 @@
+
+.subscribeContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  background: #fcfba4;
+  padding: 1em;
+  border-radius: 20px;
+}
+.subscribeContainer h5 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.subscribeContainer div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.subscribeContainer input {
+  margin-bottom: 0.5em;
+}
+
+.subscribeContainer input, button {
+  line-height: inherit;
+  width: 100%;
+}
+
+@media (min-width: 750px) { 
+  .subscribeContainer input, button {
+    width: 60%;
+  }
+}
+
