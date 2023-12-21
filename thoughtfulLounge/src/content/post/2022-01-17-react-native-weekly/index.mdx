@@ -5,7 +5,7 @@ publishDate: 2022-01-17
 tags:    ["react-native", "react-native-weekly"]
 ---
 
-First React Native Weekly of 2022 and the **40th edition**. 
+First React Native Weekly of 2022 and the **40th edition**.
 
 This is a special edition after a long deserving end of year break. This issue **covers updates from December 20th 2021 to January 17th of 2022**. Enjoy!
 
@@ -19,7 +19,7 @@ This is a special edition after a long deserving end of year break. This issue *
 
 # Remove "interfaceOnly" on 3rd party Fabric component generation
 
-Ubax jakub.tkacz@swmansion.com [fixed an issue](https://github.com/facebook/react-native/commit/3e6902244a0) where 3rd party codegen generated components (outside core) where not included in the Fabric component provider. 
+Ubax jakub.tkacz@swmansion.com [fixed an issue](https://github.com/facebook/react-native/commit/3e6902244a0) where 3rd party codegen generated components (outside core) where not included in the Fabric component provider.
 
 Comment:
 
@@ -27,9 +27,9 @@ Comment:
 
 # TypeScript Parser For Codegen
 
-Charles Dudley charlesdudley@fb.com took on the job to implement the codegen TypeScript parser based off of the [Flow](https://flow.org/) parser. 
+Charles Dudley charlesdudley@fb.com took on the job to implement the codegen TypeScript parser based off of the [Flow](https://flow.org/) parser.
 
-For context, codegen reads [Flow](https://flow.org/) type definitions from a JavaScript file to generate the header files for native component/module. 
+For context, codegen reads [Flow](https://flow.org/) type definitions from a JavaScript file to generate the header files for native component/module.
 
 Example of a Native command interface written in JavaScript Flow.
 
@@ -57,28 +57,28 @@ interface NativeCommands {
 
 On December 20th 2021, Charles pushed the following commits introducing support for TypeScript as a spec file for Native Components/Modules:
 
-[821382b9f77](https://github.com/facebook/react-native/commit/821382b9f77) TypeScript Module Tests  
-[f9e512e8fe0](https://github.com/facebook/react-native/commit/f9e512e8fe0) TypeScript Component Tests  
-[f4e32ac5bfb](https://github.com/facebook/react-native/commit/f4e32ac5bfb) Copy Flow parser tests to prepare TypeScript Parser  
-[078f6310ba5](https://github.com/facebook/react-native/commit/078f6310ba5) Choose parser based on file extension  
-[0d3036abdef](https://github.com/facebook/react-native/commit/0d3036abdef) TypeScript Modules  
-[a9632c5ec53](https://github.com/facebook/react-native/commit/a9632c5ec53) Copy Flow parser modules logic to prepare TypeScript parser  
-[7615bde0230](https://github.com/facebook/react-native/commit/7615bde0230) TypeScript Components  
-[c532fcff90b](https://github.com/facebook/react-native/commit/c532fcff90b) Copy Flow parser components logic to prepare TypeScript parser  
-[114d5a8a176](https://github.com/facebook/react-native/commit/114d5a8a176) TypeScript parser foundation  
-[165dfbcc87a](https://github.com/facebook/react-native/commit/165dfbcc87a) Copy Flow parser foundation for TypeScript parser  
+[821382b9f77](https://github.com/facebook/react-native/commit/821382b9f77) TypeScript Module Tests
+[f9e512e8fe0](https://github.com/facebook/react-native/commit/f9e512e8fe0) TypeScript Component Tests
+[f4e32ac5bfb](https://github.com/facebook/react-native/commit/f4e32ac5bfb) Copy Flow parser tests to prepare TypeScript Parser
+[078f6310ba5](https://github.com/facebook/react-native/commit/078f6310ba5) Choose parser based on file extension
+[0d3036abdef](https://github.com/facebook/react-native/commit/0d3036abdef) TypeScript Modules
+[a9632c5ec53](https://github.com/facebook/react-native/commit/a9632c5ec53) Copy Flow parser modules logic to prepare TypeScript parser
+[7615bde0230](https://github.com/facebook/react-native/commit/7615bde0230) TypeScript Components
+[c532fcff90b](https://github.com/facebook/react-native/commit/c532fcff90b) Copy Flow parser components logic to prepare TypeScript parser
+[114d5a8a176](https://github.com/facebook/react-native/commit/114d5a8a176) TypeScript parser foundation
+[165dfbcc87a](https://github.com/facebook/react-native/commit/165dfbcc87a) Copy Flow parser foundation for TypeScript parser
 
 
 
 # Improved how React Native Android defines touchable events for overflown items
 
-I have noticed that Xin Chen xch@fb.com has been doing work related to VR and he has made a few improvements to React Native to deliver performance improvements for VR. 
+I have noticed that Xin Chen xch@fb.com has been doing work related to VR and he has made a few improvements to React Native to deliver performance improvements for VR.
 
-On this occasion Xin Chen is trying to improve performance of the following situations: 
+On this occasion Xin Chen is trying to improve performance of the following situations:
 
 > This perf issue is getting obvious when a view loads too many items, which matches our experience with "Hover getting slow after scrolling", "Hover getting slow after going back from PDP view", and "The saved list view (in Explore) is very fast (because it has very few components)"
 
-On [this commit](https://github.com/facebook/react-native/commit/bc9168d4cae), Xin adds overflowInset to RN Android ViewGroup as separate mount instruction. This will allow each rendered view group on Android to compute tis overflow boundaries and know if it should handle touch events on not as a separate instruction. 
+On [this commit](https://github.com/facebook/react-native/commit/bc9168d4cae), Xin adds overflowInset to RN Android ViewGroup as separate mount instruction. This will allow each rendered view group on Android to compute tis overflow boundaries and know if it should handle touch events on not as a separate instruction.
 
 
 # New "newArchEnabled" property to enable Fabric on Android
@@ -87,9 +87,9 @@ Nicola Corti ncor@fb.com [setup](https://github.com/facebook/react-native/commit
 
 Notes from Nicola:
 
-* Set `newArchEnabled` to true inside the `gradle.properties` file  
-* Invoke gradle with `-PnewArchEnabled=true`  
-* Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`  
+* Set `newArchEnabled` to true inside the `gradle.properties` file
+* Invoke gradle with `-PnewArchEnabled=true`
+* Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
 
 The Project property will also control if:
 * ReactNative dependency should be built from source or not.
@@ -106,11 +106,11 @@ Please note that this requires RN 0.68.x to run properly (it won't work with 0.6
 
 # Introduce TextInput.onChangeSync
 
-Samuel Susla samuelsusla@fb.com [added the experimental](https://github.com/facebook/react-native/commit/8c6a98400ee) `TextInput.onChangeSync` which delivers onChange event synchronously. 
+Samuel Susla samuelsusla@fb.com [added the experimental](https://github.com/facebook/react-native/commit/8c6a98400ee) `TextInput.onChangeSync` which delivers onChange event synchronously.
 
 This means you can use `onChangeSync` as you did with `onChange` for your `TextInput`. **Warning - this is still experimental and can change**.
 
-But you might be asking why? Well, the asynchronous nature of the text updates can cause the user input to become out of sync with what he sees on the screen. Making it synchronous forces the state updates immediately.  
+But you might be asking why? Well, the asynchronous nature of the text updates can cause the user input to become out of sync with what he sees on the screen. Making it synchronous forces the state updates immediately.
 
 
 
@@ -118,13 +118,13 @@ But you might be asking why? Well, the asynchronous nature of the text updates c
 
 [Commit](https://github.com/facebook/react-native/commit/cd4c6659d34)
 
-- Gradle to 7.3.3 which fixes several Log4j CVEs  
-- Android Gradle Plugin (AGP) to 7.0.4   
-- Download Task plugin to 4.1.2  
+- Gradle to 7.3.3 which fixes several Log4j CVEs
+- Android Gradle Plugin (AGP) to 7.0.4
+- Download Task plugin to 4.1.2
 
 # Allow lazy detection of native UI component
 
-Paige Sun paigesun@fb.com added multiple patches to enable the LazyUIManager for Fabric and Static View Config enabled. 
+Paige Sun paigesun@fb.com added multiple patches to enable the LazyUIManager for Fabric and Static View Config enabled.
 
 The Static View Configs (SVC) can be codegen generated or not, its job is to represent what the native interface should look like, see the [ImageViewNativeComponent](https://github.com/facebook/react-native/blob/main/Libraries/Image/ImageViewNativeComponent.js) as an example.
 
@@ -138,11 +138,11 @@ With these changes, the UIManager will be:
 
 List of commits from Paige:
 
-[b3a34194c08](https://github.com/facebook/react-native/commit/b3a34194c08) 5/5 Hook up Bridgeless' UIManager.hasViewManagerConfig with Fabric's native component registry  
-[a620d7dc851](https://github.com/facebook/react-native/commit/a620d7dc851) 4/5 Minor: Move unstable_hasComponent out of NativeComponentRegistry  
-[7c63e0d5bc8](https://github.com/facebook/react-native/commit/7c63e0d5bc8) 3/5 For codegenNativeComponent, with SVC enabled, use UIManager hasViewManagerConfig instead of getViewManagerConfig  
-[6be46b0bb59](https://github.com/facebook/react-native/commit/6be46b0bb59) Comments only. Clarify a few Venice and SVC methods  
-[9daae5a5f2b](https://github.com/facebook/react-native/commit/9daae5a5f2b) For Fabric with StaticViewConfigs, fix UIManager to use LazyUImanager, not PaperUIManager  
+[b3a34194c08](https://github.com/facebook/react-native/commit/b3a34194c08) 5/5 Hook up Bridgeless' UIManager.hasViewManagerConfig with Fabric's native component registry
+[a620d7dc851](https://github.com/facebook/react-native/commit/a620d7dc851) 4/5 Minor: Move unstable_hasComponent out of NativeComponentRegistry
+[7c63e0d5bc8](https://github.com/facebook/react-native/commit/7c63e0d5bc8) 3/5 For codegenNativeComponent, with SVC enabled, use UIManager hasViewManagerConfig instead of getViewManagerConfig
+[6be46b0bb59](https://github.com/facebook/react-native/commit/6be46b0bb59) Comments only. Clarify a few Venice and SVC methods
+[9daae5a5f2b](https://github.com/facebook/react-native/commit/9daae5a5f2b) For Fabric with StaticViewConfigs, fix UIManager to use LazyUImanager, not PaperUIManager
 
 
 # Added "accessibilityLabelledBy" prop [Android]
@@ -153,18 +153,10 @@ List of commits from Paige:
 
 # Stativ View Config fixes
 
-Ramanpreet Nara ramanpreet@fb.com made a few commits fixing the Static View Configs using the [staticViewConfigValidator](https://github.com/facebook/react-native/blob/main/Libraries/NativeComponent/StaticViewConfigValidator.js). 
+Ramanpreet Nara ramanpreet@fb.com made a few commits fixing the Static View Configs using the [staticViewConfigValidator](https://github.com/facebook/react-native/blob/main/Libraries/NativeComponent/StaticViewConfigValidator.js).
 
-This is mostly making the SVC match the Native View Config which the validator pointed out.
-
-[0ee66889e0f](https://github.com/facebook/react-native/commit/0ee66889e0f) Fix SVC for AndroidHorizontalScrollView  
-[5bc7b02fc79](https://github.com/facebook/react-native/commit/5bc7b02fc79) Fix SVC for AndroidHorizontalScrollContentView  
-[fcf01b8c7a1](https://github.com/facebook/react-native/commit/fcf01b8c7a1) Fix SVC for RCTImageView  
-[067bcb53255](https://github.com/facebook/react-native/commit/067bcb53255) Fix SVC for RCT{Multiline,Singleline}TextInput  
-[9022849505f](https://github.com/facebook/react-native/commit/9022849505f) Fix SVC for RCTScrollView  
-[6b42bcc1f43](https://github.com/facebook/react-native/commit/6b42bcc1f43) Fix NVC for RCTModalHostView  
-[28f5abc7173](https://github.com/facebook/react-native/commit/28f5abc7173) Fix NVC for RCTSlider  
-[4ac209ca1d0](https://github.com/facebook/react-native/commit/4ac209ca1d0) Fix NVC for RCTMap  
+This is mostly making the SVC match the Native View Config which the validator
+pointed out.
 
 # Clang-tidy linter
 
@@ -181,7 +173,7 @@ Rachel Nabors [tweet](https://twitter.com/rachelnabors/status/147413424921314918
 
 [Tweet by Marc about this library](https://twitter.com/mrousavy/status/1478332431270920192?s=20)
 
-A writeable in-memory Image JSI Host Object. This library allows you to load an image to memory and share it across different context without having to copy it or read it from disk again. Like everything Marc builds this is a performance gainer. 
+A writeable in-memory Image JSI Host Object. This library allows you to load an image to memory and share it across different context without having to copy it or read it from disk again. Like everything Marc builds this is a performance gainer.
 
 This is likely to work well with his other library [VisionCamera](https://github.com/mrousavy/react-native-vision-camera)
 
