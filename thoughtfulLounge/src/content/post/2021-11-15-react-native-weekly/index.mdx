@@ -5,12 +5,12 @@ publishDate: 2021-11-15
 tags:    ["react-native", "react-native-weekly"]
 ---
 
-Welcome to the 34th edition of React Native Weekly! 
+Welcome to the 34th edition of React Native Weekly!
 
 This is week 46 of 2021: November 8th to 14th.
 
 
-# Make the `reactNativeArchitectures` property more discoverable
+# Make the reactNativeArchitectures property more discoverable
 
 Nicola Corti ncor@fb.com [added](https://github.com/facebook/react-native/commit/0f39a1076dc) `reactNativeArchitectures` property to gradle.properties for you to specify architecture on Android.
 ```diff
@@ -19,7 +19,7 @@ index 11d6e02418e..389db0c1880 100644
 --- a/template/android/gradle.properties
 +++ b/template/android/gradle.properties
 @@ -26,3 +26,8 @@ android.enableJetifier=true
- 
+
  # Version of flipper SDK to use with React Native
  FLIPPER_VERSION=0.99.0
 +
@@ -30,7 +30,7 @@ index 11d6e02418e..389db0c1880 100644
 ```
 
 
-# Default {bubbling,direct}EventTypes to {} in Native VCs
+# Default bubbling, direct EventTypes to \{\} in Native VCs
 
 Ramanpreet Nara ramanpreet@fb.com continued the work to [make the Native View Configs match the functionality of the Static View Config](https://github.com/facebook/react-native/commit/36612a80609).
 
@@ -50,7 +50,7 @@ Pieter De Baets pieterdb@fb.com had added `getSurfaceId` to UIManagerHelper to g
 +    }
 ```
 
-# Introduce RootView.onChildEndedNativeGesture method [Android] 
+# Introduce RootView.onChildEndedNativeGesture method [Android]
 
 Xin Chen xch@fb.com [added](https://github.com/facebook/react-native/commit/9b33c31ee02) `onChildEndedNativeGesture` to the RootView interface to let its implementations notify the JS side that a child gesture is ended on Android.
 
@@ -75,7 +75,7 @@ It is not yet clear how this will be used. But, the comment above implies allowi
 
 # Rename Keyboard.removeEventListener to removeListener
 
-[Commit](https://github.com/facebook/react-native/commit/8880c09076e). 
+[Commit](https://github.com/facebook/react-native/commit/8880c09076e).
 
 
 # Introduce RCTViewUtils
@@ -89,7 +89,7 @@ He thus converts a static class method used in RCTView to a C function.
 
 [This commit](https://github.com/facebook/react-native/commit/9d71b166a6c) by chenmo187 1731581001@qq.com fixes a crash on Android where caused by two separate threads accessing/mutating the same resource.
 
-He explains this only happens when you have multiple tabs and with each having its own ReactInstanceManager (maybe caused by using react-native-navigation?), not sure. 
+He explains this only happens when you have multiple tabs and with each having its own ReactInstanceManager (maybe caused by using react-native-navigation?), not sure.
 
 
 # Pass testID down in Modal

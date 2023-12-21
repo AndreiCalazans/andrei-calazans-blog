@@ -6,9 +6,9 @@ tags:    ["react-native", "react-native-weekly"]
 ---
 
 
-Welcome to the 39th edition of React Native Weekly! 
+Welcome to the 39th edition of React Native Weekly!
 
-This is week 51 2021: December 13th to 19th. Yo the year is almost gone now. 
+This is week 51 2021: December 13th to 19th. Yo the year is almost gone now.
 
 
 # RCTAppSetupUtils helper
@@ -22,17 +22,17 @@ Sota also renamed `AppDelegate.m` to `AppDelegate.mm` on this [other commit](htt
 
 # Fixed Mac M1 postinstall failure
 
-Simon Farshid Yonom@users.noreply.github.com> and William Bell <williambell9708@outlook.com [fixed the issue](https://github.com/facebook/react-native/commit/9cd40923362) where the postinstall workaround script failed on the Mac M1 if didn't set the `IPHONEOS_DEPLOYMENT_TARGET`
+Simon Farshid Yonom@users.noreply.github.com and William Bell williambell9708@outlook.com [fixed the issue](https://github.com/facebook/react-native/commit/9cd40923362) where the postinstall workaround script failed on the Mac M1 if didn't set the `IPHONEOS_DEPLOYMENT_TARGET`
 
 
 # Trigger codegen discovery when building
 
-Sota Ogo sota@fb.com made two changes to `react_native_pods.rb` related to the codegen discovery script, it finds where the codegen module are. Since it runs on Pod install, to avoid having to call pod install every time we build Sota added a trigger for calling this script on build. 
+Sota Ogo sota@fb.com made two changes to `react_native_pods.rb` related to the codegen discovery script, it finds where the codegen module are. Since it runs on Pod install, to avoid having to call pod install every time we build Sota added a trigger for calling this script on build.
 
 He also modified it to only trigger the codegen discovery script for in-app library changes, if you need to make a temporary change to a library within node_modules you can call `USE_CODEGEN_DISCOVERY=1 pod install` to update the source.
 
-[ad9eabe0337](https://github.com/facebook/react-native/commit/ad9eabe0337) Trigger codegen discovery script when building an app.   
-[bfb8f63c18c](https://github.com/facebook/react-native/commit/bfb8f63c18c) Fix bugs when running with USE_CODEGEN_DISCOVERY  
+[ad9eabe0337](https://github.com/facebook/react-native/commit/ad9eabe0337) Trigger codegen discovery script when building an app.
+[bfb8f63c18c](https://github.com/facebook/react-native/commit/bfb8f63c18c) Fix bugs when running with USE_CODEGEN_DISCOVERY
 
 
 
@@ -44,11 +44,11 @@ I'm not entirely sure if the `react-native-community/cli` points to the `react-n
 
 There were a few commits related to this work:
 
-[2e9a376c848](https://github.com/facebook/react-native/commit/2e9a376c848) Add fabric option to the default app template.  
-[8ec0e6919c5](https://github.com/facebook/react-native/commit/8ec0e6919c5) Add turbo module support in the default app template (#32752)  
-[41cad354e5e](https://github.com/facebook/react-native/commit/41cad354e5e) Fix the default template when RCT_NEW_ARCH_ENABLE=1 (#32775)  
-[6a046fb9f0d](https://github.com/facebook/react-native/commit/6a046fb9f0d) Fix build issue for the new app template (#32772)  
-[1cd8f05ee82](https://github.com/facebook/react-native/commit/1cd8f05ee82) Refactor app template setup util functions  
+[2e9a376c848](https://github.com/facebook/react-native/commit/2e9a376c848) Add fabric option to the default app template.
+[8ec0e6919c5](https://github.com/facebook/react-native/commit/8ec0e6919c5) Add turbo module support in the default app template (#32752)
+[41cad354e5e](https://github.com/facebook/react-native/commit/41cad354e5e) Fix the default template when RCT_NEW_ARCH_ENABLE=1 (#32775)
+[6a046fb9f0d](https://github.com/facebook/react-native/commit/6a046fb9f0d) Fix build issue for the new app template (#32772)
+[1cd8f05ee82](https://github.com/facebook/react-native/commit/1cd8f05ee82) Refactor app template setup util functions
 
 
 # Kevin Gozali Podcast Interview with Infinite Red
@@ -59,21 +59,21 @@ It was cool to learn that the new renderer, turbo mobules, and codegen are done.
 
 The initializer work will lazy load native modules instead of loading them up front. This work started and is planned to finish in the first half of 2022.
 
-Another insight from the conversation is how codegen was created to give native modules type safety. Previously the native layer would tell the JavaScript layer what modules where available and their methods, with codegen this is turned around and the JavaScript layer will generate the bindings and type declarations that the native modules need to abide to, as a result the native modules will need to have equal interfaces for all platforms. 
+Another insight from the conversation is how codegen was created to give native modules type safety. Previously the native layer would tell the JavaScript layer what modules where available and their methods, with codegen this is turned around and the JavaScript layer will generate the bindings and type declarations that the native modules need to abide to, as a result the native modules will need to have equal interfaces for all platforms.
 
 
 # Expo SDK 44
 
-[Release blogpost](https://blog.expo.dev/expo-sdk-44-4c4b8306584a). Evan [highlighted](https://twitter.com/Baconbrix/status/1471981252794208258?s=20) `expo-system-ui` module that allows you to set the root native background color of the app by doing: 
+[Release blogpost](https://blog.expo.dev/expo-sdk-44-4c4b8306584a). Evan [highlighted](https://twitter.com/Baconbrix/status/1471981252794208258?s=20) `expo-system-ui` module that allows you to set the root native background color of the app by doing:
 
 `SystemUI.setBackgroundColorAsync("white");`
- 
+
 
 # react-native-skia
 
-William and Christian [open sourced react-native-skia](https://github.com/Shopify/react-native-skia) sponsored by Shopify. [The release video made by William](https://www.youtube.com/watch?v=EHxEX78alZE) was amazing and he went over many capabilities that the library enables. 
+William and Christian [open sourced react-native-skia](https://github.com/Shopify/react-native-skia) sponsored by Shopify. [The release video made by William](https://www.youtube.com/watch?v=EHxEX78alZE) was amazing and he went over many capabilities that the library enables.
 
-[As I tweeted on Saturday](https://twitter.com/Andrei_Calazans/status/1472117454130266113?s=20), react-native-svg can change how we do SVG, graphs/charts, and complex animation rendering in React Native. 
+[As I tweeted on Saturday](https://twitter.com/Andrei_Calazans/status/1472117454130266113?s=20), react-native-svg can change how we do SVG, graphs/charts, and complex animation rendering in React Native.
 
 For example, react-native-svg implements SVG rendering manually using [Core Graphis on iOS](https://developer.apple.com/documentation/coregraphics) and [Graphics on Android](https://source.android.com/devices/graphics) and since react-native-skia supports SVG path rendering you could just use it instead which might be more performant given that react-native-skia is already using JSI and Skia's rendering engine is likely to have a better implementation of the SVG protocol than the one done by react-native-svg.
 
