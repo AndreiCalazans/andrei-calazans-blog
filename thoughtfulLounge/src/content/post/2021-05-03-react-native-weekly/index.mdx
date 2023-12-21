@@ -1,0 +1,182 @@
+$frontmatter
+
+Welcome to the seventh edition of React Native Weekly = ) 
+
+Reach out to me via Twitter if you have any feedback, and don't forget to subscribe!
+
+
+# Hades - an improved Garbage Collector
+
+Hermes has another update!
+
+[Tzvetan Mikov announced on Twiter another update to Hermes](https://twitter.com/tmikov/status/1387126479801126913?s=20), an improved garbage collector. He mentioned it has 30x shorted GC pause times on 64-bit devices, and up to 14x shorter on 32-bit devices.
+
+He explained they were able to achieve this by moving the work to a background thread to happen concurrently with the interpreter running JavaScript code, in constract to how it was previously running on the same thread as the interpreter.
+
+
+# React Native + Next.js File Based Routing
+
+Fernando Rojas is working on a file based routing system based on Next.js for React Native, if you are interested checkout [his post](https://twitter.com/FernandoTheRojo/status/1388572885833375756?s=20).
+
+
+# Why Aren't You Using Hermes?
+
+[Eli White wants to know why aren't you using Hermes?](https://twitter.com/Eli_White/status/1387916690474733569?s=20)
+
+
+# More Improvements To The Differentiator Module
+
+_This module contains a set of functions that does the diff when updating the `ShadowTree` and deciding what
+needs to be removed or updated._
+
+Some of the work included improving the code where it was duplicated, adding failing test case seeds, simplify logic, and delete redundant blocks.
+
+```
+
+119e8f4cd8 Differ: in flattening/unflattening nested case, reduce code duplication
+1e68a5f573 Differ: simplify nested flattening/unflattening code
+121a84496c Differ: remove incorrect comment
+7131791ab1 Differ: dedupe more code in main differ loop
+ca3aae7980 Differ: fix unit test case 1167342011
+4bc81422ed Differ: fix debug log compilation
+2c62e02b2b Differ: comments
+1b83922cb6 Differ: delete impossible and redundant blocks
+08a1531a1f Differ: simplify flatten/unflatten logic
+6e13040ecb Differ: consolidate two code paths into updateMatchedPairSubtrees
+11e166b9aa Differ: refactor: use mutation container list to store all temporary mutations
+3a99c7cdbb Differ: add failing test case 1167342011 which covers an existing error
+1b4a5176d7 Testing mechanism to find new failing Differ test-cases
+66ba89921a Differ tests: use react_native_assert(false) instead of FAIL() to get logs upon test failure
+```
+
+
+# Implement RuntimeScheduler::getCurrentPriorityLevel
+
+[841756b150](https://github.com/facebook/react-native/commit/841756b150) Implement RuntimeScheduler::getCurrentPriorityLevel
+
+The current priority level is whatever is on the top of the queue.
+
+```
++      auto previousPriority = currentPriority_;
+       while (!taskQueue_.empty()) {
+-        auto topPriority = taskQueue_.top();
++        auto topPriorityTask = taskQueue_.top();
+         auto now = now_();
+-        auto didUserCallbackTimeout = topPriority->expirationTime <= now;
++        auto didUserCallbackTimeout = topPriorityTask->expirationTime <= now;
+ 
+         if (!didUserCallbackTimeout && shouldYield_) {
+           // This task hasn't expired and we need to yield.
+           break;
+         }
+-
+-        auto result = topPriority->execute(runtime);
++        currentPriority_ = topPriorityTask->priority;
++        auto result = topPriorityTask->execute(runtime);
+```
+
+
+
+# Upgrade to Jest 26.6.3
+ 
+[Commit](https://github.com/facebook/react-native/commit/d6cd2e6559)
+
+
+# Work To Support Bridgeless Mode
+
+Updates were made to both the [`RCTNetworking`](https://github.com/facebook/react-native/commit/4c5182c1cc) and [`RCTImageLoader`](https://github.com/facebook/react-native/commit/af6bcfa3ab) to support bridgeless mode.
+
+The new architecture, Fabric, will be in bridgeless mode. 
+
+
+# Fix For Crash On Android When Creating Negative Width Layouts
+
+
+[3d0cf8dcf8](https://github.com/facebook/react-native/commit/3d0cf8dcf8) Fix IllegalArgumentException when creating layout with negative width
+
+stacktrace:
+```
+stack_trace:	java.lang.IllegalArgumentException: Layout: -2 < 0
+	at android.text.Layout.<init>(Layout.java:265)
+	at android.text.Layout.<init>(Layout.java:241)
+	at android.text.BoringLayout.<init>(BoringLayout.java:179)
+	at android.text.BoringLayout.make(BoringLayout.java:61)
+	at com.facebook.react.views.text.TextLayoutManager.createLayout(TextLayoutManager.java:290)
+	at com.facebook.react.views.text.TextLayoutManager.measureText(TextLayoutManager.java:384) [inlined]
+	at com.facebook.react.views.text.ReactTextViewManager.measure(ReactTextViewManager.java:172) [inlined]
+	at com.facebook.react.fabric.mounting.MountingManager.measure(MountingManager.java:349) [inlined]
+	at com.facebook.react.fabric.FabricUIManager.measure(FabricUIManager.java:461)
+	at com.facebook.react.bridge.queue.NativeRunnable.run(Native Method)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+	at java.lang.Thread.run(Thread.java:923)
+
+```
+
+Now it throws a soft exception.
+
+
+# Fix DatePicker sizing issue
+
+Changing `preferredDatePickerStyle` changes size of the component without triggering re-layout of the react native screen. The fix is to make sure the size stays the same after changing the style.
+
+[84d55868e8](https://github.com/facebook/react-native/commit/84d55868e8) Fix DatePicker sizing issue
+
+
+
+# 2b67631210 Bump Hermes npm to 0.8.0
+
+[Commit](https://github.com/facebook/react-native/commit/2b67631210)
+
+
+# Batch Animation setValue call in a separate batch
+
+<div style={{ borderLeft: "4px solid gray", paddingLeft: 20 }}>
+
+Summary:
+
+NativeAnimationModule on Android is using batches to combine related updates together. In Fabric, this process is controlled by JS, which schedules starts batching when Animated component props are about to be updated.
+
+In rare cases when there's no prop update (like calls to `setValue` on `AnimatedValue`), changes weren't applied until the next batch was scheduled. This change ensures that such changes get applied directly.
+
+This problem doesn't happen on iOS or non-Fabric surfaces, because they use per-frame scheduling instead.
+
+</div>
+
+
+# Migrations to NativeComponentRegistry
+
+
+[cf0a6e9e27](https://github.com/facebook/react-native/commit/cf0a6e9e27) Refactor RCTMultilineTextInputNativeComponent to use NativeComponentRegistry instead of requireNativeComponent
+[f76943af1a](https://github.com/facebook/react-native/commit/f76943af1a) Refactor RCTSingelineTextInputNativeComponent to use NativeComponentRegistry instead of requireNativeComponent
+
+The intention is to unify the way the component is registered and enable StaticViewConfigs for this component
+
+
+
+# iOS: 1/7 Add missing onDismiss prop in Modal component
+
+<div style={{ borderLeft: "4px solid gray", paddingLeft: 20 }}>
+
+Static ViewConfigs are not yet available in Fabric. ViewConfigs are generated from Paper view managers.
+
+For a prop to pass through from JS to iOS, props in [RCTModalHostViewNativeComponent.js](https://github.com/facebook/react-native/blob/dc80b2dcb52fadec6a573a9dd1824393f8c29fdc/Libraries/Modal/RCTModalHostViewNativeComponent.js) need to match RCT_EXPORT_VIEW_PROPERTY in RCTModalHostViewManager.m.
+
+</div>
+
+[Commit](https://github.com/facebook/react-native/commit/7258afeea3)
+
+
+# Nice, you  made it here! 
+
+I like having this weekly commitment to writing this post because it forces me to stay up to date with React Native.
+
+Despite my personal goal, I would like to know more about you, reader, and make sure I can serve you better. 
+
+If you have 1 minute, [please answer these 3 questions in this Google Form](https://docs.google.com/forms/d/e/1FAIpQLSclWwITZofCNveYcsqE1iDUzIGhq2N_0UygvyK7QuhphIgKBw/viewform?usp=sf_link). The purpose of the form is to improve the weekly post. Thank you.
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+

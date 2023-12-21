@@ -1,0 +1,102 @@
+$frontmatter
+
+Welcome to the 30th edition of React Native Weekly! 
+
+
+This is week 42 of 2021: October 11th and 17th.
+
+# Added `ACCESS_MEDIA_LOCATION` to PermissionsAndroid 
+
+[Commit](https://github.com/facebook/react-native/commit/79db4835681) by Aditya Wasan <adityawasan55@gmail.com>
+
+[PermissionsAndroid](https://reactnative.dev/docs/permissionsandroid)
+
+# Fixed incorrect offset position after scrollToItem [IOS]
+
+Xin Chen <xch@fb.com> [fixed an edge case](https://github.com/facebook/react-native/commit/55392f65a6a) where the offset measurement in the ScrollView was off after calling `scrollToIndex` or `scrollToItem` with animation false. 
+
+
+# Kotlin & Gradle version bumps
+
+[Commit](https://github.com/facebook/react-native/commit/9ae33674314) bumped Kotlin version to 1.5.31 and Gradle version to 7.2
+
+# Add hermesFlagsForVariant and deleteDebugFilesForVariant
+
+Geraint White <geraintwhite@gmail.com>'s commit adds two build.gradle config lambdas: `hermesFlagsForVariant` and  `deleteDebugFilesForVariant`.
+
+Previously build.gradle would only give you a Hermes release configuration if the target name contained release. With the above change you can now set the release config as you wish - this is helpful if you have staging releases for instance where the target name does not contain "release" i.e., "your-app-staging".
+
+
+You can set `hermesFlagsForVariant` and  `deleteDebugFilesForVariant` in `android/app/build.gradle`.
+
+[Commit](https://github.com/facebook/react-native/commit/91adb761cf1) and [issue](https://github.com/facebook/react-native/issues/25601#issuecomment-510856047) related to this.
+
+
+# Fix border positioning regression [Android]
+
+[Issue](https://github.com/facebook/react-native/issues/29099) introduced a regression where non-rounded borders on Android would render outside of the view. [This change](https://github.com/facebook/react-native/commit/d1a33cd139f) addresses that by rendering the borders completely inside the view like it works on iOS.
+
+# Refactor touch event dispatch
+
+While [this change](https://github.com/facebook/react-native/commit/a2feaeb5f11) is only relevant internally to the touch event architecture for Android, it introduces improvements that should decrease allocations done when transforming events, according to Andrei Shikov <ashikov@fb.com>.
+
+Essentially, Andrei Shikov reuses the event emitter's `receiveEvent` method directly to dispatch events instead of the previous custom dispatcher.
+
+
+# Centralize C++ compiler flags in rn_defs.bzl
+
+[This commit](https://github.com/facebook/react-native/commit/a75e615a90b) unifies all C++ compiler flags used throughout the project under Bazel's config file.
+
+
+# Stop using RTTI features in Fabric core and components
+
+Joshua Gross <joshuagross@fb.com>'s [commit](https://github.com/facebook/react-native/commit/6525f9b0828) removes a few dynamic casting from the codebase as an effort to possibly disabled RTTI in a near future.
+
+For Context, in C++, RTTI's have a bad rep for having bad performance, increasing bundle size to include the type informations, and for indicating a bad architecture.
+
+# Add Github Action to close stale PRs and issues
+
+Nicola Corti <ncor@fb.com>'s [commit](https://github.com/facebook/react-native/commit/37efe38e6cb) adds a Github Action to close stale issues/PRs that have one year of inactivity.
+
+
+
+# React Native Core Team QA
+
+[Link to the Reddit thread](https://www.reddit.com/r/reactnative/comments/pzdo1r/react_native_team_aua_thursday_oct_14_9am_pt/)
+
+There were a few great questions and answers on topics like: list peformance; input & keyboard handling; upgrading React Native; and when will Fabric/TurboModule become production ready for Open Source.
+
+A few answers overlapped on the contribution that concurrent mode can make on performance. In one answer on the performance problems of the current FlatList, Timothy Yung shared how simply creating a synchronous version of the FlatList wouldn't necessarily solve performance since the JavaScript thread can be blocked by other computations or garbage collection, he continued to say that with concurrent mode they can explore improving it. Yung shared how the FlatList is used by many components at Facebook and changing/improving requires caution. 
+
+
+# Faster bundling in Expo by Evan Bacon
+
+[Faster bundling in Expo](https://twitter.com/Baconbrix/status/1449043817663905793) by Evan Bacon. Expo and Evan continues pushing React Native forward. This article highlights how Evan is improving Metro's bundling time by using a custom Metro transformer that does the following:
+
+1) Avoid transforming already transformed code in node_modules 
+
+In contrast with the web, React Native 3rd party libs are shipped as is without having it pre-bundled, with some exceptions.
+
+2) Use a faster transformer - [Sucrase](https://sucrase.io) on the untransformed code in node_modules
+
+3) Use Babel only in the remaining application code
+
+The insight from this is: React Native 3rd party ecosystem habit of shipping unbundled code is a bad practice, we should try to push the community towards shipping bundled code. And due to the high number of plugins, Babel is slow to transform all the code. The less code we transform with Babel the faster it obviously becomes. 
+
+If you are interested in the topic, [I recommend reading it](https://blog.expo.dev/drastically-faster-bundling-in-react-native-a54f268e0ed1) since Evan Bacon does an amazing job with Gifs to illustrate his point. 
+
+I haven't had the time to look into [the exotic transformer itself](https://github.com/expo/expo-cli/blob/master/packages/metro-config/src/transformer/createExoticTransformer.ts) yet, but I believe we can replicate this same idea on a non-Expo project.
+
+
+# Community
+
+- [Lorenzo Sciandra](https://twitter.com/Kelset)'s React Native Performance Compendium [link](https://lifeiswhat.notion.site/The-React-Native-Performance-Compendium-21d58f64292e4074afb73a10f760f303)
+- [React Native hint: for optimizing images](https://twitter.com/jamonholmgren/status/1448386599599833091?s=20) `npx expo-optimize`
+- Marc Rousavy [is looking for sponsors for VisionCamera](https://twitter.com/mrousavy/status/1447586433456386052)
+
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+

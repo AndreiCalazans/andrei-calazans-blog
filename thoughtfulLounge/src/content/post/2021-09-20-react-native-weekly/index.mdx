@@ -1,0 +1,159 @@
+$frontmatter
+
+Welcome to the 26th edition of React Native Weekly! 
+
+
+This is a special edition that contains two weeks: Week 37 and 38. This is everything that happened between the 6th and 19th of September. 
+
+# Fixed LogBoxData ignorePatterns function
+
+wangqingyang <wangqingyang@alsoplanet.com> [improved the comparison logic](https://github.com/facebook/react-native/commit/a950634424c) of this function that was previously broken. You can use the `LogBoxData.addIgnorePatterns` to ignore certain logs.
+
+
+# Add LayoutAnimation support to all ViewKind nodes
+
+Samuel Susla <samuelsusla@fb.com> explained how the LayoutAnimation only animated changes inside a View and a Paragraph node. [His change](https://github.com/facebook/react-native/commit/30887403ec4) adds support to any ViewKind now.  
+
+What he did was remove the interpolation logic from the `ParagraphComponentDescriptor` and  `ViewComponentDescriptor` then add it to the  `ConcreteComponentDescriptor` which is the base class for any descriptor or node.
+
+
+Samuel Susla <samuelsusla@fb.com> also introduced improvements to the LayoutAnimation code. He simplified [(1)](https://github.com/facebook/react-native/commit/d83c3101447) , organized [(2)](https://github.com/facebook/react-native/commit/5153b43c6a3), and improved the C++ code [(3)](https://github.com/facebook/react-native/commit/84d039aad2b).
+
+_There were quite a few commits by Samuel which I am not linking here, it impresses me how productive Samuel is._
+
+
+
+# NativeModule Initialization Improvements
+
+Ramanpreet Nara <ramanpreet@fb.com> [made improvements](https://github.com/facebook/react-native/commit/ddc4225dd41) to the Native Module initialization logic. It is a bit beyond my understanding and I didn't have the time to properly dig through yet. From what I understood Ramanpreet found some deadlocking code due to the recursive initialization of some modules. He thus moved the initialization logic outside the `setModuleRegistry` to avoid this. 
+
+This is all relevant for the Bridgeless mode AKA Fabric since Native Module initialization is now owned by each module through the "initialize" method introduced in [RCTInitializing](https://github.com/facebook/react-native/commit/9b45df1fced066f40034b0a58be6f4caafd5f785).
+
+Ramanpreet Nara <ramanpreet@fb.com> says:
+
+"In general, we shouldn't do any sort of initialization inside setters for these bridge/bridgeless APIs. No other NativeModules do initialization outside of initialize."
+
+
+
+# Use Updated Android Locale API 
+
+[Change](https://github.com/facebook/react-native/commit/b7c023a8c11) by Aaron Grider <agrider@tesla.com>
+
+Summary:
+This change migrates fetching locale information from the deprecated Android locale api to the new locale api on sdk version 30+. The old api was deprecated some time ago and should not be used.
+
+https://developer.android.com/reference/android/content/res/Configuration#locale
+
+Test Plan:
+```js
+if (Platform.OS === 'android') {
+  locale = NativeModules.I18nManager.localeIdentifier; // returns ex. 'EN_us'
+}
+```
+
+
+# Fix missing WebView provider crash in ForwardingCookieHandler [Android]
+
+Rodolfo <RodolfoGS@users.noreply.github.com> explained how this was a regression introduced in 0.62.2. His app had ~0.1% of the users impacted on Android.
+
+[Commit](https://github.com/facebook/react-native/commit/d40cb0e1b0f)
+
+
+# Fix BorderExample Crash on Out of Tree Platforms
+
+[This](https://github.com/facebook/react-native/commit/ffcaef64e40) is a simple change for the RnTester, putting it here so you can see the usage of `Platform.select` with `PlatformColor`.
+
+```diff
+diff --git a/packages/rn-tester/js/examples/Border/BorderExample.js b/packages/rn-tester/js/examples/Border/BorderExample.js
+index 1c256df9aba..34a4db8b16c 100644
+--- a/packages/rn-tester/js/examples/Border/BorderExample.js
++++ b/packages/rn-tester/js/examples/Border/BorderExample.js
+@@ -183,10 +183,12 @@ const styles = StyleSheet.create({
+   },
+   border15: {
+     borderWidth: 10,
+-    borderColor: PlatformColor(
+-      'systemGray4',
+-      '@android:color/holo_orange_dark',
+-    ),
++    borderColor: Platform.select({
++      ios: PlatformColor('systemGray4'),
++      android: PlatformColor('@android:color/holo_orange_dark'),
++      windows: PlatformColor('SystemAccentColorDark1'),
++      default: 'black',
++    }),
+```
+
+
+# Set "new task flag" for intent method Android
+
+Krzysztof Borowy <krizzu.dev@gmail.com> [fixed the crash](https://github.com/facebook/react-native/commit/04fe3ed80d9) caused when calling `Linking.sendIntent` on Android.
+
+```diff
++    sendOSIntent(intent, true);
++  }
++
++  private void sendOSIntent(Intent intent, Boolean useNewTaskFlag) {
++    Activity currentActivity = getCurrentActivity();
++
++    String selfPackageName = getReactApplicationContext().getPackageName();
++    ComponentName componentName =
++        intent.resolveActivity(getReactApplicationContext().getPackageManager());
++    String otherPackageName = (componentName != null ? componentName.getPackageName() : "");
++
++    // If there is no currentActivity or we are launching to a different package we need to set
++    // the FLAG_ACTIVITY_NEW_TASK flag
++    if (useNewTaskFlag || currentActivity == null || !selfPackageName.equals(otherPackageName)) {
++      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++    }
++
++    if (currentActivity != null) {
++      currentActivity.startActivity(intent);
++    } else {
++      getReactApplicationContext().startActivity(intent);
++    }
+```
+
+
+# Use Gradle Lazy API
+
+Nicola Corti <ncor@fb.com> [introduced updates to the Gradle plugin](https://github.com/facebook/react-native/commit/578cba23380) to use the Gradle Lazy API. He notes that this is a breaking change for users that are testing their Gradle Plugin and for Gradle Kotlin DSL users.
+
+
+# Do not flatten view if prop accessibilityViewIsModal is true
+
+With [this](https://github.com/facebook/react-native/commit/1ecd98adc7b) views are no longer flatten if accessibility view is a modal.
+
+# Use Fabric by default in RNTester
+
+Héctor Ramos <hramos@fb.com> [enabled](https://github.com/facebook/react-native/commit/ead19e13e10) Fabric by default for the rn-tester app for iOS.
+
+
+# Fix NSInvalidArgumentException for Invalid Font Family Name
+
+Tim Yung <yungsters@fb.com> explained how in certain production scenarios `[UIFont fontNamesForFamilyName:familyName]` returns `nil` and it caused an issue when trying to insert `nil` into NSCache since it is an object type. 
+
+[He fixes](https://github.com/facebook/react-native/commit/5683932862a) this by guarding against `nil`.
+
+# Pass accessibilityHint through Button component
+
+[This commit](https://github.com/facebook/react-native/commit/be5372801a3) ensures `accessibilityHint` is passed down to the Button component.
+
+
+
+# Community
+
+
+- [React Native Radio 211](https://podcasts.apple.com/us/podcast/react-native-radio/id1058647602?i=1000534739180) - Transitioning from Native to React Native at Coinbase
+
+
+- [Alex Castilo from Neurosity is hiring a Senior React Native Engineer](https://twitter.com/castillo__io/status/1438909253461237761?s=20)
+
+- [The Swyx Mixtape](https://share.transistor.fm/s/ee467824): React Native's near death experience told by Christopher Chedeau AKA Vjeux
+
+
+# Done
+
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+

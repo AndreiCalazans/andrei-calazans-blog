@@ -1,0 +1,186 @@
+$frontmatter
+
+Welcome to the 36th edition of React Native Weekly! 
+
+This is week 48 of 2021: November 22nd to 28th.
+
+
+
+# Complete Fabric Native Component Example [Android]
+
+[Last week](/posts/2021-11-22/react-native-weekly) we saw the commit that introduced the Fabric native component on iOS, this week, Nicola Corti <ncor@fb.com> [added the Android version](https://github.com/facebook/react-native/commit/2162bce44bb).
+
+A few things to notice:
+
+**1) adding the custom "MyNativeViewManager" to the view manager registry**
+
+```java
+diff --git a/packages/rn-tester/android/app/src/main/java/com/facebook/react/uiapp/RNTesterApplication.java b/packages/rn-tester/android/app/src/main/java/com/facebook/react/uiapp/RNTesterApplication.java
+index 643c4627618..70d834076ec 100644
+--- a/packages/rn-tester/android/app/src/main/java/com/facebook/react/uiapp/RNTesterApplication.java
++++ b/packages/rn-tester/android/app/src/main/java/com/facebook/react/uiapp/RNTesterApplication.java
++              },
++              new ReactPackage() {
++                @NonNull
++                @Override
++                public List<NativeModule> createNativeModules(
++                    @NonNull ReactApplicationContext reactContext) {
++                  return Collections.emptyList();
++                }
++
++                @NonNull
++                @Override
++                public List<ViewManager> createViewManagers(
++                    @NonNull ReactApplicationContext reactContext) {
++                  return Collections.singletonList(new MyNativeViewManager());
++                }
+```
+
+**2) the implementation of the custom "MyNativeViewManager"**
+
+It extends the core View component and implements the `callNativeMethodToChangeBackgroundColor` method.
+
+```java
+diff --git a/packages/rn-tester/android/app/src/main/java/com/facebook/react/uiapp/component/MyNativeViewManager.java b/packages/rn-tester/android/app/src/main/java/com/facebook/react/uiapp/component/MyNativeViewManager.java
+new file mode 100644
+index 00000000000..839d6ab4dbb
+--- /dev/null
++++ b/packages/rn-tester/android/app/src/main/java/com/facebook/react/uiapp/component/MyNativeViewManager.java
+@@ -0,0 +1,70 @@
++/*
++ * Copyright (c) Facebook, Inc. and its affiliates.
++ *
++ * This source code is licensed under the MIT license found in the
++ * LICENSE file in the root directory of this source tree.
++ */
++
++package com.facebook.react.uiapp.component;
++
++import android.graphics.Color;
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++import com.facebook.react.bridge.ReadableArray;
++import com.facebook.react.module.annotations.ReactModule;
++import com.facebook.react.uimanager.SimpleViewManager;
++import com.facebook.react.uimanager.ThemedReactContext;
++import com.facebook.react.uimanager.ViewManagerDelegate;
++import com.facebook.react.uimanager.ViewProps;
++import com.facebook.react.uimanager.annotations.ReactProp;
++import com.facebook.react.viewmanagers.RNTMyNativeViewManagerDelegate;
++import com.facebook.react.viewmanagers.RNTMyNativeViewManagerInterface;
++
++/** View manager for {@link MyNativeView} components. */
++@ReactModule(name = MyNativeViewManager.REACT_CLASS)
++public class MyNativeViewManager extends SimpleViewManager<MyNativeView>
++    implements RNTMyNativeViewManagerInterface<MyNativeView> {
++
++  public static final String REACT_CLASS = "RNTMyNativeView";
++
++  private final ViewManagerDelegate<MyNativeView> mDelegate;
++
++  public MyNativeViewManager() {
++    mDelegate = new RNTMyNativeViewManagerDelegate<>(this);
++  }
++
++  @Nullable
++  @Override
++  protected ViewManagerDelegate<MyNativeView> getDelegate() {
++    return mDelegate;
++  }
++
++  @NonNull
++  @Override
++  public String getName() {
++    return REACT_CLASS;
++  }
++
++  @NonNull
++  @Override
++  protected MyNativeView createViewInstance(@NonNull ThemedReactContext reactContext) {
++    return new MyNativeView(reactContext);
++  }
++
++  @Override
++  public void receiveCommand(
++      @NonNull MyNativeView view, String commandName, @Nullable ReadableArray args) {
++    mDelegate.receiveCommand(view, commandName, args);
++  }
++
++  @Override
++  public void callNativeMethodToChangeBackgroundColor(MyNativeView view, String color) {
++    view.setBackgroundColor(Color.parseColor(color));
++  }
++
++  @Override
++  @ReactProp(name = ViewProps.OPACITY, defaultFloat = 1.f)
++  public void setOpacity(@NonNull MyNativeView view, float opacity) {
++    super.setOpacity(view, opacity);
++  }
++}
+```
+
+**3) Component registry plumbing**
+
+[In the commit](https://github.com/facebook/react-native/commit/2162bce44bb) you can see a lot of work related to adding the native component to the native view component registry. Technically you would only need to do this once, and then every new native view would just be appended to the list.  
+
+
+# Fix onLayout prop bug on KeyboardAvoidingView
+
+[Work by](https://github.com/facebook/react-native/commit/9c5e177a79c) Jeffrey Hyer <jeffrey.hyer@rainfocus.com>, he fixed an issue where the KeyboardAvoidingView didn't work as expected when you provided it with the `onLayout` prop.
+
+According to Jeffrey: This happens because the KeyboardAvoidingView component relies on the onLayout prop internally, so when we supply the prop ourselves it overrides the internal implementation.
+
+| BEFORE | AFTER |
+|---|---|
+| <img width="200" alt="example of keyboarding avoiding view" src="https://user-images.githubusercontent.com/1406082/142287541-0dbcf137-4d72-4ab6-9367-ac42bdf5aed9.gif"/>  | <img width="200" alt="example of keyboarding avoiding view" src="https://user-images.githubusercontent.com/1406082/142287611-c7424a6c-b590-48f7-8d74-e96543eab41c.gif"/> |
+
+
+
+# Introduce macros to mock C functions
+
+Phillip Pan <phillippan@fb.com> [introduced RCTMockDef](https://github.com/facebook/react-native/commit/749a9207b6f), a set of macros to mock C functions. If you are curious he adds an example of how to use it.
+
+
+
+# Bump Android Gradle Plugin to 7.
+
+[Commit](https://github.com/facebook/react-native/commit/272cfe5d137)
+```
+-        classpath("com.android.tools.build:gradle:4.2.2")
++        classpath("com.android.tools.build:gradle:7.0.1")
+```
+
+[as a consequence of the above bump](https://github.com/facebook/react-native/commit/a5469f9d7fd), Nicola Corti <ncor@fb.com> updated the `libruntimeexector` to be a shared lib instead of a static lib, he comments:
+
+> AGP 7.x is changing the path where we can find the precompiled static libraries. Therefore is getting complicated to share prebuilt `.a` files. I'm updating `libruntimeexecutor` to be a shared library instead so this will solve this issue for now.
+
+
+
+
+# Bump Android build to SDK 31
+
+[Commit](https://github.com/facebook/react-native/commit/00ac034353c)
+
+# Use NSInteger for NS_ENUM instead of NSUInteger
+
+[Small chore](https://github.com/facebook/react-native/commit/b8f0e975b7f) by Phillip Pan <phillippan@fb.com> for the code to follow [Apple's recommendation](https://developer.apple.com/library/content/releasenotes/ObjectiveC/ModernizationObjC/AdoptingModernObjective-C/AdoptingModernObjective-C.html).
+
+
+
+# React Native Skia
+
+William Candillon and Christian Falch continue sharing updates on their progress with this imperative API. Update [one](https://twitter.com/wcandillon/status/1464591185545150469?s=20) and [two](https://twitter.com/chrfalch/status/1465225625107681285?s=20).
+
+# Community
+
+- [This week in React](https://www.getrevue.co/profile/thisweekinreact) by Sébastien Lorber
+- [Catalin Miron's patreon](https://twitter.com/mironcatalin/status/1462858489500418062?s=20) to access animation examples
+- React Native is everywhere, [Mos - banking](https://twitter.com/jkadamczyk/status/1463080126636302336?s=20) for students app lists as third in iOS app store (100% RN)
+- [react-native-sha](https://twitter.com/h__________1234/status/1464260567015776257?s=20): A Secure Hash Algorithm solution with direct C++ bindings using JSI. ~160x faster
+
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )Sa
+
+

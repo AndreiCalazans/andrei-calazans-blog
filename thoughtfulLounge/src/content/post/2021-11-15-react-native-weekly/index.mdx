@@ -1,0 +1,114 @@
+$frontmatter
+
+Welcome to the 34th edition of React Native Weekly! 
+
+This is week 46 of 2021: November 8th to 14th.
+
+
+# Make the `reactNativeArchitectures` property more discoverable
+
+Nicola Corti <ncor@fb.com> [added](https://github.com/facebook/react-native/commit/0f39a1076dc) `reactNativeArchitectures` property to gradle.properties for you to specify architecture on Android.
+```diff
+diff --git a/template/android/gradle.properties b/template/android/gradle.properties
+index 11d6e02418e..389db0c1880 100644
+--- a/template/android/gradle.properties
++++ b/template/android/gradle.properties
+@@ -26,3 +26,8 @@ android.enableJetifier=true
+ 
+ # Version of flipper SDK to use with React Native
+ FLIPPER_VERSION=0.99.0
++
++# Use this property to specify which architecture you want to build.
++# You can also override it from the CLI using
++# ./gradlew <task> -PreactNativeArchitectures=x86_64
++reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64
+```
+
+
+# Default {bubbling,direct}EventTypes to {} in Native VCs
+
+Ramanpreet Nara <ramanpreet@fb.com> continued the work to [make the Native View Configs match the functionality of the Static View Config](https://github.com/facebook/react-native/commit/36612a80609).
+
+* The View Config defines the properties you can use/access for the native component counterpart.
+
+Ramanpreet [also did further work](https://github.com/facebook/react-native/commit/73b243acbcb) on the StaticViewConfigValidator he created to make it output objects. The StaticViewConfigValidator creates a diff between the native and static view config to show the difference.
+
+
+# Support RootView in UIManagerHelper.getSurfaceId
+
+Pieter De Baets <pieterdb@fb.com> had added `getSurfaceId` to UIManagerHelper to get the view tag for Fabric root views. He noticed `getSurfaceId` duplicates the logic for `getSurfaceIdForView` and thus refactors the code by removing `getSurfaceId` in favor of the legacy `getSurfaceIdForView` and extending this latter method to support getting the view tag.
+
+```diff
++    if (view instanceof ReactRoot) {
++      ReactRoot rootView = (ReactRoot) view;
++      return rootView.getUIManagerType() == UIManagerType.FABRIC ? rootView.getRootViewTag() : -1;
++    }
+```
+
+# Introduce RootView.onChildEndedNativeGesture method [Android] 
+
+Xin Chen <xch@fb.com> [added](https://github.com/facebook/react-native/commit/9b33c31ee02) `onChildEndedNativeGesture` to the RootView interface to let its implementations notify the JS side that a child gesture is ended on Android.
+
+Comment from code:
+
+```diff
++  /**
++   * Helper method that should be called when a native view ends a native gesture (e.g. a native
++   * ScrollView takes control of a gesture stream and starts scrolling). This will handle
++   * dispatching the appropriate events to JS to make sure future gesture is not blocked.
++   *
++   * @param view the View ending the native gesture
++   * @param event the MotionEvent that caused the gesture to be ended
++   */
++  public static void notifyNativeGestureEnded(View view, MotionEvent event) {
++    RootViewUtil.getRootView(view).onChildEndedNativeGesture(view, event);
++  }
+```
+
+It is not yet clear how this will be used. But, the comment above implies allowing React Native to be notified when a native view is done with controlling the gesture stream.
+
+
+# Rename Keyboard.removeEventListener to removeListener
+
+[Commit](https://github.com/facebook/react-native/commit/8880c09076e). 
+
+
+# Introduce RCTViewUtils
+
+[This commit](https://github.com/facebook/react-native/commit/9fc3fc83acd) is a demonstration by Phillip Pan <phillippan@fb.com> on how C functions are superior to Objective-C++ static class methods because they incur less binary size cost [[1]](https://swolchok.github.io/objcperf/)
+
+He thus converts a static class method used in RCTView to a C function.
+
+
+# Fix crash on multiple shadow threads [Android]
+
+[This commit](https://github.com/facebook/react-native/commit/9d71b166a6c) by chenmo187 <1731581001@qq.com> fixes a crash on Android where caused by two separate threads accessing/mutating the same resource.
+
+He explains this only happens when you have multiple tabs and with each having its own ReactInstanceManager (maybe caused by using react-native-navigation?), not sure. 
+
+
+# Pass testID down in Modal
+
+[Commit](https://github.com/facebook/react-native/commit/5050e7eaa17). This was an issue because you couldn't grab the Modal via testID.
+
+
+# Fix RCTAlertController import when embed in existing iOS projects
+
+[Commit summary](https://github.com/facebook/react-native/commit/614e6025ab8):
+
+Fixes a build error relating to RCTAlertController import when embedding react-native into existing iOS app. This PR resolves the issue detailed [here](https://github.com/facebook/react-native/issues/32356)
+
+
+
+# Community
+
+- [This week in React](https://www.getrevue.co/profile/thisweekinreact) by Sébastien Lorber
+- [Dynamic scrolling](https://twitter.com/mironcatalin/status/1458820543055020042?s=20) view by Catalin
+- [Expo Application Services](https://twitter.com/expo/status/1458598050310475776) free for users
+- [Janic's tip](https://twitter.com/janicduplessis/status/1457733721570881546?s=20) on improving build performance when running on an Android device from react-native source
+
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+

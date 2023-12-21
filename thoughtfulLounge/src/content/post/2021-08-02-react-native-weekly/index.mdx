@@ -1,0 +1,180 @@
+$frontmatter
+
+Welcome to the 20th edition of React Native Weekly 😅
+
+This is everything that happened in between 26th of July and 1st of August 2021.
+
+
+# Example with all Transform properties
+
+Luna Wei <luwe@fb.com> [added an Animated transform style property example](https://github.com/facebook/react-native/commit/893aff2e202) to the RNTester app.
+
+```js
++const transformProperties = {
++  rotate: {outputRange: ['0deg', '360deg'], selected: false},
++  rotateX: {outputRange: ['0deg', '360deg'], selected: false},
++  rotateY: {outputRange: ['0deg', '360deg'], selected: false},
++  rotateZ: {outputRange: ['0deg', '360deg'], selected: false},
++  skewX: {outputRange: ['0deg', '45deg'], selected: false},
++  skewY: {outputRange: ['0deg', '45deg'], selected: false},
++  perspective: {outputRange: [1, 2], selected: false},
++  scale: {outputRange: [1, 3], selected: false},
++  scaleX: {outputRange: [1, 3], selected: false},
++  scaleY: {outputRange: [1, 3], selected: false},
++  translateX: {outputRange: [0, 100], selected: false},
++  translateY: {outputRange: [0, 100], selected: false},
++};
+```
+
+
+
+# Implement View.removeClippedSubviews prop [Fabric][iOS]
+
+Fabric didn't have prop [removeClippedSubviews](https://reactnative.dev/docs/view#removeclippedsubviews) implemented. [This diff](https://github.com/facebook/react-native/commit/c5f8c314351) adds it.
+
+
+# Ignore when a text string or number is supplied as a child [Fabric]
+
+
+React Native throws an error when a text string or number is passed as a child. [This change](https://github.com/facebook/react-native/commit/3e836245b5) will ignore this error. This will work once another work related to host configs are landed (https://github.com/facebook/react/pull/21953)
+
+# Remove option to make measure calls asynchronous
+
+Calling the `measure` method in Fabric had an option to be asynchronous, but due to a found regression in core metrics [they removed it](https://github.com/facebook/react-native/commit/eb38543ef21).
+
+# Fix android view dimensions
+
+While [this seems like a trivial fix](https://github.com/facebook/react-native/commit/6d4fff2e5cc), what caught my attention was this comment: `This diff fixes the Android View dimensions in VR`. Does VR mean virtual reality? 
+
+
+Summary from commit message:
+
+PixelUtil.toSPFromPixel and PixelUtil.getDisplayMetricDensity() are both using getScreenDisplayMetrics() to perform conversion of dimensions. This is not correct because we should take into consideration the density of the Context / Activity instead of the Screen.
+
+
+
+# Refactor DevServerHelper to separate checking if packager running
+
+[Separate the functionality of the  isPackagerRunning() function](https://github.com/facebook/react-native/commit/3081db28a72) into a new class PackagerStatusCheck with the intention of being able to use this without needing a DevServerHelper
+
+
+So technically you can use `PackagerStatusCheck` for tooling to check if the JS packager is running.
+
+```c++
++/** Use this class to check if the JavaScript packager is running on the provided host. */
++public class PackagerStatusCheck {
+```
+
+# Rename immediate to ReactNativeMicrotask in Bridge
+
+The `setImmediate` became `queueReactNativeMicrotask`.
+
+You can and should still use `setImmediate` since it is aliased to `queueReactNativeMicrotask`.
+
+```
++  /**
++   * Set up immediate APIs as aliases to the ReactNativeMicrotask APIs.
++   */
++  polyfillGlobal(
++    'setImmediate',
++    () => require('./Timers/JSTimers').queueReactNativeMicrotask,
++  );
++  polyfillGlobal(
++    'clearImmediate',
++    () => require('./Timers/JSTimers').clearReactNativeMicrotask,
++  );
+```
+
+Xuan Huang <jsx@fb.com> renamed the internal occurrences of "Immediate" with
+"ReactNativeMicrotask" in the legacy bridge and then polyfilled the
+original immediate APIs during the timer setup phases as aliases of them.
+
+So internally the handler for `setImmediate`'s callbacks used to be `_immediatesCallback` and now it is `_reactNativeMicrotasksCallback`.
+
+I was wondering why, until I stumbled on another commit below by Xuan Huang <jsx@fb.com> moving the Immediate API to JSVM microtask.
+
+
+# Introduce queueMicrotask API
+
+[Commit message](https://github.com/facebook/react-native/commit/be189cd8190):
+
+`queueMicrotask` is a relatively recent API defined in the WHATWG HTML spec
+and it's been widely adopted by all web browsers and Node.js.
+
+This diff introduced it to React Native by polyfilling it via a lazily-allocated
+resolved Promise, or calling directly into a fast path provided by Hermes.
+
+[See MDN doc about the queueMicrotask](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/queueMicrotask)
+
+
+# Shim Immediate APIs when Promise is queueing to JSVM
+
+[This is a step](https://github.com/facebook/react-native/commit/dc8d218077a) towards moving from React Native internally handling promises to letting the JavaScript Virtual Machine (JSCore, Hermes, etc.,.) handle promises.
+
+React Native handles both promises and immedidate callbacks by keeping a queue internally. In order to let the JSVM handle promises they need to migrate the Immediate API to the JSVM microtask queue.
+
+
+# Makes "force" property available to Apple Pencil based events. (#31780)
+
+[Change](https://github.com/facebook/react-native/commit/f1b1ba8963f)
+
+For more detailed explanation, see issue https://github.com/facebook/react-native/issues/31779
+
+The code compiles and runs, and trying a simple handler for a View like
+````
+  touchMove = (e: GestureResponderEvent) => {
+    console.log(`pressure, altitude (${e.nativeEvent.force}, ${e.nativeEvent.altitudeAngle})`);
+````
+results in
+<img width="424" alt="Screen Shot 2564-06-28 at 17 13 22" src="https://user-images.githubusercontent.com/5000572/123621055-0b563f00-d835-11eb-9eff-526ba27fdf7b.png" />
+and when pencil is oriented perpendicular to the screen and pressed with full force shows
+<img width="412" alt="Screen Shot 2564-06-28 at 17 13 58" src="https://user-images.githubusercontent.com/5000572/123621139-1c06b500-d835-11eb-8207-68a49720d708.png" />
+
+
+
+# Updated TextInput autoCompleteType prop to autoComplete (#26010)
+
+[Change](https://github.com/facebook/react-native/commit/8066bc9ff6a)
+
+
+# Implement PlatformColor in Fabric Android
+
+[Change](https://github.com/facebook/react-native/commit/cdce14f6701)
+
+
+# react-native-quick-sqlite
+
+
+[Tweet by Oscar](https://twitter.com/ospfranco/status/1420734601262206980?s=20):
+
+This is what react-native with JSI can do for you
+[Link to repo](https://github.com/ospfranco/react-native-quick-sqlite)
+
+Not only it is super fast, but you get all the benefits of SQLite:
+
+- Relational data
+- SQL
+- Transactions
+- TypeORM
+
+
+# JSI Tutorial
+
+Oscar always shared a link to his [React Native Module JSI tutorial](https://ospfranco.com/post/2021/02/24/how-to-create-a-javascript-jsi-module/)
+
+# Improving the Text Component's Performance
+
+[Sebastian Lorber](https://twitter.com/sebastienlorber) shared a tweet that highlighted William Candillon conversation on how he improved the Text components performance by 2x by removing some of the unnecessary things from it. 
+
+You can watch the talk [here](https://www.youtube.com/watch?t=1156&v=1D78Tc46Xqo&feature=youtu.be) 
+
+[You can check the Text component implementation](https://github.com/facebook/react-native/blob/main/Libraries/Text/Text.js) and create a new version of it without a few things if you need the performance boost.
+
+Some of the things you can remove is the press handler and the nested Text support.
+
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+

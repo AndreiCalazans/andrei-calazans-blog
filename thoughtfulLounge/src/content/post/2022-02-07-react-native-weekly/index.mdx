@@ -1,0 +1,165 @@
+$frontmatter
+Welcome to the **43rd edition** of React Native Weekly.
+
+This week covers updates from **January 31st to February 6th 2022.**
+
+
+# Highlights
+
+- StatusBar API update for Android 11+ 
+- Support platform color with AnimatedColor
+- CDP inspector API (callFunctionOn)
+
+
+# Fix crash due to null WindowInsets on ReactRootView [Android]
+
+[This change](https://github.com/facebook/react-native/commit/6239e2f5ce8) by Elias Nahum <nahumhbl@gmail.com> fixes a crash happening on Android for apps that register different ReactRootViews. Maybe only for those using react-native-navigation?
+
+Great summary by Elias:
+
+> Fixes a potential crash was introduced by [PR 30919](https://github.com/facebook/react-native/issues/30919) that aimed to get the keyboard height on devices with a Notch. The problem is that it considers that any ReactRootView will have an insets available.
+
+> When using [react-native-navigation](https://github.com/wix/react-native-navigation) and assigning a Navigation button to the TopBar as a component, the component gets registered as a RootView but won't have any insets attach to the view.
+
+> [getRootWindowInsets()](https://developer.android.com/reference/android/view/View#getRootWindowInsets()) in fact return a `WindowInset` only available if the view is attached, so when executing `checkForKeyboardEvents` method from ReactRootView, is trying to access the `DisplayCutout` of a null object, leading to a crash.
+
+
+
+# StatusBar API update for Android 11+
+
+Kuba Holuj <kubah@remitly.com> [refactored](https://github.com/facebook/react-native/commit/50c8e973f06) Android's `StatusBarModule.setStyle` to use [`WindowInsetsController#setSystemBarsAppearance`](https://developer.android.com/reference/kotlin/android/view/WindowInsetsController#setsystembarsappearance) for Android 11 (API 30). 
+
+```java
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+  WindowInsetsController insetsController = activity.getWindow().getInsetsController();
+  if ("dark-content".equals(style)) {
+    // dark-content means dark icons on a light status bar
+    insetsController.setSystemBarsAppearance(
+        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+  } else {
+   insetsController.setSystemBarsAppearance(
+        0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+  }
+}
+```
+
+# Introduce PlatformBaseViewConfig and fix SVC for RCTView
+
+Ramanpreet Nara <ramanpreet@fb.com> refactored the Static View Config to unify both platforms under one interface - the `PlatformBaseViewConfig`. _Remember the Static View Config declares what props the native layer supports._
+
+This commit also goes over the internal architecture for how each platform defines its base ViewConfig. On iOS all props come from the ViewManagers and all HostComponents extend the View's ViewManager. On Android props also come from the Shadow Nodes and instead of View's ViewManager, the HostComponents extend a BaseViewManager class.
+
+[See PlatformBaseViewConfig file for all base platform props.](https://github.com/facebook/react-native/blob/main/Libraries/NativeComponent/PlatformBaseViewConfig.js)
+
+# PropTypes removals
+
+If you are still using PropTypes you should reconsider as React Native core is almost done removing all references to it.
+
+[cdfddb4dad7](https://github.com/facebook/react-native/commit/cdfddb4dad7) RN: Remove `deprecated-react-native-props` Dependency  
+[3e229f27bc9](https://github.com/facebook/react-native/commit/3e229f27bc9) RN: Remove `propTypes` from Image, Text, and TextInput  
+[10199b15813](https://github.com/facebook/react-native/commit/10199b15813) RN: Remove `{Color,EdgeInsets,Point}PropType` and `ViewPropTypes`  
+
+
+
+# Fix ScrollView Snapping [Android]
+
+Pieter De Baets <pieterdb@fb.com> [fixed ScrollView's setSnapToInterval](https://github.com/facebook/react-native/commit/79975d146ef) offset calculation to take into consideration density of the Context/Activity instead of the screen.
+
+This is done by using `PixelUtil.getDisplayMetricDensity` instead of `DisplayMetricsHolder.getScreenDisplayMetrics`.
+
+# Support platform color with AnimatedColor
+
+[Continuation of last week](/posts/2022-01-30/react-native-weekly)'s work. Genki Kondo <gkondo@fb.com> introduced AnimatedColor API [and now landed support for us to use platform colors](https://github.com/facebook/react-native/commit/cb42049e0ae). 
+
+
+
+# Implement Chrome DevTools inspector API -  Runtime.callFunctionOn 
+
+John Porto <jpporto@fb.com> [implemented the Chrome DevTools Protocol function - Runtime.callFunctionOn](https://github.com/facebook/react-native/commit/eb08af57a95) to enable proper inspection of Hermes through Chrome DevTools.
+
+According to [Chrome DevTools](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-callFunctionOn) the `callFunctionOn` is responsible for:
+
+> Calls function with given declaration on the given object. Object group of the result is inherited from the target object.
+
+
+
+
+# Single underscore privates methods being obfuscated
+
+These changes don't seem to impact OSS React Native, I think. Two bugs were fixed where underscore prefixed methods were obfuscated at Facebook for being private due to its internal compiler (Flow) for obfuscating underscore private fields. 
+
+- [Crash with crash with SectionList.scrollToLocation](https://github.com/facebook/react-native/commit/b2f871a6fa9)
+- [Animated Node not updating listener](https://github.com/facebook/react-native/commit/1f778014a7e)
+
+
+
+# Further Runtime Yielding Improvements
+
+Samuel Susla <samuelsusla@fb.com> [refactored RuntimeScheduler's yielding flag](https://github.com/facebook/react-native/commit/5e933fdd2a3) to use a counter for pending lambdas instead of a boolean flag. 
+Yield for each access to the runtime
+
+From Samuel's commit message:
+
+> With multiple requests to the runtime, we need to make sure they are all granted before React continues with rendering. A boolean is not enough to track this. The first lambda that has VM will set it to false and subsequent requests will have to wait for React to finish rendering.
+
+
+
+# Build tests for RNTester
+
+[Commit by](https://github.com/facebook/react-native/commit/70062c13220) Gabriel Donadel Dall'Agnol <donadeldev@gmail.com>.
+
+
+# Attempt fix on App termination [iOS]
+
+Samuel Susla <samuelsusla@fb.com> [is attempting to fix](https://github.com/facebook/react-native/commit/9cd43340a7e) a Fabric crash on iOS when the app is closed by stoping all surfaces before the app is terminated.
+
+
+
+# Fix ScrollView contentOffset [Android]
+
+[Commit](https://github.com/facebook/react-native/commit/be260b9f479).
+
+Summary by Genki Kondo <gkondo@fb.com>:
+
+When setting ScrollView's contentOffset, if the ScrollView hasn't been laid out yet when ReactScrollViewManager.setContentOffset is called, then scroll position is never set properly. This is because the actual scroll offset (0, 0) was being passed into setPendingContentOffsets, instead of the desired scroll offset. Thus, when ReactScrollView.onLayout gets called, ReactScrollView.scrollTo gets called with (0, 0).
+
+
+```diff
+-    setPendingContentOffsets(actualX, actualY);
++    ReactScrollViewHelper.updateFabricScrollState(this);
++    setPendingContentOffsets(x, y);
+```
+
+# Updates to PushNotificationIOS
+
+Despite its deprecation in favor of the community module, some work went in to [enable custom sound in local notications](https://github.com/facebook/react-native/commit/eb194994840) and [to avoid error messages in Xcode](https://github.com/facebook/react-native/commit/3633a05299d).
+
+
+# Dependency updates
+
+- [Danger.js was updated to v11 by Orta](https://github.com/facebook/react-native/commit/fbb9d33ceeb)  
+- [Updated gradle-download-task to 5.0.1](https://github.com/facebook/react-native/commit/a86cae7aacc) by Michel Kraemer <michel.kraemer@igd.fraunhofer.de>  
+- Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> [Bumped shelljs from 0.8.4 to 0.8.5](https://github.com/facebook/react-native/commit/e8f7a1b5761)  
+- Lorenzo Sciandra <notkelset@kelset.dev> [bumped CLI version to 7](https://github.com/facebook/react-native/commit/848ba6fb1db) to get new version of Metro (67)  
+
+# Community
+
+- Do you use Graham's Navigation Router? [Give them some support at updating the docs](https://twitter.com/grahammendick/status/1489570216124297216?s=20&t=oOXVNH5yTvK-4xcWrJM7Ig).
+- [William Candillon crazy demo of React Native Skia](https://twitter.com/wcandillon/status/1488505306200031234?s=20&t=oOXVNH5yTvK-4xcWrJM7Ig)
+- [You know you can build a custom virtual keyboard in RN right?](https://twitter.com/orjiAce_/status/1488477676323184643?s=20&t=oOXVNH5yTvK-4xcWrJM7Ig)
+- [Andrew Clark (React Core Team) has a suggestion on how you could make a trillion dollars!?!?](https://twitter.com/acdlite/status/1489755769876754434?s=20&t=oOXVNH5yTvK-4xcWrJM7Ig)
+
+# Partners
+
+- [TypeScript Weekly](https://www.typescript-weekly.com/): The best TypeScript links every week, right in your inbox.
+- [This Week In React](https://www.getrevue.co/profile/thisweekinreact): the best of React & React Native news. Sebastien filters the noise, and you save time!
+- [ES.next News](http://esnextnews.com): learn about the latest in JavaScript and cross-platform tools.
+- [Tailwind Weekly](https://tailwindweekly.com): all things Tailwind CSS, new issue every Saturday.
+
+
+# Done
+
+If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+

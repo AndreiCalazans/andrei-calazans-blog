@@ -1,0 +1,207 @@
+$frontmatter
+
+Welcome to the third edition of React Native Weekly = ) 
+
+Reach out to me via Twitter if you have any feedback, and don't forget to subscribe!
+
+
+# The React Native Show Podcast - Episode 4: "Expert Guide to React Navigation"
+
+[Callstack and team did a podcast](https://www.youtube.com/watch?v=S2uZe6AkZOM) about React Navigation version 5.  
+
+[Satyajit Sahoo](https://twitter.com/satya164) explained the motivation behind the rewrite and the problems they tried to solve.  
+
+He explained the main reason was to make the React Navigation API dynamic. He also goes over some internal improvements they made like:
+
+- Using Reanimated
+- Adding support for native navigators where it matters,
+- improvements to the event systems, 
+- adding theme support,
+- extracting out the UI component library into its own thing,
+- and more.
+
+
+It was a cool conversation, and I enjoyed listening to it.
+
+
+# Infinite Red React Native Podcast
+
+[React Native for Junior Developers (and Virtual Coffee) w/ Bekah Hawrot Weigel](https://reactnativeradio.com/episodes/rnr-194-react-native-for-junior-developers) went over the struggles of Junior developers as a whole and tips for choosing a code school.    
+
+This was also a relaxed talk despite them not going over too much of the hurdles with starting out with React Native.   
+
+
+It got me inspired into writing a post on what are the topics which you need to learn if you want to be a productive React Native developer, reach out to me via Twitter if you would be interested in a post like that = )
+
+
+# React Native Now Requires cocoapods >= 1.10.1
+
+[b50b7e3a19](https://github.com/facebook/react-native/commit/b50b7e3a19) Update React.podspec to require cocoapods >= 1.10.1 (#31134)
+
+
+# Add getAuthorizationStatus to NativePushNotificationManagerIOS
+
+I'm surprised to see updates to the `PushNotificationManagerIOS`. You can understand the change by just looking at the type definition of this method:
+
+
+```
+diff --git a/Libraries/PushNotificationIOS/NativePushNotificationManagerIOS.js b/Libraries/PushNotificationIOS/NativePushNotificationManagerIOS.js
+index 1eec7bde81..84d59b030a 100644
+--- a/Libraries/PushNotificationIOS/NativePushNotificationManagerIOS.js
++++ b/Libraries/PushNotificationIOS/NativePushNotificationManagerIOS.js
+@@ -65,6 +65,9 @@ export interface Spec extends TurboModule {
+   +getDeliveredNotifications: (
+     callback: (notification: Array<Notification>) => void,
+   ) => void;
++  +getAuthorizationStatus: (
++    callback: (authorizationStatus: number) => void,
++  ) => void;
+   +addListener: (eventType: string) => void;
+   +removeListeners: (count: number) => void;
+ }
+```
+
+
+# Return Value To JS Call In UIManagerBinding (Fabric Update)
+
+Can you call a C++ method from the JavaScript thread and get a return value synchronously? Previously no, but with Fabric yes!!!  
+
+
+```
+-static void callMethodOfModule(
++static jsi::Value callMethodOfModule(
+```
+
+[This commit](https://github.com/facebook/react-native/commit/a038179b9b) adds the capability for the `UIManagerBinding::callMethodOfModule` to return a `jsi::Value`.
+
+
+# What is the Paper rendering system?
+
+I didn't know until Christoph Nakazawa responded to my tweet about this post 🎉
+https://twitter.com/cpojer/status/1379280990804176897
+
+According to Christoph, Facebook calls the old renderer (prior to Fabric) Paper. 
+
+So, it does not mean they made their own renderer using a Graphics API like Vulkan 😅. And I also remember that this is not likely to happen since [Eli White once said their decision to leverage platform widgets were intentional to the main objectives of creating React Native](/posts/2020-10-20/podcast-eli-white-react-native-principles).
+
+
+# Add `displayName` to Touchables To Stop Messing Up Jest
+
+> Since TouchableHighlight and TouchableOpacity are being exported using `forwardRef`, it's messing up jest's snapshots and some matchers.  This commit 4b935ae95f09e4a1eb1e5ac8089eb258222a0f8b fixed this for components being mocked on [setup.js](https://github.com/facebook/react-native/blob/master/jest/setup.js). However, these Touchables aren't being mocked.
+
+
+[c4e40b81c0](https://github.com/facebook/react-native/commit/c4e40b81c0) feat: add displayName to touchables (#29531)
+
+
+# LayoutAnimation Engine Updates
+
+There seems to be a refactor effort around the LayoutAnimation driver to improve it. This means we will be getting a more stable and reliable LayoutAnimation API soon.
+
+```
+706a223dd2 Refactor LA: keyFrames have N "final items" to execute  
+f915ca99be EZ refactor  
+22c9b7d520 If a parent node is DELETEd or CREATEd, immediately end animation  
+63c0be55d5 EZ: Make StubViewTree "Delete" logs consistent with other logs  
+4ae1a9bea8 Do not check consistency of updated Virtual views  
+9ea0020054 For certain types of conflicts we do *not* want to generate a final UPDATE mutation  
+ae264b995f Update 'viewPrev' as well as 'viewStart' when transitioning from one animation to another  
+92b8075120 Recursively clean up conflicting animations  
+61d59fff23 Add additional debug logging in LayoutAnimationDriver  
+17c3846838 Only run assert-only path in debug mode  
+17c3846838 Only run assert-only path in debug mode  
+01f7d4f720 Refactor duplicated code into queueFinalMutationsForCompletedKeyFrame  
+64c93977bd Log ShadowView hash with verbose StubViewTree logs; and when StubView comparisons fail  
+64c93977bd Log ShadowView hash with verbose StubViewTree logs; and when StubView comparisons fail  
+638e788e06 Improve StubViewTree logging when comparisons fail  
+e9ff6d8bca Print ShadowView hash when displaying instructions  
+8f52fb24ec Make mutation sorting more clear  
+```
+
+
+# C++ 17 in React Native targets.
+
+Woah!! You can write CPP 17 now in React Native = )
+
+
+Short and comprehensive list of C++ features:
+https://github.com/AnthonyCalandra/modern-cpp-features#c17-language-features
+
+[9ef995a14a](https://github.com/facebook/react-native/commit/9ef995a14a) Enable C++ 17 in React Native
+
+
+# 
+# Support For Text Copy To Paragraph Component (Fabric Update)
+
+Little by little old functionalities are being supported by Fabric.
+
+```
+e42ffdd859 Add support for text copy to Paragraph component
+0901830977 Fix default values of snapToEnd and snapToStart in ScrollViewProps
+```
+
+
+# Destroy Callbacks Not Called 
+
+This is a cool memory leak caught fixed by using the `RAII` principles. 
+
+> JSI callbacks are only destroyed if the callback is called. If the callback is never called, we're potentially leaking a lot of callbacks.  To mitigate this, we add a wrapper object that is owned by the std::function. Whenever the std::function is destroyed, the wrapper is destroyed and it deallocates the callback as well.
+
+
+[3d1afbbda3](https://github.com/facebook/react-native/commit/3d1afbbda3) destroy callbacks even if they aren't called, when java object is destroyed
+
+
+# No More UNSAFE_componentWillReceiveProps in Modal
+
+[a782b6f5a1](https://github.com/facebook/react-native/commit/a782b6f5a1) Remove unsafe lifecycles usage
+
+# Any Invalid Color Now Fallbacks To `0x00000000`
+
+This changes `processColorArray` to always return an array with valid color values. Any invalid color values will fallback to being transparent black, `0x00000000`.
+
+bb6cd56fae RN: Fallback for Invalid Colors in `processColorArray`
+
+
+# Unexpected Props Will Fail Early
+
+Previously React Native aborted or returned early when running into unexpected props. Now it fails.
+
+[cb37562f83](https://github.com/facebook/react-native/commit/cb37562f83) Remove `abort` in props parsing
+
+Commit comment:
+
+Summary:
+Goals are:
+
+1. Catch errors in parsing during dev-mode in a way that is disruptive/grabs attention, but has enough information.
+2. Use react_native_assert for hitting breakpoints (less useful for Android, more for iOS), and add LOGs for when this code is used in Android (more useful for Android, less useful for iOS).
+3. Return sane defaults so that prod cases don't crash, and don't return totally garbage data.
+
+I also found a couple cases where parsing was incorrect before; see WritingDirection and TextAlignment. This could impact some layouts and RTL/LTR potentially.
+
+
+
+# Added talkback support for TouchableNativeFeedback accessibility: disabled prop (#31224)
+
+Issue https://github.com/facebook/react-native/issues/30952  
+Add talkback support for TouchableNativeFeedback component.
+
+[88f2356eed](https://github.com/facebook/react-native/commit/88f2356eed) Added talkback support for TouchableNativeFeedback accessibility: disabled prop (#31224)
+
+
+# More C++ Improvements - Avoid Unnecessary Copies Of Arguments
+
+[7ee2a998f0](https://github.com/facebook/react-native/commit/7ee2a998f0) Avoid copy of shared_ptr in ConcreteComponentDescriptor::adopt
+
+
+# More Accessibility Improvements
+
+[7ee2acc6c8](https://github.com/facebook/react-native/commit/7ee2acc6c8) Selected State does not annonce when TextInput Component selected (#31144)
+
+> This issue fixes https://github.com/facebook/react-native/issues/30955 and is a follow up to pr https://github.com/facebook/react-native/pull/24608 which added the basic Accessibility functionalities to React Native.  TextInput should announce "selected" to the user when screenreader focused.  The focus is moved to the TextInput by navigating with the screenreader to the TextInput.
+
+
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout last week's post [here](/posts/2021-03-29/react-native-weekly). Subscribe to get notified when new posts are out = )
+

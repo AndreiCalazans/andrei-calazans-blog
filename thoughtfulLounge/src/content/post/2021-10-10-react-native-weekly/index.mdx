@@ -1,0 +1,97 @@
+$frontmatter
+
+Welcome to the 29th edition of React Native Weekly! 
+
+This is week 41 of 2021: October 4th and 10th.
+
+# Update Metro config to use blockList instead of blacklistRE
+
+Summary from [commit](https://github.com/facebook/react-native/commit/7923804c28a) by Rob Hogan <rh389@users.noreply.github.com>:
+An [update to `metro`](https://github.com/facebook/metro/commit/94c0b541b4bfa17aee4efa0f1969565522ce830d#diff-1a3c1a959bb8c4e2e9743c03cb7a6d0c56648ffcfe129a11b9090bfc139622dd) which landed in metro 0.60 (RN 0.64+) deprecates the config `blacklistRE`, renaming it to `blockList`. Although the former is still supported it now generates a deprecation warning.
+
+
+# Fixes to the Appearance API
+
+According to Brent Kelly <brentkelly87@gmail.com> the Appearance API wasn't working as expected because of it wasn't listening to the right context in Android and for iOS there was a bug in the code that caused a mutation to the current color scheme value.
+
+Brent's [commit](https://github.com/facebook/react-native/commit/25a2c608f79) fixes this.
+
+Use the [Appearance module](https://reactnative.dev/docs/appearance) to implement dark/light mode theme aware UIs.  The below code will now update as expected:
+
+```
+import { useColorScheme } from 'react-native';
+const isDarkMode = useColorScheme() === 'dark';
+```
+
+# Update React DevTools from 4.13.0 -> 4.19.1
+
+[Commit](https://github.com/facebook/react-native/commit/356236471ab)
+
+
+# Fix multiline TextInput "jerk" movement when moving cursor 
+
+
+This [commit](https://github.com/facebook/react-native/commit/22801870f06) by Xiankun Cheng <xiankuncheng@gmail.com> fixes [30748](https://github.com/facebook/react-native/issues/30748): on iOS 14, when trying to hold down the space bar and move the cursor on a multi-line TextInput with lots of lines, the cursor could not be scrolled to the desired point. It works as expected on iOS 13 and before.
+
+
+**Video Before:**
+<video controls style={{ width: "50%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/6382178/132800651-fb7cd2ac-fbd1-4ec4-9e3b-c06ab5b6a114.MP4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+**Video After:**
+<video controls style={{ width: "50%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/6382178/132800677-f349fe7f-5902-40ff-8b93-ecc96ce29166.MP4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+
+
+
+
+# Avoid logging sensitve param values in AppRegistry.runApplication
+
+[Commit](https://github.com/facebook/react-native/commit/e612d3a116f) by Wes Johnson <wjohnson@wealthsimple.com> who noticed that by default the RootView/ReactView that called `runApplication` logged all info level props passed to that components. In Wes' case there were sensitive information there that would leak to the device loss.
+
+
+
+# Add error handling to RuntimeScheduler
+
+[Commit](https://github.com/facebook/react-native/commit/27304fcd0bd) by Samuel Susla <samuelsusla@fb.com>, he extended the RuntimeScheduler to forward JavaScript errors to `ErrorUtils` - the error utils is used to add error handlers like the Error redbox in React Native.
+
+
+# Update Modal's mock to not render its children when it is not visible
+
+[Commit](https://github.com/facebook/react-native/commit/ec614c16b33) by AntoineDoubovetzky <antoined@bam.tech> who found that when testing if a Modal is visible or not the mocked Modal still rendered its children forcing the unit test to check the `visible` prop instead of testing if the children rendered. His commit fixes this.
+
+
+# Remove shared responsibility between LogBox and ExceptionsManager native module
+
+[Commit](https://github.com/facebook/react-native/commit/c901c43d11a) by Lulu Wu <luluwu@fb.com>, there was an overlap between the LogBox and the ExceptionsManager. Now, LogBox will only be responsible for showing the error dialog when in DEV, while the ExceptionsManager will handle reporting the error.
+
+
+# Community
+
+**Top 7 myths about Expo in 2021**
+
+Software Mansion team [wrote a post](https://blog.swmansion.com/top-7-myths-about-expo-in-2021-ee66f929bf9f) to debunk a few myths about React Native & Expo. Highlights to:
+- Expo supports custom native libs (except Expo Go apps and classic builds).
+- Ejecting is no longer very buggy and irreversible (now it is fully reversible).
+- Expo's AES tool now takes care shrinking the size of the final output bundle, making it smaller than before.
+- You can now build Expo apps locally by running `expo run:android` and `expo run:ios`.
+- EAS service will be free once they are done testing it in the preview mode.
+
+
+**JSI Template for writing native modules**
+
+[Michał Osadnik](https://twitter.com/mosdnk) [shared a template](https://twitter.com/mosdnk/status/1445893563108282373) to write native modules with JSI.
+
+**3 Different ways of styling React Native Components**
+
+[Post by Jode Mejia](https://twitter.com/JoseMejia62/status/1446983009459081218?s=20)
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+

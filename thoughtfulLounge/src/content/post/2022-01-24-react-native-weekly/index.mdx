@@ -1,0 +1,159 @@
+$frontmatter
+
+Welcome to the **41st edition** of React Native Weekly.
+
+This week covers updates from **January 18th to January 24th 2022.**
+
+# Highlights
+
+- Fix Alert's dismiss UI blocker bug
+- Fix RedBox displaying error with LogBox
+- Added menu to test-manual-e2e script
+- pointerEvents support on Android ScrollView
+
+# Improvements to MapBuffer
+
+Andrei Shikov <ashikov@fb.com> introduced a few improvements like [1](https://github.com/facebook/react-native/commit/5b489d5f95b), [2](https://github.com/facebook/react-native/commit/c338fff5212), [3](https://github.com/facebook/react-native/commit/b173bf3c0e9), [4](https://github.com/facebook/react-native/commit/d287598d237) to the MapBuffer which is a data type for transferring props between C++ and other VMs. 
+
+# Fix NPE in ScrollView due to JS error [Android]
+
+Joshua Gross <joshuagross@fb.com> [fixed a null expection error crash](https://github.com/facebook/react-native/commit/2151d115271) happening in the ScrollView that would happen a consequence of an error happening from JavaScript, this NPE would hide the real reason of the crash - the JS error. 
+
+# Auto-label PR opened against release branches
+
+Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> added this life of quality improvement by using Danger, see [the commit](https://github.com/facebook/react-native/commit/43e07a4941a) if you are interested on this works.
+
+
+# Fix Alert's dismiss UI blocker [iOS]
+
+[Issue 32304](https://github.com/facebook/react-native/issues/32304) calls out an bug with IOS 15 runtime where dismissing the Alert blocked user interaction because the Alert's underlying UIWindow was left behind after the dismissal. 
+
+For instance, calling `Alert.alert` as below than dismissing it.
+
+```javascript
+    InteractionManager.runAfterInteractions(() => {
+      Alert.alert('Delete this post?', 'Are you sure you want to permanently delete this?', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          onPress: () => someFunction(),
+          text: 'Delete',
+          style: 'destructive',
+        },
+      ])
+    })
+```
+
+Asaf Korem <asaf.korem@gmail.com> [fixes the underlying method](https://github.com/facebook/react-native/commit/a46a99e1203) by using the appropriate API for dismissing: `setHidden:YES`
+
+
+# Fix hitSlop to be set with a single value [IOS]
+
+Pieter De Baets <pieterdb@fb.com> [fixed an iOS only](https://github.com/facebook/react-native/commit/3addafa5257) issue where hitSlop was not set with a single value.
+
+It was interesting to see how in Fabric this was already fixed because of the shared logic for all platforms.
+
+
+
+# Fix failure to reload App on JS bundle load error [Android]
+
+[Issue 32898](https://github.com/facebook/react-native/issues/32898) described an bug in Android's dev environment where on connecting a JS bundle and having it fail the user would see a blank screen after reloading the JS bundle with the fix.
+
+[This commit](https://github.com/facebook/react-native/commit/c8d823b9bd9) by Sam Kline <samkline@users.noreply.github.com> fixes the issue by appropriately resetting ReactInstanceManager's state when createReactContext has an issue - this allows it to correctly restart.
+
+```java
+// Reset state and bail out. This lets us try again later.
++                  mHasStartedCreatingInitialContext = false;
++                  mCreateReactContextThread = null;
+```
+
+
+# Fix RedBox displaying with LogBox on logged errors [IOS]
+
+[This commit](https://github.com/facebook/react-native/commit/9d2df5b8ae9) by Liam Jones <liam@stardive.co.uk> fixes an issue where calling `console.error` caused the RedBox to appear alongside the LogBox.
+
+
+
+# Migrate ScreenshotManager from NativeModule to TurboModule in RNTester
+
+Paige Sun <paigesun@fb.com> [added a patch](https://github.com/facebook/react-native/commit/b13e41d98e8) to migrate the ScreenshotManager to use its TurboModule version.
+
+While this is a simple change, what caught my attention was her comment that states how in "Bridgeless" mode using `NativeModules.<module>` will throw an error, it made me wonder if this means that TurboModules are backwards compatible, maybe not? 
+
+
+# Add platformConfig to the Animated API
+
+Eric Rozell <ericroz@fb.com> [added a way to pass an extra config object called platformConfig](https://github.com/facebook/react-native/commit/4a227ce2ab3) to the Animated API which can be helpful to optimize and experiment with different behaviors on different platforms, he gives the example of `react-native-windows`.  
+
+> The ability to pass an additional property bag to further configure NativeAnimated is useful for a few reasons, e.g., experimentation with multiple implementations of the NativeAnimated module.
+
+
+# Remove Detox 
+
+Lorenzo Sciandra <notkelset@kelset.dev> [removed Detox](https://github.com/facebook/react-native/commit/ac206aa814c) since was not being used in the core repo. At least for now until it is decided that it is needed again.
+
+# Add `vendor/bundle` into .gitignore template 
+
+[Commit](https://github.com/facebook/react-native/commit/2f67f5d68b1)
+
+
+# Add menu to test-manual-e2e script
+
+Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> [extended the `test-manual-e2e`](https://github.com/facebook/react-native/commit/1ec399781df) script in the core repo to have a menu for you to choose which test you want to run. This script is specially useful to run things in the core repo like running the RNTester app or starting a template app.
+
+# Continue work on matching SVC and NVCs
+
+Ramanpreet Nara <ramanpreet@fb.com> [continued the work](https://github.com/facebook/react-native/commit/0343e697fdb) of making the Static View Configs match the Native View Configs and vice-versa. Learn more about this in [last weeek's post](/posts/2022-01-17/react-native-weekly).
+
+
+# Fix race condition in Websocket's implementation [IOS]
+
+Michelle Laurenti <asmeikal@me.com> [fixed an](https://github.com/facebook/react-native/commit/86db62b7a8b) where a race condition caused the WebSocket frame payloads to be processed incorrectly.
+
+According to the commit message:
+
+> This can cause errors on RFC6455 compliant WebSocket servers:
+> - the server sends a ping frame with no payload
+> - the server sends a text frame with a payload longer than 125 bytes
+> - the client answers the ping with a pong frame echoing back the contents of the text frame
+> This is caused by concurrent modification of the current frame contents, that is passed by reference to the handlers. The concurrent modification happens [here](https://github.com/facebook/react-native/blob/main/Libraries/WebSocket/RCTSRWebSocket.m#L1162).
+
+# Add pointerEvents prop support [Android]
+
+With Xin Chen <xch@fb.com> [patch](https://github.com/facebook/react-native/commit/48f6967ae88), Android's ScrollView now supports [pointerEvents prop](https://reactnative.dev/docs/next/view#pointerevents).
+
+# Updated doc to disable Fabric in the RNTester
+
+[Commit](https://github.com/facebook/react-native/commit/ad14eb4bd32)
+
+# Package Bumps
+
+- [Bump Kotlin version to 1.6.10](https://github.com/facebook/react-native/commit/d0f0234656d )
+- [Bump react-native-codegen to 0.0.13](https://github.com/facebook/react-native/commit/37e5cc966f4)
+- [Bump Flipper to 0.125.0](https://github.com/facebook/react-native/commit/50057158ca3)
+- [Bump SoLoader to 0.10.3 to fix a crash](https://github.com/facebook/react-native/commit/f45889ef95e ) (#32922)
+
+
+# React Native H2 2021 Recap Blog
+
+[Nicola Corti wrote the H2 2021 recap](https://reactnative.dev/blog/2022/01/21/react-native-h2-2021-recap) where he mention the repo health, community contributions, the multi-platform vision, and how 2022 will the year of the new architecture roll out to OSS. One thing he stressed in this blog was the importance of community feedback to the new releases. 
+
+# Community
+
+- [Catalin Miron rebuilds common CSS loaders for RN](https://twitter.com/mironcatalin/status/1484482466329026563?s=20)
+- [Fernando Rojo went on React Native Radio to talk about Expo + Next.js](https://twitter.com/FernandoTheRojo/status/1484254273806295041?s=20)
+- [Necolas' comment on how low React Native's API overhead is for Web](https://twitter.com/necolas/status/1484625768336420864?s=20)
+
+# Done
+
+If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+
+# Partners
+
+- [TypeScript Weekly](https://www.typescript-weekly.com/): The best TypeScript links every week, right in your inbox.
+- [This Week In React](https://www.getrevue.co/profile/thisweekinreact): the best of React & React Native news. Sebastien filters the noise, and you save time!
+- [ES.next News](http://esnextnews.com): learn about the latest in JavaScript and cross-platform tools.
+- [Tailwind Weekly](https://tailwindweekly.com): all things Tailwind CSS, new issue every Saturday.

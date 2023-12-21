@@ -1,0 +1,322 @@
+$frontmatter
+Welcome to the twelfth edition of React Native Weekly. This is the retrospect of week 23 of 2021.
+
+Reach out to me via Twitter if you have any feedback, and don't forget to subscribe!
+
+# Clean Ups & Improvements
+
+This week there were a few clean ups and improvements done to the codebase, like:
+
+- Improvements over the Flow Definitions [1](https://github.com/facebook/react-native/commit/74d5d03dbd5) and [2](https://github.com/facebook/react-native/commit/4fb371b53a6).
+- Deletion of unused [Text Injection](https://github.com/facebook/react-native/commit/b85572af6e0)
+- Improvement to a C++ [large array allocation](https://github.com/facebook/react-native/commit/a3a7fc2c940)
+- Fix Gradle warning to [use maven-publish](https://github.com/facebook/react-native/commit/fc6fc637bb0)
+- [Bump Gradle to 6.9](https://github.com/facebook/react-native/commit/547b4c92e47) which supports Apple Silicon.
+- [Bump buildToolsVersion to 30.0.2](https://github.com/facebook/react-native/commit/5d01110b537)
+ 
+
+# Remove JCenter [Android]
+
+This [commit](https://github.com/facebook/react-native/commit/70da6409460) removes `jcenter`.
+
+
+> jcenter is read-only now, and newer versions of dependencies will be published to either MavenCentral or Jitpack. This PR removes jcenter to avoid future issues, then uses MavenCentral and Jitpack as replacement. Current flipper depends on Stetho version that is not available on MavenCentral, so had to exclude and bump the version.
+
+
+# Delete eager initialization of Fabric classes
+
+David Vacca <dvacca@fb.com> ran an experiment on the Marketplace app to see the impact of eagerly initializing Fabric classes as follows:
+
+```
+-  // TODO T31905686: eager load Fabric classes, this is temporary and it will be removed
+-  // in the near future
+-  private static void loadClasses() {
+-    EventBeatManager.class.getClass();
+-    EventEmitterWrapper.class.getClass();
+-    FabricEventEmitter.class.getClass();
+-    DispatchCommandMountItem.class.getClass();
+-    DispatchIntCommandMountItem.class.getClass();
+-    DispatchStringCommandMountItem.class.getClass();
+-    IntBufferBatchMountItem.class.getClass();
+-    MountItem.class.getClass();
+-    PreAllocateViewMountItem.class.getClass();
+-    SendAccessibilityEvent.class.getClass();
+-    LayoutMetricsConversions.class.getClass();
+-    MountingManager.class.getClass();
+-    MountItemDispatcher.class.getClass();
+-    SurfaceMountingManager.class.getClass();
+-    Binding.class.getClass();
+-    ComponentFactory.class.getClass();
+-    CoreComponentsRegistry.class.getClass();
+-    FabricComponents.class.getClass();
+-    FabricSoLoader.class.getClass();
+-    FabricUIManager.class.getClass();
+-    GuardedFrameCallback.class.getClass();
+-    StateWrapper.class.getClass();
+-    StateWrapperImpl.class.getClass();
+-    SurfaceHandler.class.getClass();
+-    SurfaceHandlerBinding.class.getClass();
+-    BatchEventDispatchedListener.class.getClass();
+-    ReactNativeConfig.class.getClass();
+-    ReadableMapBuffer.class.getClass();
+-  }
+```
+
+The result was neutral and caused a regression thus he removed in [this commit](https://github.com/facebook/react-native/commit/286fac5ad0a)
+
+
+
+# Ship bridge RuntimeExecutor JSIExecutor flushing
+
+
+For those who are new to flushing and React Native's event system - React Native's event system that handles calls into native and JavaScript uses a queue mechanism, in order to empty the queue it flushes it, which means it empties whatever is in the queue and handles the calls.
+
+According to Ramanpreet Nara <ramanpreet@fb.com>, the `RuntimeExecutor` that Fabric gets wasn't calling `JSIExecutor::flush()` as frequently as it was  on the legacy `NativeModule` system, it is supposed to call `flush` on every call. [His commit](https://github.com/facebook/react-native/commit/281daf12222) changed this so Flush NativeModule calls with Fabric on Android on every Native -> JS call
+
+
+```
+diff --git a/ReactAndroid/src/main/jni/react/jni/CatalystInstanceImpl.h b/ReactAndroid/src/main/jni/react/jni/CatalystInstanceImpl.h
+index fff64a0a79d..c40a691232c 100644
+--- a/ReactAndroid/src/main/jni/react/jni/CatalystInstanceImpl.h
++++ b/ReactAndroid/src/main/jni/react/jni/CatalystInstanceImpl.h
+
+...
+
++RuntimeExecutor Instance::getRuntimeExecutor() {
+   std::weak_ptr<NativeToJsBridge> weakNativeToJsBridge = nativeToJsBridge_;
+ 
+   auto runtimeExecutor =
+-      [weakNativeToJsBridge,
+-       shouldFlush](std::function<void(jsi::Runtime & runtime)> &&callback) {
++      [weakNativeToJsBridge](
++          std::function<void(jsi::Runtime & runtime)> &&callback) {
+         if (auto strongNativeToJsBridge = weakNativeToJsBridge.lock()) {
+           strongNativeToJsBridge->runOnExecutorQueue(
+-              [callback = std::move(callback),
+-               shouldFlush](JSExecutor *executor) {
++              [callback = std::move(callback)](JSExecutor *executor) {
+                 jsi::Runtime *runtime =
+                     (jsi::Runtime *)executor->getJavaScriptContext();
+                 try {
+                   callback(*runtime);
+-                  if (shouldFlush) {
+-                    executor->flush();
+-                  }
++                  executor->flush();
+                 } catch (jsi::JSError &originalError) {
+                   handleJSError(*runtime, originalError, true);
+                 }
+
+```
+
+# Custom NSURLSession configuration (#27701) [External Contribution]
+
+Stemmed from [react native community discussion](https://github.com/react-native-community/discussions-and-proposals/issues/166)
+
+[iOS] [Added] - Allow for configuring the NSURLSessionConfiguration
+
+
+> Implement a C function `RCTSetCustomNSURLSessionConfigurationProvider` which gives the app programmer the ability to provide a block which provides an NSURLSessionConfiguration that will be used for all HTTP requests instead of the default configuration. The provided block will be called when the session configuration is needed.
+
+[Commit](https://github.com/facebook/react-native/commit/58444c74f5c)
+
+
+# Experimental Animated API?
+
+Tim Yung <yungsters@fb.com> is experimenting with a new `createAnimatedComponent` that is compatible with concurrent rendering. Let's wait and see what this results in. See commit [1](https://github.com/facebook/react-native/commit/8ccc4064c5c) and [2](https://github.com/facebook/react-native/commit/819b926beb3)
+
+This work results in a custom hook.
+
+# Introduce `useAnimatedProps` hook
+
+Creates a `useAnimatedProps` hook that is compatible with concurrent mode, and uses this in `createAnimatedComponent_EXPERIMENTAL`.
+
+[Commit](https://github.com/facebook/react-native/commit/c774f9e97e3)
+
+Note that this is all experimental.
+
+
+# Create `useMergeRefs` Utility
+
+[Creates `useMergeRefs`](https://github.com/facebook/react-native/commit/0b994ac19c1) which will be used by components in React Native.
+
+```
++/**
++ * Constructs a new ref that forwards new values to each of the given refs. The
++ * given refs will always be invoked in the order that they are supplied.
++ *
++ * WARNING: A known problem of merging refs using this approach is that if any
++ * of the given refs change, the returned callback ref will also be changed. If
++ * the returned callback ref is supplied as a `ref` to a React element, this may
++ * lead to problems with the given refs being invoked more times than desired.
++ */
+```
+
+
+
+# Create `useRefEffect` Utility
+
+[Create `useRefEffect` Utility](https://github.com/facebook/react-native/commit/cb25638a0ec)
+
+```jsx
+
++/**
++ * Constructs a callback ref that provides similar semantics as `useEffect`. The
++ * supplied `effect` callback will be called with non-null component instances.
++ * The `effect` callback can also optionally return a cleanup function.
++ *
++ * When a component is updated or unmounted, the cleanup function is called. The
++ * `effect` callback will then be called again, if applicable.
++ *
++ * When a new `effect` callback is supplied, the previously returned cleanup
++ * function will be called before the new `effect` callback is called with the
++ * same instance.
++ *
++ * WARNING: The `effect` callback should be stable (e.g. using `useCallback`).
++ */
++export default function useRefEffect<TInstance>(
++  effect: TInstance => (() => void) | void,
++): CallbackRef<TInstance | null> {
++  const cleanupRef = useRef<(() => void) | void>(undefined);
++  return useCallback(
++    instance => {
++      if (cleanupRef.current) {
++        cleanupRef.current();
++        cleanupRef.current = undefined;
++      }
++      if (instance != null) {
++        cleanupRef.current = effect(instance);
++      }
++    },
++    [effect],
++  );
++}
+
+```
+
+Tim Yung <yungsters@fb.com> has been busy 😁
+
+
+# Create swipeable card demo
+
+[This verifies](https://github.com/facebook/react-native/commit/7463f6d0fd1) interaction between PanResponder and ScrollView with JSResponderHandler. Also showcases how to create a swipeable card with scrollable content.
+
+```jsx
+
+function SwipeableCard() {
+  const movementX = React.useRef(new Animated.Value(0)).current;
+
+  const panResponder = React.useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponderCapture: (e, gestureState) => {
+        const {dx} = gestureState;
+        return Math.abs(dx) > 5;
+      },
+      onPanResponderMove: (e, gestureState) => {
+        Animated.event([null, {dx: movementX}], {
+          useNativeDriver: false,
+        })(e, gestureState);
+      },
+      onPanResponderEnd: (e, gestureState) => {
+        Animated.timing(movementX, {
+          toValue: 0,
+          useNativeDriver: true,
+        }).start();
+      },
+    }),
+  ).current;
+
+  const {width} = useWindowDimensions();
+  const rotation = movementX.interpolate({
+    inputRange: [-width / 2, 0, width / 2],
+    outputRange: (['-5deg', '0deg', '5deg']: $ReadOnlyArray<string>),
+    extrapolate: 'clamp',
+  });
+
+  return (
+    <View style={styles.container}>
+      <Animated.View
+        {...panResponder.panHandlers}
+        style={{
+          transform: [{translateX: movementX}, {rotateZ: rotation}],
+          flex: 1,
+        }}>
+        <Card />
+      </Animated.View>
+    </View>
+  );
+}
+
+```
+
+# Ship JS Responder in Fabric
+
+Comment from Joshua Gross <joshuagross@fb.com>:
+
+> setJSResponder/clearJSResponder have been in use in prod for a while and are stable. Ship them in code.
+
+[Commit](https://github.com/facebook/react-native/commit/3ba815228e0)
+
+
+# Bug fix: TextInput content is reset when emoji is entered at the max length [iOS]
+
+
+> When maxLength is defined in TextInput, if the last character at max length is an emoji, the content of the input is cleared:
+
+[Commit](https://github.com/facebook/react-native/commit/f3b8d4976f8)
+
+
+
+
+
+# Directory.now.sh 
+
+I recently saw a tweet from [Leandro Favre](https://twitter.com/FavreLeandro) about directory.now.sh - a quick font search for expo-google-fonts.  He also has one for [icons](https://icons.expo.fyi) 
+
+
+
+# React Native 0.64.2 is out
+
+[Tweet from Kelset](https://github.com/facebook/react-native/releases/tag/v0.64.2)
+
+
+# Moti can power mount/unmount animations
+
+You can typically do this imperatively by having a separate state for the visibility of your component in a parent component and only unmounting after your animation ran, however this usually gets messy.
+
+Moti handles it for you and [Fernando made a tweet](https://twitter.com/FernandoTheRojo/status/1401267532942696458?s=20) with an Expo Snack showing you how you can do it without Moti.
+
+# You can hide YellowBox/LogBox with warnings
+
+
+[Daniel Koprowski](https://twitter.com/Koprowski_it) shared [a tweet](https://twitter.com/Koprowski_it/status/1400837904050622467?s=20) on how he hides the YellowBox/LogBox logs when demoing his apps.
+
+
+# Space Game With React Native
+
+Found this gem from [friggitydingo AKA @BenScottSteer](https://twitter.com/BenScottSteer/) on Twitter, a Space Game built with React Native, looks great and there are two videos of how he is building it. Pretty cool! 
+
+[Tweet](https://twitter.com/BenScottSteer/status/1400989471395368960)
+
+[Building a Custom Spritesheet Player in React Native](https://www.youtube.com/watch?v=aukLNTujMjA)
+
+[Making a Reusable Modal for React Native Apps](https://www.youtube.com/watch?v=u7MFM3zZB6Q)
+
+
+# Flutter Versus React Native Series
+
+I was very happy to see [React Newsletter by UI.dev tweet](https://twitter.com/reactnewsletter/status/1401579388542537731) the series [I'm writing with G2i](https://www.g2i.co/blog/flutter-vs-react-native-the-core-differences).
+
+
+# react-native-voice/voice has full Expo intergration support
+
+react-native-voice/voice now has a config plugin and supports expo prebuild, expo run commands, eas build, and the dev client beta.
+
+[Tweet](https://twitter.com/Baconbrix/status/1400283728774156288)
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+
+

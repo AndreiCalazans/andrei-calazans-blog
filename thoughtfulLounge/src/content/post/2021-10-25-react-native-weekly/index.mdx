@@ -1,0 +1,107 @@
+$frontmatter
+
+Welcome to the 31th edition of React Native Weekly! 
+
+
+This is week 43 of 2021: October 18th and 24th.
+
+
+# Fix enableVmCleanup not working for apps with product flavors
+
+Nicola Corti <ncor@fb.com> noticed the Gradle `enableVmCleanup` function wasn't cleaning up the extra `.so` files for apps with variants like name-staging for instance. [This commit](https://github.com/facebook/react-native/commit/a2b5e4cd825) fixes this.
+
+Besides this work, Nicola Corti <ncor@fb.com> also contributed with a few other commits ([1](https://github.com/facebook/react-native/commit/c3e7ea0b5b4)) ([2](https://github.com/facebook/react-native/commit/bb981b20551)) ([3](https://github.com/facebook/react-native/commit/52b0cc03550)) ([4](https://github.com/facebook/react-native/commit/75b2e5cc973)) ([5](https://github.com/facebook/react-native/commit/bc93fefe130)) where he organizes the Gradle tasks into isolated tasks.
+
+
+
+# Strict Static View Config Validator
+
+In [this commit](https://github.com/facebook/react-native/commit/addf4dab512), Tim Yung <yungsters@fb.com> created a new `StaticViewConfigValidator` module that validates the difference between the static and native view configs. I don't fully understand how static and native view configs are different but it seems the view configs are used to establish the native component counterpart from the configs. 
+
+If you understand how this is tied in with the architecture shoot me a DM. I would guess the static configs are generated from TurboModules but I'm uncertain.
+
+
+# Fix onPress event for nested Text [Android]
+
+[Commit](https://github.com/facebook/react-native/commit/e494e4beb6a)
+
+When the user tapped the "Inner" text, Android is dispatching three events:
+topTouchStart, topTouchStart and topTouchEnd.
+
+David Vacca <dvacca@fb.com> identified that the information stored on the first two JS events is correct, but the problem is that it is duplicated.
+
+# Disabled RTTI on Android by Default 
+
+[Commit](https://github.com/facebook/react-native/commit/d291a7efdda)
+
+
+
+# Load JSC or Hermes lib in static method
+
+Tuomas Jaakola <tuomas.jaakola@iki.fi> [introduced a change](https://github.com/facebook/react-native/commit/d839b24b06d) to make it clearer when a error happens while loading JSC or Hermes, previously the stack-trace was pointing to the wrong place.
+
+
+# Deprecate Prop Types
+
+[With this commit](https://github.com/facebook/react-native/commit/3f629049ba9), Tim Yung <yungsters@fb.com> added a warning to every React Native component PropType to let you know it has been deprecated.
+
+
+# More Android Permissions
+
+[This commit](https://github.com/facebook/react-native/commit/4b25a0aaa07) added a few more dangerous permissions to [PermissionsAndroid](https://reactnative.dev/docs/permissionsandroid).
+
+
+```diff
++  | 'android.permission.ACCESS_MEDIA_LOCATION'
++  | 'android.permission.ACCEPT_HANDOVER'
++  | 'android.permission.ACTIVITY_RECOGNITION'
++  | 'android.permission.ANSWER_PHONE_CALLS'
++  | 'android.permission.READ_PHONE_NUMBERS'
++  | 'android.permission.UWB_RANGING';
+```
+
+
+# Community
+
+Updates from the community:
+
+## React Native Native Runtime
+
+[Jamie Birch](https://twitter.com/LinguaBrowse) implemented [a module that gives you access the iOS' runtime APIs in JavaScript](https://github.com/shirakaba/react-native-native-runtime).  The initial implementation is only for iOS but the README points out they are planning for Android. 
+
+NativeScript essentially does the same thing, but it has never been ported to work with React Native. I see this possibly being very useful for implementing native modules.
+
+## ua-parser-js compromise
+
+[The library, called UAParser.js, was compromised with a cryptominer](https://therecord.media/malware-found-in-npm-package-with-millions-of-weekly-downloads/)
+
+[Here is how you can verify your local machine doesn't have the wrong UAParser.js installed](https://twitter.com/jamonholmgren/status/1451964697528258562)
+
+## Flickering input bug
+
+[Someone pointed out a React Native bug on Shopify's app](https://twitter.com/ricburton/status/1451908253437161472) which exposes a problem of the `KeyboardAvoidingView`. As you can see in the video the UI flickers when the keyboard suggest the email. If someone has time to work on this we could probably capture this issue and fix it. 
+
+
+## React Native Deps Check
+
+[Eli White](https://twitter.com/Eli_White/status/1451209760599011331) pointed out [a tool by Microsoft](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check) that helped him upgrade an app from 0.63 to 0.66. It checks if your dependencies are compatible with a specific React Native version:
+
+Run this to check your dependencies are compatible with 0.66 for example
+
+`yarn rnx-dep-check --vigilant 0.64`
+
+## Upcoming Expo Module API AKA Sweet API
+
+[Blogpost](https://blog.expo.dev/a-peek-into-the-upcoming-sweet-expo-module-api-6de6b9aca492) by Tomasz Sapeta.
+
+Expo in collaboration with Software Mansion is attempting to simplify how we write native modules in React Native. They identified how dificult and low level it is to write native modules in Objective-C and Java. Tomasz's post goes over the "Sweet API" which allows you to use Swift to write native modules in a very declarative way.  
+
+
+> In Expo SDK 43 there are already four modules using this API — [expo-cellular](https://github.com/expo/expo/blob/master/packages/expo-cellular/ios/EXCellular/CellularModule.swift), [expo-haptics](https://github.com/expo/expo/blob/master/packages/expo-haptics/ios/EXHaptics/HapticsModule.swift), [expo-tracking-transparency](https://github.com/expo/expo/blob/master/packages/expo-tracking-transparency/ios/EXTrackingTransparency/TrackingTransparencyModule.swift) and [expo-linear-gradient](https://github.com/expo/expo/blob/master/packages/expo-linear-gradient/ios/EXLinearGradient/LinearGradientModule.swift).
+
+Their next goal is to have a similar API with Kotlin.
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+

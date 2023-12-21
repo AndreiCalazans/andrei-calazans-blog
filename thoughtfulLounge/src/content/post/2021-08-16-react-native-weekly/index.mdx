@@ -1,0 +1,91 @@
+$frontmatter
+
+
+Welcome to the 22nd and second late 😅 edition of React Native Weekly! 
+
+I suffered a leg injury while playing volleyball and I needed some rest, but here we are. 
+
+# Dynamic color borders RNTester example
+
+
+As we saw in another [React Native Weekly](/posts/2021-06-28/react-native-weekly) when Jordan Becker <jordanbeckerfr@gmail.com> introduced a fix the dynamic colors not updating on the fly, this week his examples were merged.
+
+`PlatformColor` and `DynamicColorIOS` in action:
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/4186230/110828711-9c5dd600-8297-11eb-8bc8-bdc9054b6b44.mov" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/4186230/110828800-b4cdf080-8297-11eb-9d23-07f69dc3a702.mov" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+
+
+# Fix Undefined symbol: __swift_FORCE_LOAD_$_swiftFileProvider when building with Xcode 13
+
+[This change](https://github.com/facebook/react-native/commit/d583c2f154e) fixes Xcode 13 build error in HelloWorld template.
+
+# Introduce RCTPlatformColorUtils
+
+[This](https://github.com/facebook/react-native/commit/df65dbb37f4) handles converting PlatformColor strings to their corresponding RGBA and [this other change](https://github.com/facebook/react-native/commit/e10c222dee7) connects the RCTPlatformColorsUtils to the PlatformColorParser.
+
+Phillip Pan <phillippan@fb.com> does not yet cover:
+- customColor
+- iOS Dynamic Colors
+- Variant Colors
+
+
+# Updated TextInput autoCompleteType prop to autoComplete 2/2 (#26010)
+
+[This is](https://github.com/facebook/react-native/commit/27fec9569e0) a breaking change, you can expect the `autoCompleteType` prop on TextInput to be just `autoComplete` now.
+
+# Warning for legacy Native Modules
+
+[This change](2b427f86928), [this](https://github.com/facebook/react-native/commit/f536f82e12b) and [this](https://github.com/facebook/react-native/commit/f93d95e0791) adds a flat and logger that can trigger logs for when the legacy Native Modules are used, this is in preparation for Fabric.
+
+
+# Allow Modal to handle hardware escape key in the same way the back button is handled (#31564)
+
+
+On Android, when a hardware keyboard is connected pressing the escape key will partially dismiss an active `<Modal>` without calling the `onRequestClose` callback. The modal will disappear, but the underlying activity may still be present, blocking interaction with the main app below and leaving things in a partially broken state.
+
+[This change](https://github.com/facebook/react-native/commit/f51773ecded) fixes this issue. This is only present in Android.
+
+
+# Fix TextInput Cursor jumping to the right when the placeholder null [Android]
+
+Quote from [change](https://github.com/facebook/react-native/commit/35607535590):
+
+The null value causes the cursor to jump to the right in a TextInput. The fix replaces the placeholder null value with an empty string which avoid calling setHint(null) as causes the placeholder to jump to the right
+
+| **BEFORE** |
+|:-------------------------:|
+| <video controls style={{ width: "100%", height: "auto" }} src="https://user-images.githubusercontent.com/24992535/107960803-5d44a980-6fa5-11eb-90e2-f0d665e35291.mp4" />|
+
+| **AFTER** |
+|:-------------------------:|
+| <video controls style={{ width: "100%", height: "auto" }} src="https://user-images.githubusercontent.com/24992535/107960602-1f478580-6fa5-11eb-8f39-b985fafa6a6c.mp4" />|
+
+
+
+# Tweet on misconception of React Native's performance
+
+[Ashoat Tevosyan](https://twitter.com/Ashoat) tweeted a very cool thread about the misconception that performance on native apps is by default better than React Native. He explained in his thread how the multi-threaded model of React Native can yield better performance than native, specially with JSI/TurboModules enabled.
+
+[See full thread](https://twitter.com/Ashoat/status/1425906197992026114)
+
+I have witnessed this on apps running on Android TV.
+
+# React Native Document Picker was rewritten in TS
+
+Better documentation and easier to contribute to said Vojtech Novak in [his tweet](https://twitter.com/vonovak/status/1425019229762473993?s=20). Check out [react-native-document-picker](https://github.com/rnmods/react-native-document-picker) here.
+
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+
