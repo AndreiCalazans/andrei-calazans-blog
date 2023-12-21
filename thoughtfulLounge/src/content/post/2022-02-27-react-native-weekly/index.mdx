@@ -20,7 +20,7 @@ In this edition I did not include any community updates due to the size of the p
 - Fix action sheet callback invoked more than once on iPad
 - Fix Text with adjustFontSizeToFit updating infinitely [Android]
 - Removed find-node.sh script
-- Flag to build Hermes from source on iOS 
+- Flag to build Hermes from source on iOS
 - Synchronously render cached images [iOS]
 
 And more...
@@ -56,12 +56,10 @@ Danilo Bürger info@danilobuerger.de [fixed an issue](https://github.com/faceboo
 Danilo noticed how in certain iOS OS versions it did not resolve the correct border color for dark mode, see related [StackOverflow post](https://stackoverflow.com/a/57177411/2525941). This commit resolves the colors with the current trait collection to ensure the right colors are selected.
 
 
-
 ## Update RedBoxDialog to separate content view and dialog
 
 
-
-Xin Chen xch@fb.com made a strategic change due to VR. 
+Xin Chen xch@fb.com made a strategic change due to VR.
 
 Summary from Xin:
 
@@ -73,9 +71,7 @@ He [later also created a delegate - RedBoxSurfaceDelegate](https://github.com/fa
 
 ## Introduce RawEventEmitter
 
-Joshua Gross joshuagross@fb.com [added the RawEventEmitter interface](https://github.com/facebook/react-native/commit/1f15a640286). 
-
-
+Joshua Gross joshuagross@fb.com [added the RawEventEmitter interface](https://github.com/facebook/react-native/commit/1f15a640286).
 
 
 ## Further support for AnimatedColor
@@ -101,13 +97,13 @@ index b0418ce8525..1db9ac70f79 100644
 @@ -19,11 +19,12 @@
          <item name="android:datePickerMode">spinner</item>
      </style>
- 
+
 -    <style name="CalendarDatePickerDialog" parent="Theme.AppCompat.Light.Dialog" tools:targetApi="lollipop">
 +    <style name="CalendarDatePickerDialog" parent="android:Theme.Material.Dialog.Alert" tools:targetApi="lollipop">
          <item name="android:datePickerStyle">@style/CalendarDatePickerStyle</item>
 +        <item name="android:windowIsFloating">true</item>
      </style>
- 
+
 -    <style name="CalendarDatePickerStyle" parent="android:Widget.Material.Light.DatePicker" tools:targetApi="lollipop">
 +    <style name="CalendarDatePickerStyle" parent="android:Widget.Material.DatePicker" tools:targetApi="lollipop">
          <item name="android:datePickerMode">calendar</item>
@@ -118,9 +114,9 @@ index b0418ce8525..1db9ac70f79 100644
 
 ## Improved JVM 11 error message
 
-Muhammad Numan muhammadnuman70@gmail.com> [improved the JVM error message due](https://github.com/facebook/react-native/commit/4e947ecb2da) to trying to build Gradle with other than JVM 11 and Nicola Corti <ncor@fb.com [downgrade the Java source/target compat to JVM 8](https://github.com/facebook/react-native/commit/3d8a7fe14a2) for the invalid JVM version to be handled through a formatted message.
+Muhammad Numan muhammadnuman70@gmail.com [improved the JVM error message due](https://github.com/facebook/react-native/commit/4e947ecb2da) to trying to build Gradle with other than JVM 11 and Nicola Corti ncor@fb.com [downgrade the Java source/target compat to JVM 8](https://github.com/facebook/react-native/commit/3d8a7fe14a2) for the invalid JVM version to be handled through a formatted message.
 
-He added a check for the JVM version which outputs the following message: 
+He added a check for the JVM version which outputs the following message:
 
 ```
 **************************************************************************************************************
@@ -133,7 +129,7 @@ Incompatible major version detected: '8'
 
 ## Fix bug when converting string casing with on non ASCII languages [Android]
 
-Hamid halaeiv@gmail.com [added a fix](https://github.com/facebook/react-native/commit/5341ad89624) for a very unexpected bug where lowering/upper casing a string in a non ASCII langugage like Turkish causes a bug by returning unexpected symbols, see [joltup/rn-fetch-blob#573](https://github.com/joltup/rn-fetch-blob/issues/573) 
+Hamid halaeiv@gmail.com [added a fix](https://github.com/facebook/react-native/commit/5341ad89624) for a very unexpected bug where lowering/upper casing a string in a non ASCII langugage like Turkish causes a bug by returning unexpected symbols, see [joltup/rn-fetch-blob#573](https://github.com/joltup/rn-fetch-blob/issues/573)
 
 The fix is suprisingly to add `Locale.ROOT` as argument to the `toLowerCase` or `toUpperCase` calls.
 
@@ -161,7 +157,7 @@ Paige Sun paigesun@fb.com added a few error logs to warn of unexpected use of Re
 Deprecated methods/modules in bridgeless mode include ReactInstanceManager and all UIManager methods.
 
 
-## Fix RCTLogError and RCTLogWarn to display RedBox or LogBox in Bridgeless 
+## Fix RCTLogError and RCTLogWarn to display RedBox or LogBox in Bridgeless
 
 Paige Sun paigesun@fb.com [fixed an issue](https://github.com/facebook/react-native/commit/74f5697fdcf) with the native RCTLogError and RCTLogWarn to display RedBox or LogBox in Bridgeless mode for feature parity between Bridge and Bridgeless.
 
@@ -172,11 +168,11 @@ Paige Sun paigesun@fb.com [fixed an issue](https://github.com/facebook/react-nat
 
 
 
-## Fix crash for some OS/OEM when WebView is not supported [Android] 
+## Fix crash for some OS/OEM when WebView is not supported [Android]
 
-Kunal Farmah kunal.farmah@airtel.com [fixed an issue](https://github.com/facebook/react-native/commit/8c573d93365) where the error catch was not working due to inconsistent crash class name between OS/OEMs on Android. Instead Kunal resorted to parsing the error message for the right keywords - seems brittle, Android I guess. 
+Kunal Farmah kunal.farmah@airtel.com [fixed an issue](https://github.com/facebook/react-native/commit/8c573d93365) where the error catch was not working due to inconsistent crash class name between OS/OEMs on Android. Instead Kunal resorted to parsing the error message for the right keywords - seems brittle, Android I guess.
 
-Kunal explained how to reproduce this crash today: 
+Kunal explained how to reproduce this crash today:
 
 Launch any app that has a webview.
 Go to settings->apps->Android System Webview -> disable.
@@ -192,7 +188,7 @@ Even if it survives startup (did on Realme X), it will crash once you try to ope
 
 ## Fixed accessibility announcement for disable state on press Text
 
-[Fix](https://github.com/facebook/react-native/commit/7b2d8178b15) by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com 
+[Fix](https://github.com/facebook/react-native/commit/7b2d8178b15) by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com
 
 
 
@@ -303,7 +299,7 @@ _Diff was cut for shortness, see commit for full diff_
 
 ## Fix Text with adjustFontSizeToFit updating infinitely [Android]
 
-Alfonso Curbelo alfonso.curbelo@coinbase.com [fixed an issue](https://github.com/facebook/react-native/commit/c1db41f0609) where a text component that has the property adjustsFontSizeToFit updated the text layout infinitely on Android. 
+Alfonso Curbelo alfonso.curbelo@coinbase.com [fixed an issue](https://github.com/facebook/react-native/commit/c1db41f0609) where a text component that has the property adjustsFontSizeToFit updated the text layout infinitely on Android.
 
 
 ## Deprecate `reactRoot` in favor of `root` and `reactNativeDir` [Gradle] [Android]
@@ -336,7 +332,7 @@ Warning - if you relied on `find-node.sh` to set your Node version using some No
 
 ## Enable Kotlin build in OSS
 
-[Commit](https://github.com/facebook/react-native/commit/b1a779392d4) by Andrei Shikov ashikov@fb.com. Could this mean we will start seeing some native modules in Kotlin? Maybe. 
+[Commit](https://github.com/facebook/react-native/commit/b1a779392d4) by Andrei Shikov ashikov@fb.com. Could this mean we will start seeing some native modules in Kotlin? Maybe.
 
 
 
@@ -348,20 +344,20 @@ Another changy by Andrei Shikov ashikov@fb.com, Andrei explains well his changes
 
 > This way of passing props allows for additional alignment between platforms, as C++ props are now source of truth for the view state, similar to iOS. At the same time, changing serialization method requires reimplementing `ViewManager` codegen (done manually for now) to account for `MapBuffer`s.
 
-With the above change, Andrei Shikov also [optimized the `rawProps` variable](https://github.com/facebook/react-native/commit/1953f6f02e9) to only initialize when not using `MapBuffer` potentially decreasing memory footprint. 
+With the above change, Andrei Shikov also [optimized the `rawProps` variable](https://github.com/facebook/react-native/commit/1953f6f02e9) to only initialize when not using `MapBuffer` potentially decreasing memory footprint.
 
 
 
 ## Add flag to enable building Hermes from source on iOS
 
-[Commit](https://github.com/facebook/react-native/commit/3c958a838d7) by Héctor Ramos hramos@fb.com. 
+[Commit](https://github.com/facebook/react-native/commit/3c958a838d7) by Héctor Ramos hramos@fb.com.
 
 With this change, you can run `BUILD_HERMES_SOURCE=1 pod install` to build Hermes from source on iOS.
 
 
 ## Fix Switch causing RetryableMountingLayerException
 
-[Fix](https://github.com/facebook/react-native/commit/8d50bf11335) by jonathanmos jonathanmo@wix.com 
+[Fix](https://github.com/facebook/react-native/commit/8d50bf11335) by jonathanmos jonathanmo@wix.com
 
 Summary:
 
@@ -376,7 +372,7 @@ Note that avoiding RTTI provides significant binary size gains.
 
 ## Synchronously render cached images [iOS]
 
-Mo Wang mowang@fb.com noticed how React Native asynchronously loaded even cached images resulting in the image rendering a frame later. With [this patch](https://github.com/facebook/react-native/commit/189c2c89584) this no longer happens and the image renders synchronously. 
+Mo Wang mowang@fb.com noticed how React Native asynchronously loaded even cached images resulting in the image rendering a frame later. With [this patch](https://github.com/facebook/react-native/commit/189c2c89584) this no longer happens and the image renders synchronously.
 
 
 ## Dependency bumps

@@ -11,14 +11,14 @@ This week includes 48 commits from 23 distinct authors.
 
 ## Highlights
 
-- Added Runtime.getHeadUsage for Hermes 
+- Added Runtime.getHeadUsage for Hermes
 - Introduce viewRegistry_DEPRECATED addUIBlock for Fabric migration
 - Added Event and CustomEvent W3c-compatible polyfills
 
 
 ## Include folly fabric headers in source files [iOS] [Fabric]
 
-Danilo Bürger info@danilobuerger.de [fixed a compilation](https://github.com/facebook/react-native/commit/56dda14c465) issue on iOS when including `react-native-safe-area-context` 4.0.1 with Fabric enabled.  
+Danilo Bürger info@danilobuerger.de [fixed a compilation](https://github.com/facebook/react-native/commit/56dda14c465) issue on iOS when including `react-native-safe-area-context` 4.0.1 with Fabric enabled.
 ```diff
 diff --git a/third-party-podspecs/RCT-Folly.podspec b/third-party-podspecs/RCT-Folly.podspec
 index 0ae3060bdc8..700cd7e2cfb 100644
@@ -48,7 +48,7 @@ index 5663a47a7ad..d3f2d87971d 100644
 +++ b/Libraries/ReactNative/renderApplication.js
 @@ -64,6 +64,10 @@ function renderApplication<Props: Object>(
    }
- 
+
    performanceLogger.startTimespan('renderApplication_React_render');
 +  performanceLogger.setExtra(
 +    'usedReactConcurrentRoot',
@@ -57,9 +57,9 @@ index 5663a47a7ad..d3f2d87971d 100644
 ```
 
 
-## Added Runtime.getHeadUsage for Hermes 
+## Added Runtime.getHeadUsage for Hermes
 
-Janic Duplessis <janicduplessis@gmail.com [added Runtime.getHeapUsage](https://github.com/facebook/react-native/commit/cff9590864c) for Hermes Chrome inspector.
+Janic Duplessis janicduplessis@gmail.com [added Runtime.getHeapUsage](https://github.com/facebook/react-native/commit/cff9590864c) for Hermes Chrome inspector.
 
 This will enable seeing a summary of memory usage from JavaScript in Devtools.
 
@@ -74,7 +74,7 @@ We learn to use `UIManager.hasViewManagerConfig` to check the existence of a vie
 
 ## Introduce _viewRegistry_DEPRECATED addUIBlock for Fabric migration
 
-Paige Sun paigesun@fb.com [added `_viewRegistry_DEPRECATED addUIBlock`](https://github.com/facebook/react-native/commit/2c268d7fe65) to make it easier to migrate View Managers to Fabric. 
+Paige Sun paigesun@fb.com [added `_viewRegistry_DEPRECATED addUIBlock`](https://github.com/facebook/react-native/commit/2c268d7fe65) to make it easier to migrate View Managers to Fabric.
 
 With Fabric the UIManager will no longer exist, and the use `uiManager addUIBlock` will need to be replaced by `_viewRegistry_DEPRECATED addUIBlock`.
 
@@ -87,7 +87,7 @@ This contribution is a clear example of how the shared C++ interface benefits fr
 
 Xin Chen xch@fb.com [fixed overflowInset calculation](https://github.com/facebook/react-native/commit/0975e96d535) when a shadow node has transform matrix from a transform prop in JS.
 
-note how Xin has made various improvements to Android which seem related to supporting VR based on what I've followed so far. 
+note how Xin has made various improvements to Android which seem related to supporting VR based on what I've followed so far.
 
 Xin's commit message goes into great detail into the problem he faced plus fix.
 
@@ -103,13 +103,13 @@ According to Nicola Corti ncor@fb.com, [due to a bug with AGP](https://issuetrac
 
 
 
-## Added Event and CustomEvent W3c-compatible polyfills 
+## Added Event and CustomEvent W3c-compatible polyfills
 
 Joshua Gross joshuagross@fb.com [added these polyfills](https://github.com/facebook/react-native/commit/6abbef1200a) in preparation for upcoming changes.
 
 
 
-## Fixed error caused by re-registering bubbling event by RCTModalHostView  
+## Fixed error caused by re-registering bubbling event by RCTModalHostView
 
 According HeyImChris 48299693+HeyImChris@users.noreply.github.com they are seeing the following error `Component 'RCTModalHostView' re-registered bubbling event 'topDismiss' as a direct event moduleConstantsForComponent` on a react-native-macOS build.
 
@@ -122,7 +122,7 @@ index 0246328f99f..2fcdcaea83f 100644
 +++ b/React/Views/RCTModalHostView.h
 @@ -38,7 +38,7 @@
  @property (nonatomic, copy) RCTDirectEventBlock onOrientationChange;
- 
+
  // Fabric only
 -@property (nonatomic, copy) RCTBubblingEventBlock onDismiss;
 +@property (nonatomic, copy) RCTDirectEventBlock onDismiss;

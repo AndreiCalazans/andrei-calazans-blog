@@ -5,7 +5,7 @@ publishDate: 2021-09-27
 tags:    ["react-native", "react-native-weekly"]
 ---
 
-Welcome to the 27th edition of React Native Weekly! 
+Welcome to the 27th edition of React Native Weekly!
 
 This is week 39 of 2021: September 20th to 26th.
 
@@ -27,7 +27,7 @@ I was surprised to see changes to the ActionSheetIOS make it to the core since E
 
 # Updates to Android's Build System
 
-For the past three weeks or so, Nicola Corti ncor@fb.com has been doing a lot of work around Android's build system. He made several improvements by refactoring, breaking things up into invidual tasks, and more.  
+For the past three weeks or so, Nicola Corti ncor@fb.com has been doing a lot of work around Android's build system. He made several improvements by refactoring, breaking things up into invidual tasks, and more.
 
 The stuff he did last week:
 - [Removed extra missing script from package.json](https://github.com/facebook/react-native/commit/9cf4bb73c0d4ab5ab548db2cbc8f9e6e14e6d50d)
@@ -57,7 +57,7 @@ Héctor Ramos hramos@fb.com [extended the Circle CI](https://github.com/facebook
 
 # Introduce RCTComputeScreenScale
 
-Phillip Pan phillippan@fb.com [exposed](https://github.com/facebook/react-native/commit/99f706e5df4) the [UIScreen mainScreen].scale for Apple devices as a temporary solution to dealing with different screen sizes. 
+Phillip Pan phillippan@fb.com [exposed](https://github.com/facebook/react-native/commit/99f706e5df4) the [UIScreen mainScreen].scale for Apple devices as a temporary solution to dealing with different screen sizes.
 
 
 # How to disable Fabric on RNTester
@@ -70,9 +70,9 @@ index 8b0ea4becc9..087f0cf3587 100644
 --- a/packages/rn-tester/README.md
 +++ b/packages/rn-tester/README.md
 @@ -12,6 +12,12 @@ Before running the app, make sure you ran:
- 
+
  ## Running on iOS
- 
+
 +If you are testing non-fabric component, modify [the fabric_enabled flag in RNTester's Podfile](https://github.com/facebook/react-native/blob/main/packages/rn-tester/Podfile#L21).
 +
 +```ruby
@@ -110,7 +110,6 @@ He also included a fix for the `contentInset` not respected when animating new i
 
 <td>
 
-
 <video controls style={{ width: "100%", height: "auto" }}>
   <source src="https://user-images.githubusercontent.com/15199031/115708699-9b2cc800-a370-11eb-976f-c4010cd96d55.MP4" type="video/mp4"/>
   Your browser does not support the video tag.
@@ -118,11 +117,11 @@ He also included a fix for the `contentInset` not respected when animating new i
 
 </td>
 </tr>
-</table> 
+</table>
 
 
 
-  
+
 Why not just use `<KeyboardAvoidingView>`?
 
 <table>
