@@ -22,7 +22,7 @@ for page in thoughtfulLounge/src/content/post/*weekly; do
   tags=$(echo "$object" | grep tags | sed 's/tags://g' | sed 's/,$//g')
   frontmatter="---\ntitle: $title\npublishDate: "$date"\ntags: $tags\n---"
 
-  sed -i '' '1s/^/$frontmatter\n/' $page/index.mdx
+  sed -i '' "s/\$frontmatter/$frontmatter/g" "$page/index.mdx"
 
   # echo "$frontmatter"  > $tmpfile
   # cat $page/index.md >> $tmpfile
