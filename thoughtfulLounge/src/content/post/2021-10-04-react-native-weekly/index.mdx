@@ -16,7 +16,7 @@ This is week 40 of 2021: September 27th to October 3rd.
 # Add snapToAlignment to ScrollView [Android]
 
 
-The `snapToAlignment` prop on the ScrollView was a iOS only prop. David Vacca <dvacca@fb.com> makes a series of commits:
+The `snapToAlignment` prop on the ScrollView was a iOS only prop. David Vacca dvacca@fb.com makes a series of commits:
 [(1)](https://github.com/facebook/react-native/commit/a54cfb9e579) [(2)](https://github.com/facebook/react-native/commit/deec1db9fdf) [(3)](https://github.com/facebook/react-native/commit/b12256394e3) [(4)](https://github.com/facebook/react-native/commit/c6e5640e87e) [(5)](https://github.com/facebook/react-native/commit/e774c037bce) [(6)](https://github.com/facebook/react-native/commit/04184ef851c) [(7)](https://github.com/facebook/react-native/commit/3cffe352b52) [(7)](https://github.com/facebook/react-native/commit/2feca00797d)
 where he extends the ReactHorizontalScrollView.java and ReactScrollView.java to support this feature. It is currently released under a feature flag. 
 
@@ -33,12 +33,12 @@ Example of snap to alignment set:
 APK size went from 30MB to 26.3MB for a release bundle with Hermes disabled and 
 from 23.6MB to 20.7MB for a release bundle with Hermes enabled. [Source.](https://github.com/facebook/react-native/pull/32257#issuecomment-926627578)
 
-enniel <razumov.evgeni@gmail.com> [introduced a fix](https://github.com/facebook/react-native/commit/6f126740fa5) that cleans up the Gradle VM for debug and release builds. What he found was that some shared object files for release were being left behind on the debug build and vice-versa. 
+enniel razumov.evgeni@gmail.com [introduced a fix](https://github.com/facebook/react-native/commit/6f126740fa5) that cleans up the Gradle VM for debug and release builds. What he found was that some shared object files for release were being left behind on the debug build and vice-versa. 
 
 
 # Correct keyboard height with notch [Android]
 
-fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com> [fixed an issue](https://github.com/facebook/react-native/commit/8bef3b1f113) on Android where the keyboard height did not consider the Android Notch height thus being wrong when the device had a notch (API 28+).
+fabriziobertoglio1987 fabrizio.bertoglio@gmail.com [fixed an issue](https://github.com/facebook/react-native/commit/8bef3b1f113) on Android where the keyboard height did not consider the Android Notch height thus being wrong when the device had a notch (API 28+).
 
 
 # Add asdf-vm support in react-native-xcode.sh
@@ -48,12 +48,12 @@ fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com> [fixed an issue](https://gi
 
 # Adding interface to wrap surface interactions for LogBox
 
-Xin Chen <xch@fb.com> [abstracted the logic for creating the content view of the LogBox](https://github.com/facebook/react-native/commit/652cb541a50), previously it defaulted to creating a Android view, with this abstraction each platform can determine what the surface will be.
+Xin Chen xch@fb.com [abstracted the logic for creating the content view of the LogBox](https://github.com/facebook/react-native/commit/652cb541a50), previously it defaulted to creating a Android view, with this abstraction each platform can determine what the surface will be.
 
 
 # Nested text onPress not working on last character [Android]
 
-Second commit in master from fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com>, [this commit](https://github.com/facebook/react-native/commit/132d1d00f88) fixes a long standing issue where onPress did not trigger on the last character on Android.
+Second commit in master from fabriziobertoglio1987 fabrizio.bertoglio@gmail.com, [this commit](https://github.com/facebook/react-native/commit/132d1d00f88) fixes a long standing issue where onPress did not trigger on the last character on Android.
  
 
 

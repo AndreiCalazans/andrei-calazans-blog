@@ -48,7 +48,7 @@ Before Hermes totally replaced JSC, it should be worth to have this and make JSC
 # Refactor LockFreeEventDispatcherImpl 
 
 
-Joshua Gross <joshuagross@fb.com> refactored the Java implementation of LockFreeEventDispatcherImpl, responsible for dispatching events between the JS and native threads. 
+Joshua Gross joshuagross@fb.com refactored the Java implementation of LockFreeEventDispatcherImpl, responsible for dispatching events between the JS and native threads. 
 
 He found that LockFreeEventDispatcherImpl was triple queuing events when in "staging", "dispatch events" in JS, and again when sent to C++. The refactor eliminated one level of queuing - the "dispatch events" queue for the JS thread.
 
@@ -58,7 +58,7 @@ There were some more implementation details that impacted the AsyncEventBeat in 
 
 # Refactor EventQueue
 
-[Another refactor took place](https://github.com/facebook/react-native/commit/285406103d) where Samuel Susla <samuelsusla@fb.com> simplified the core EventQueue implementation by pulling out some logic and placing it in EventQueueProcessor. It now holds the logic for flushing events.
+[Another refactor took place](https://github.com/facebook/react-native/commit/285406103d) where Samuel Susla samuelsusla@fb.com simplified the core EventQueue implementation by pulling out some logic and placing it in EventQueueProcessor. It now holds the logic for flushing events.
 
 ```
 
@@ -239,7 +239,7 @@ To make sure the race doesn't happen, state must be updated before dispatching o
 
 # Adds accessiblity actions on core components (#31532) [External Contribution]
 
-Contribution by Dennis Urtubia <dennisurtubia@alunos.utfpr.edu.br>.
+Contribution by Dennis Urtubia dennisurtubia@alunos.utfpr.edu.br.
 
 Summary:
 Android: Adding custom actions (https://github.com/facebook/react-native/issues/30854).

@@ -39,7 +39,7 @@ Some highlights:
 
 # Support ScrollAway in ReactScrollView [Android]
 
-It is not clear yet what this feature is. Joshua Gross <joshuagross@fb.com> added a prop named `scrollAwayPaddingTop` that enables a natively-controlled navbar that optionally obscures the top content of the ScrollView. This was implemented only for Android, and there are no demo or examples on how to use it. For now, we will have to wait for more updates.
+It is not clear yet what this feature is. Joshua Gross joshuagross@fb.com added a prop named `scrollAwayPaddingTop` that enables a natively-controlled navbar that optionally obscures the top content of the ScrollView. This was implemented only for Android, and there are no demo or examples on how to use it. For now, we will have to wait for more updates.
 
 [Commit](https://github.com/facebook/react-native/commit/0ef5beee85) 
 
@@ -65,7 +65,7 @@ Due to react-native-windows' more strict set of warnings, they made some changes
 
 # [External Collaboration] Fix natively driven animations not getting reset properly 
 
-Tien Pham <tien@phaw.io> explained in his [commit](https://github.com/facebook/react-native/commit/129180c77b) that Animated.loop needs to reset the animation after each iteration but currently, natively driven animations are not getting reset properly.
+Tien Pham tien@phaw.io explained in his [commit](https://github.com/facebook/react-native/commit/129180c77b) that Animated.loop needs to reset the animation after each iteration but currently, natively driven animations are not getting reset properly.
 
 ```
 @@ -196,6 +196,12 @@ class AnimatedValue extends AnimatedWithChildren {

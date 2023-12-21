@@ -19,7 +19,7 @@ This is a special edition after a long deserving end of year break. This issue *
 
 # Remove "interfaceOnly" on 3rd party Fabric component generation
 
-Ubax <jakub.tkacz@swmansion.com> [fixed an issue](https://github.com/facebook/react-native/commit/3e6902244a0) where 3rd party codegen generated components (outside core) where not included in the Fabric component provider. 
+Ubax jakub.tkacz@swmansion.com [fixed an issue](https://github.com/facebook/react-native/commit/3e6902244a0) where 3rd party codegen generated components (outside core) where not included in the Fabric component provider. 
 
 Comment:
 
@@ -27,7 +27,7 @@ Comment:
 
 # TypeScript Parser For Codegen
 
-Charles Dudley <charlesdudley@fb.com> took on the job to implement the codegen TypeScript parser based off of the [Flow](https://flow.org/) parser. 
+Charles Dudley charlesdudley@fb.com took on the job to implement the codegen TypeScript parser based off of the [Flow](https://flow.org/) parser. 
 
 For context, codegen reads [Flow](https://flow.org/) type definitions from a JavaScript file to generate the header files for native component/module. 
 
@@ -72,7 +72,7 @@ On December 20th 2021, Charles pushed the following commits introducing support 
 
 # Improved how React Native Android defines touchable events for overflown items
 
-I have noticed that Xin Chen <xch@fb.com> has been doing work related to VR and he has made a few improvements to React Native to deliver performance improvements for VR. 
+I have noticed that Xin Chen xch@fb.com has been doing work related to VR and he has made a few improvements to React Native to deliver performance improvements for VR. 
 
 On this occasion Xin Chen is trying to improve performance of the following situations: 
 
@@ -83,7 +83,7 @@ On [this commit](https://github.com/facebook/react-native/commit/bc9168d4cae), X
 
 # New "newArchEnabled" property to enable Fabric on Android
 
-Nicola Corti <ncor@fb.com> [setup](https://github.com/facebook/react-native/commit/8d652fba4ce) a `newArchEnabled` property to Opt-in the New Architecture on the Android template.
+Nicola Corti ncor@fb.com [setup](https://github.com/facebook/react-native/commit/8d652fba4ce) a `newArchEnabled` property to Opt-in the New Architecture on the Android template.
 
 Notes from Nicola:
 
@@ -106,7 +106,7 @@ Please note that this requires RN 0.68.x to run properly (it won't work with 0.6
 
 # Introduce TextInput.onChangeSync
 
-Samuel Susla <samuelsusla@fb.com> [added the experimental](https://github.com/facebook/react-native/commit/8c6a98400ee) `TextInput.onChangeSync` which delivers onChange event synchronously. 
+Samuel Susla samuelsusla@fb.com [added the experimental](https://github.com/facebook/react-native/commit/8c6a98400ee) `TextInput.onChangeSync` which delivers onChange event synchronously. 
 
 This means you can use `onChangeSync` as you did with `onChange` for your `TextInput`. **Warning - this is still experimental and can change**.
 
@@ -124,7 +124,7 @@ But you might be asking why? Well, the asynchronous nature of the text updates c
 
 # Allow lazy detection of native UI component
 
-Paige Sun <paigesun@fb.com> added multiple patches to enable the LazyUIManager for Fabric and Static View Config enabled. 
+Paige Sun paigesun@fb.com added multiple patches to enable the LazyUIManager for Fabric and Static View Config enabled. 
 
 The Static View Configs (SVC) can be codegen generated or not, its job is to represent what the native interface should look like, see the [ImageViewNativeComponent](https://github.com/facebook/react-native/blob/main/Libraries/Image/ImageViewNativeComponent.js) as an example.
 
@@ -147,13 +147,13 @@ List of commits from Paige:
 
 # Added "accessibilityLabelledBy" prop [Android]
 
-[Commit](https://github.com/facebook/react-native/commit/36037fa81bb) by grgr-dkrk <40130327+grgr-dkrk@users.noreply.github.com>, the `accessibilityLabelledBy` prop is specially useful for `TextInput`s to announce its title, [see video in PR description](https://github.com/facebook/react-native/pull/32470)
+[Commit](https://github.com/facebook/react-native/commit/36037fa81bb) by grgr-dkrk 40130327+grgr-dkrk@users.noreply.github.com, the `accessibilityLabelledBy` prop is specially useful for `TextInput`s to announce its title, [see video in PR description](https://github.com/facebook/react-native/pull/32470)
 
 
 
 # Stativ View Config fixes
 
-Ramanpreet Nara <ramanpreet@fb.com> made a few commits fixing the Static View Configs using the [staticViewConfigValidator](https://github.com/facebook/react-native/blob/main/Libraries/NativeComponent/StaticViewConfigValidator.js). 
+Ramanpreet Nara ramanpreet@fb.com made a few commits fixing the Static View Configs using the [staticViewConfigValidator](https://github.com/facebook/react-native/blob/main/Libraries/NativeComponent/StaticViewConfigValidator.js). 
 
 This is mostly making the SVC match the Native View Config which the validator pointed out.
 

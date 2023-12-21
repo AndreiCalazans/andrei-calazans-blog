@@ -12,7 +12,7 @@ This is everything that happened in between 26th of July and 1st of August 2021.
 
 # Example with all Transform properties
 
-Luna Wei <luwe@fb.com> [added an Animated transform style property example](https://github.com/facebook/react-native/commit/893aff2e202) to the RNTester app.
+Luna Wei luwe@fb.com [added an Animated transform style property example](https://github.com/facebook/react-native/commit/893aff2e202) to the RNTester app.
 
 ```js
 +const transformProperties = {
@@ -90,13 +90,13 @@ You can and should still use `setImmediate` since it is aliased to `queueReactNa
 +  );
 ```
 
-Xuan Huang <jsx@fb.com> renamed the internal occurrences of "Immediate" with
+Xuan Huang jsx@fb.com renamed the internal occurrences of "Immediate" with
 "ReactNativeMicrotask" in the legacy bridge and then polyfilled the
 original immediate APIs during the timer setup phases as aliases of them.
 
 So internally the handler for `setImmediate`'s callbacks used to be `_immediatesCallback` and now it is `_reactNativeMicrotasksCallback`.
 
-I was wondering why, until I stumbled on another commit below by Xuan Huang <jsx@fb.com> moving the Immediate API to JSVM microtask.
+I was wondering why, until I stumbled on another commit below by Xuan Huang jsx@fb.com moving the Immediate API to JSVM microtask.
 
 
 # Introduce queueMicrotask API

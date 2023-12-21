@@ -18,7 +18,7 @@ This week includes 48 commits from 23 distinct authors.
 
 ### Include folly fabric headers in source files [iOS] [Fabric]
 
-Danilo Bürger <info@danilobuerger.de> [fixed a compilation](https://github.com/facebook/react-native/commit/56dda14c465) issue on iOS when including `react-native-safe-area-context` 4.0.1 with Fabric enabled.  
+Danilo Bürger info@danilobuerger.de [fixed a compilation](https://github.com/facebook/react-native/commit/56dda14c465) issue on iOS when including `react-native-safe-area-context` 4.0.1 with Fabric enabled.  
 ```diff
 diff --git a/third-party-podspecs/RCT-Folly.podspec b/third-party-podspecs/RCT-Folly.podspec
 index 0ae3060bdc8..700cd7e2cfb 100644
@@ -66,7 +66,7 @@ This will enable seeing a summary of memory usage from JavaScript in Devtools.
 
 ### Migrating codegenNativeComponent to be Bridgeless compatible
 
-Paige Sun <paigesun@fb.com> migrated the `codegenNativeComponent` to be Bridgeless compatible.
+Paige Sun paigesun@fb.com migrated the `codegenNativeComponent` to be Bridgeless compatible.
 
 We learn to use `UIManager.hasViewManagerConfig` to check the existence of a view manager instead of `UIManager.getViewManagerConfig` to be bridgeless compatible.
 
@@ -74,7 +74,7 @@ We learn to use `UIManager.hasViewManagerConfig` to check the existence of a vie
 
 ### Introduce _viewRegistry_DEPRECATED addUIBlock for Fabric migration
 
-Paige Sun <paigesun@fb.com> [added `_viewRegistry_DEPRECATED addUIBlock`](https://github.com/facebook/react-native/commit/2c268d7fe65) to make it easier to migrate View Managers to Fabric. 
+Paige Sun paigesun@fb.com [added `_viewRegistry_DEPRECATED addUIBlock`](https://github.com/facebook/react-native/commit/2c268d7fe65) to make it easier to migrate View Managers to Fabric. 
 
 With Fabric the UIManager will no longer exist, and the use `uiManager addUIBlock` will need to be replaced by `_viewRegistry_DEPRECATED addUIBlock`.
 
@@ -85,7 +85,7 @@ Paige also [exemplified the migration to "Bridgeless" mode with the DatePickerIO
 
 This contribution is a clear example of how the shared C++ interface benefits from work focused on one of the platforms - Android.
 
-Xin Chen <xch@fb.com> [fixed overflowInset calculation](https://github.com/facebook/react-native/commit/0975e96d535) when a shadow node has transform matrix from a transform prop in JS.
+Xin Chen xch@fb.com [fixed overflowInset calculation](https://github.com/facebook/react-native/commit/0975e96d535) when a shadow node has transform matrix from a transform prop in JS.
 
 note how Xin has made various improvements to Android which seem related to supporting VR based on what I've followed so far. 
 
@@ -94,24 +94,24 @@ Xin's commit message goes into great detail into the problem he faced plus fix.
 
 ### Improve rendering of images when resampled and corner radius applied [Android]
 
-Pieter De Baets <pieterdb@fb.com> [improved rendering](https://github.com/facebook/react-native/commit/f743bed6575) images by enabling [`paintFilterBitmap`](https://developer.android.com/reference/android/graphics/Paint#FILTER_BITMAP_FLAG) when rendering images with rounded corners.
+Pieter De Baets pieterdb@fb.com [improved rendering](https://github.com/facebook/react-native/commit/f743bed6575) images by enabling [`paintFilterBitmap`](https://developer.android.com/reference/android/graphics/Paint#FILTER_BITMAP_FLAG) when rendering images with rounded corners.
 
 
 ### Guarantee configureNdkBild depends on preBuild task [Android]
 
-According to Nicola Corti <ncor@fb.com>, [due to a bug with AGP](https://issuetracker.google.com/issues/207403732), the configureNdkBuild* tasks are not depending on preBuild tasks. Thus, [Nicola added a fix](https://github.com/facebook/react-native/commit/2fdbf6a10fe) which manually guarantees this dependency.
+According to Nicola Corti ncor@fb.com, [due to a bug with AGP](https://issuetracker.google.com/issues/207403732), the configureNdkBuild* tasks are not depending on preBuild tasks. Thus, [Nicola added a fix](https://github.com/facebook/react-native/commit/2fdbf6a10fe) which manually guarantees this dependency.
 
 
 
 ### Added Event and CustomEvent W3c-compatible polyfills 
 
-Joshua Gross <joshuagross@fb.com> [added these polyfills](https://github.com/facebook/react-native/commit/6abbef1200a) in preparation for upcoming changes.
+Joshua Gross joshuagross@fb.com [added these polyfills](https://github.com/facebook/react-native/commit/6abbef1200a) in preparation for upcoming changes.
 
 
 
 ### Fixed error caused by re-registering bubbling event by RCTModalHostView  
 
-According HeyImChris <48299693+HeyImChris@users.noreply.github.com> they are seeing the following error `Component 'RCTModalHostView' re-registered bubbling event 'topDismiss' as a direct event moduleConstantsForComponent` on a react-native-macOS build.
+According HeyImChris 48299693+HeyImChris@users.noreply.github.com they are seeing the following error `Component 'RCTModalHostView' re-registered bubbling event 'topDismiss' as a direct event moduleConstantsForComponent` on a react-native-macOS build.
 
 This is fixed by replacing RCTBubblingEventBlock for RCTDirectEventBlock.
 
@@ -131,17 +131,17 @@ index 0246328f99f..2fcdcaea83f 100644
 
 ### Setup a Gradle build inside `ReactAndroid/hermes-engine` to download Hermes sources
 
-[Adapted from Nicola's commit message](https://github.com/facebook/react-native/commit/191fc0f7cca), Nicola Corti <ncor@fb.com> started a Gradle build inside `ReactAndroid/hermes-engine` to kickoff a small project where we can download Hermes sources and start a compilation of Hermes sources from there.
+[Adapted from Nicola's commit message](https://github.com/facebook/react-native/commit/191fc0f7cca), Nicola Corti ncor@fb.com started a Gradle build inside `ReactAndroid/hermes-engine` to kickoff a small project where we can download Hermes sources and start a compilation of Hermes sources from there.
 
 
 ### Added asBool() method to JSI Value
 
-Scott Kyle <skyle@fb.com> [added the `asBool()` method](https://github.com/facebook/react-native/commit/603620b7394) to the JSI object for easier conversion of data.
+Scott Kyle skyle@fb.com [added the `asBool()` method](https://github.com/facebook/react-native/commit/603620b7394) to the JSI object for easier conversion of data.
 
 
 ### Allow usage of TurboModules in context with RTTI
 
-Nikita Lutsenko <nlutsenko@fb.com> [moved the definitions of TurboModule's virtual methods to declaration](https://github.com/facebook/react-native/commit/1f877296973) to allow for use in context with RTTI.
+Nikita Lutsenko nlutsenko@fb.com [moved the definitions of TurboModule's virtual methods to declaration](https://github.com/facebook/react-native/commit/1f877296973) to allow for use in context with RTTI.
 
 
 ### Library upgrades

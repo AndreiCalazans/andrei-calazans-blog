@@ -13,7 +13,7 @@ This is week 44 of 2021: October 25th and 31st.
 
 # Fix devDisabledInStaging not working with multiple productFlavors [Android]
 
-Geraint White <geraintwhite@gmail.com>'s [commit](https://github.com/facebook/react-native/commit/055ea9c7b7d) fixes the ability to disable dev builds for specific build target (product flavor).  
+Geraint White geraintwhite@gmail.com's [commit](https://github.com/facebook/react-native/commit/055ea9c7b7d) fixes the ability to disable dev builds for specific build target (product flavor).  
 
 
 Now you can define a `disableDevForVariant` lambda in `build.gradle` `project.ext.react` to define if this build variant should have dev build disabled.
@@ -30,7 +30,7 @@ project.ext.react = [
 
 # Add bundleForVariant option [Android]
 
-Geraint White <geraintwhite@gmail.com> [also implemented](https://github.com/facebook/react-native/commit/d2c10da5d56) a `bundleForVariant` lambda. The bundle output (.aab) is an optimized APK which the Play Store can derive all the APK architecture from.
+Geraint White geraintwhite@gmail.com [also implemented](https://github.com/facebook/react-native/commit/d2c10da5d56) a `bundleForVariant` lambda. The bundle output (.aab) is an optimized APK which the Play Store can derive all the APK architecture from.
 
 With `bundleForVariant` you can now define to use the bundle option per build variant. Similar to `disableDevForVariant`:
 
@@ -43,7 +43,7 @@ With `bundleForVariant` you can now define to use the bundle option per build va
 # Update XMLHttpRequest.getAllResponseHeaders() implementation
 
 
-Andrew Scherkus <ascherkus@gmail.com> [updated](https://github.com/facebook/react-native/commit/b2415c48669) `getAllResponseHeaders` to conform with the XHR whatwg spec.
+Andrew Scherkus ascherkus@gmail.com [updated](https://github.com/facebook/react-native/commit/b2415c48669) `getAllResponseHeaders` to conform with the XHR whatwg spec.
 
 > As per the XMLHttpRequest specification [1], getAllResponseHeaders() should return a string of headers with lowercased names and sorted by their uppercase representation, with each header ending with '\r\n'. [1] https://xhr.spec.whatwg.org/#the-getallresponseheaders()-method
 
@@ -52,14 +52,14 @@ Andrew Scherkus <ascherkus@gmail.com> [updated](https://github.com/facebook/reac
 
 # Expose Pressability Hover config props in Pressable
 
-Saad Najmi <sanajmi@microsoft.com> highlighted how `react-native-macos`, `react-native-windows`, and `react-native-web` all already support mouse hover events since the underlying Pressability module already calculates onMouseEnter/onMouseLeave events. The core React Native Pressable event wasn't sending these events because the props were not forwarded - [Saad fixes this](https://github.com/facebook/react-native/commit/1b30dd074b5).
+Saad Najmi sanajmi@microsoft.com highlighted how `react-native-macos`, `react-native-windows`, and `react-native-web` all already support mouse hover events since the underlying Pressability module already calculates onMouseEnter/onMouseLeave events. The core React Native Pressable event wasn't sending these events because the props were not forwarded - [Saad fixes this](https://github.com/facebook/react-native/commit/1b30dd074b5).
 
 
 # Fix Switch crash [Android]
 
 The Switch component is crashing when initialized with both backgroundColor and thumbColor.
 
-Stefanos Markidis <stmarkidis@gmail.com>'s [fix](https://github.com/facebook/react-native/commit/456cf3db14c) and summary:
+Stefanos Markidis stmarkidis@gmail.com's [fix](https://github.com/facebook/react-native/commit/456cf3db14c) and summary:
 
 > ReactSwitch component is crashing on Android when it is initialised with both a backgroundColor and thumbColor, `style={{ backgroundColor: "anyColor" }} thumbColor="anyColor"`, due to IllegalCastException.
 
@@ -79,14 +79,14 @@ Just `thumbColor`:
 
 # Fix #flingAndSnap to check all the scroll item for offset range [Android]
 
-According to Xin Chen <xch@fb.com>, when the ScrollView calculated the offset of the items it skipped the first item since it assumed the offset was zero, turns out this is not always the case and thus [this diff](https://github.com/facebook/react-native/commit/61e1b6f86cf) fixes this.
+According to Xin Chen xch@fb.com, when the ScrollView calculated the offset of the items it skipped the first item since it assumed the offset was zero, turns out this is not always the case and thus [this diff](https://github.com/facebook/react-native/commit/61e1b6f86cf) fixes this.
 
 
 
 
 # Added `isAccessibilityServiceEnabled` to get if accessibility services are enabled [Android]
 
-grgr-dkrk <40130327+grgr-dkrk@users.noreply.github.com>'s [commit](https://github.com/facebook/react-native/commit/c8b83d4e0b3) adds `isAccessibilityServiceEnabled`:
+grgr-dkrk 40130327+grgr-dkrk@users.noreply.github.com's [commit](https://github.com/facebook/react-native/commit/c8b83d4e0b3) adds `isAccessibilityServiceEnabled`:
 
 ```javascript
   AccessibilityInfo.isAccessibilityServiceEnabled().then(state => {

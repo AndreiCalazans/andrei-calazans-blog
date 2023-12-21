@@ -30,7 +30,7 @@ The `PressabilityPerformanceEventEmitterSingleton` is a an emitter that emits ev
 
 # Add arguments to codegen script
 
-Héctor Ramos <hramos@fb.com> in this [diff](https://github.com/facebook/react-native/commit/2e8893fb5be) adds a few parameters to make the codegen script more configurable, read the summary by him:
+Héctor Ramos hramos@fb.com in this [diff](https://github.com/facebook/react-native/commit/2e8893fb5be) adds a few parameters to make the codegen script more configurable, read the summary by him:
 
 Summary:
 The codegen script now takes parameters for any necessary configuration. Now, there are three *required* parameters: JS_SRCS_DIR, LIBRARY_NAME, and OUTPUT_DIR.
@@ -44,7 +44,7 @@ If a fifth argument is provided, this COMPONENT_OUTPUT_DIR will be used as the o
 
 # Enable codegen in RNTester's NativeModuleExample
 
-Héctor Ramos <hramos@fb.com> [included another change](https://github.com/facebook/react-native/commit/6651d8c3468), this time to the RNTester app code generating the `NativeModuleExample` with codegen.
+Héctor Ramos hramos@fb.com [included another change](https://github.com/facebook/react-native/commit/6651d8c3468), this time to the RNTester app code generating the `NativeModuleExample` with codegen.
 
 ```diff
 
@@ -103,7 +103,7 @@ namespace facebook {
 
 # Add Xcode 12.5 + M1 machines CocoaPods post_install workaround
 
-If you are having issues with building with Xcode 12.5 on a M1 machine, see this [commit](https://github.com/facebook/react-native/commit/ac4ddec542f) by Kevin Gozali <fkg@fb.com>, he adds a workaround to the RNTester that you can copy.
+If you are having issues with building with Xcode 12.5 on a M1 machine, see this [commit](https://github.com/facebook/react-native/commit/ac4ddec542f) by Kevin Gozali fkg@fb.com, he adds a workaround to the RNTester that you can copy.
 
 They also had to [switch the order of the search libraries](https://github.com/facebook/react-native/commit/329b026f3a4).
 
@@ -113,9 +113,9 @@ They also had to [switch the order of the search libraries](https://github.com/f
 
 # Fix non selectable Text in FlatList [Android]
 
-[Fix](https://github.com/facebook/react-native/commit/c360b1d92b6) by fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com>
+[Fix](https://github.com/facebook/react-native/commit/c360b1d92b6) by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com
 
-Summary by fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com>:
+Summary by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com:
 
 Text is not selectable inside a FlatList on Android. The solution is to invalidate the ReactTextView after a change of the selectable prop. If the view is visible, onDraw(android.graphics.Canvas) will be called at some point in the future and make the Text selectable.
 
@@ -134,7 +134,7 @@ Text is not selectable inside a FlatList on Android. The solution is to invalida
 
 # Fix keyboardDismissMode="on-drag" [Android]
 
-[Fix](https://github.com/facebook/react-native/commit/7edf9274cf6) by Janic Duplessis <janicduplessis@gmail.com>
+[Fix](https://github.com/facebook/react-native/commit/7edf9274cf6) by Janic Duplessis janicduplessis@gmail.com
 
 Summary:
 
@@ -143,7 +143,7 @@ The current logic using `_isTouching` does not work because `_handleTouchCancel`
 
 # Allow RCTRootView users to require NativeModules without the bridge
 
-[Change](https://github.com/facebook/react-native/commit/bfead74e69f) by Ramanpreet Nara <ramanpreet@fb.com>:
+[Change](https://github.com/facebook/react-native/commit/bfead74e69f) by Ramanpreet Nara ramanpreet@fb.com:
 
 Summary
 RCTRootVeiw exports the bridge. One reason why is to allow users of RCTRootView users to access NativeModules.

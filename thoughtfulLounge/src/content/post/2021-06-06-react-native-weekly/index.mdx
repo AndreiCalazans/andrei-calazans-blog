@@ -30,7 +30,7 @@ This [commit](https://github.com/facebook/react-native/commit/70da6409460) remov
 
 # Delete eager initialization of Fabric classes
 
-David Vacca <dvacca@fb.com> ran an experiment on the Marketplace app to see the impact of eagerly initializing Fabric classes as follows:
+David Vacca dvacca@fb.com ran an experiment on the Marketplace app to see the impact of eagerly initializing Fabric classes as follows:
 
 ```
 -  // TODO T31905686: eager load Fabric classes, this is temporary and it will be removed
@@ -76,7 +76,7 @@ The result was neutral and caused a regression thus he removed in [this commit](
 
 For those who are new to flushing and React Native's event system - React Native's event system that handles calls into native and JavaScript uses a queue mechanism, in order to empty the queue it flushes it, which means it empties whatever is in the queue and handles the calls.
 
-According to Ramanpreet Nara <ramanpreet@fb.com>, the `RuntimeExecutor` that Fabric gets wasn't calling `JSIExecutor::flush()` as frequently as it was  on the legacy `NativeModule` system, it is supposed to call `flush` on every call. [His commit](https://github.com/facebook/react-native/commit/281daf12222) changed this so Flush NativeModule calls with Fabric on Android on every Native -> JS call
+According to Ramanpreet Nara ramanpreet@fb.com>, the `RuntimeExecutor` that Fabric gets wasn't calling `JSIExecutor::flush()` as frequently as it was  on the legacy `NativeModule` system, it is supposed to call `flush` on every call. [His commit](https://github.com/facebook/react-native/commit/281daf12222) changed this so Flush NativeModule calls with Fabric on Android on every Native - JS call
 
 
 ```
@@ -128,7 +128,7 @@ Stemmed from [react native community discussion](https://github.com/react-native
 
 # Experimental Animated API?
 
-Tim Yung <yungsters@fb.com> is experimenting with a new `createAnimatedComponent` that is compatible with concurrent rendering. Let's wait and see what this results in. See commit [1](https://github.com/facebook/react-native/commit/8ccc4064c5c) and [2](https://github.com/facebook/react-native/commit/819b926beb3)
+Tim Yung yungsters@fb.com is experimenting with a new `createAnimatedComponent` that is compatible with concurrent rendering. Let's wait and see what this results in. See commit [1](https://github.com/facebook/react-native/commit/8ccc4064c5c) and [2](https://github.com/facebook/react-native/commit/819b926beb3)
 
 This work results in a custom hook.
 
@@ -199,7 +199,7 @@ Note that this is all experimental.
 
 ```
 
-Tim Yung <yungsters@fb.com> has been busy 😁
+Tim Yung yungsters@fb.com has been busy 😁
 
 
 # Create swipeable card demo
@@ -256,7 +256,7 @@ function SwipeableCard() {
 
 # Ship JS Responder in Fabric
 
-Comment from Joshua Gross <joshuagross@fb.com>:
+Comment from Joshua Gross joshuagross@fb.com:
 
 > setJSResponder/clearJSResponder have been in use in prod for a while and are stable. Ship them in code.
 

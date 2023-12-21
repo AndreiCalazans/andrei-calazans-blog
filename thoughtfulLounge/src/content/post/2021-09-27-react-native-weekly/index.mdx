@@ -12,12 +12,12 @@ This is week 39 of 2021: September 20th to 26th.
 
 # Don’t hard-code CocoaPods’s sandbox path
 
-This [commit](https://github.com/facebook/react-native/commit/ef5ff3e0554) by Jakob Krigovsky <jakob@krigovsky.com>, now allows you to call `pod install --project-directory=ios` from the root of the project, or anywhere you specify the project directory to be. Previously, this would fail.
+This [commit](https://github.com/facebook/react-native/commit/ef5ff3e0554) by Jakob Krigovsky jakob@krigovsky.com, now allows you to call `pod install --project-directory=ios` from the root of the project, or anywhere you specify the project directory to be. Previously, this would fail.
 
 
 # Add cancelButtonTintColor props to ActionSheetIOS
 
-Muhammad Numan <muhammadnuman70@gmail.com> updated the ActionSheetIOS on this [commit](https://github.com/facebook/react-native/commit/01856633a1d)
+Muhammad Numan muhammadnuman70@gmail.com updated the ActionSheetIOS on this [commit](https://github.com/facebook/react-native/commit/01856633a1d)
 
 I was surprised to see changes to the ActionSheetIOS make it to the core since Expo started maintaining [a separate version](https://github.com/expo/react-native-action-sheet) of it since the Lean Core initiative. I recommend you use Expo's version of it instead.
 
@@ -27,7 +27,7 @@ I was surprised to see changes to the ActionSheetIOS make it to the core since E
 
 # Updates to Android's Build System
 
-For the past three weeks or so, Nicola Corti <ncor@fb.com> has been doing a lot of work around Android's build system. He made several improvements by refactoring, breaking things up into invidual tasks, and more.  
+For the past three weeks or so, Nicola Corti ncor@fb.com has been doing a lot of work around Android's build system. He made several improvements by refactoring, breaking things up into invidual tasks, and more.  
 
 The stuff he did last week:
 - [Removed extra missing script from package.json](https://github.com/facebook/react-native/commit/9cf4bb73c0d4ab5ab548db2cbc8f9e6e14e6d50d)
@@ -52,12 +52,12 @@ Next time I have a Gradlew build issue I might just ping him 😅
 
 # Circle CI: Package a release on every commit
 
-Héctor Ramos <hramos@fb.com> [extended the Circle CI](https://github.com/facebook/react-native/commit/c0b46f3487a) config to include a per-commit release build that does not get published to NPM.
+Héctor Ramos hramos@fb.com [extended the Circle CI](https://github.com/facebook/react-native/commit/c0b46f3487a) config to include a per-commit release build that does not get published to NPM.
 
 
 # Introduce RCTComputeScreenScale
 
-Phillip Pan <phillippan@fb.com> [exposed](https://github.com/facebook/react-native/commit/99f706e5df4) the [UIScreen mainScreen].scale for Apple devices as a temporary solution to dealing with different screen sizes. 
+Phillip Pan phillippan@fb.com [exposed](https://github.com/facebook/react-native/commit/99f706e5df4) the [UIScreen mainScreen].scale for Apple devices as a temporary solution to dealing with different screen sizes. 
 
 
 # How to disable Fabric on RNTester
@@ -83,9 +83,9 @@ index 8b0ea4becc9..087f0cf3587 100644
 
 # ScrollView automaticallyAdjustKeyboardInsets prop iOS
 
-[Commit](https://github.com/facebook/react-native/commit/6e903b07fa8) by our infamous Marc Rousavy <marcrousavy@hotmail.com>
+[Commit](https://github.com/facebook/react-native/commit/6e903b07fa8) by our infamous Marc Rousavy marcrousavy@hotmail.com
 
-The following is taken from the commit summary written by Marc Rousavy <marcrousavy@hotmail.com>.
+The following is taken from the commit summary written by Marc Rousavy marcrousavy@hotmail.com.
 
 The `automaticallyAdjustKeyboardInsets` prop automatically animates `contentInset`, `scrollIndicatorInsets` and `contentOffset` (scroll Y) to avoid the Keyboard. (respecting absolute position on screen and safe-areas)
 

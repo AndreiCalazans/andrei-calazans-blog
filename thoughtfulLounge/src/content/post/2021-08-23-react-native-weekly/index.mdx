@@ -11,7 +11,7 @@ Welcome to the 23rd edition of React Native Weekly!
 
 # iOS Modal dismiss on swipe & onRequestClose prop  
 
-Nishan Bende <nishanbende@gmail.com> [introduced this expected feature on iOS](https://github.com/facebook/react-native/commit/c29ec46b0ee) - the dismiss on on swipe gesture for Modals. He also introduced the `onRequestClose` prop. 
+Nishan Bende nishanbende@gmail.com [introduced this expected feature on iOS](https://github.com/facebook/react-native/commit/c29ec46b0ee) - the dismiss on on swipe gesture for Modals. He also introduced the `onRequestClose` prop. 
 
 Nishan noted he intentionally only added support for partial drag so the `onRequestClose` could be supported, he is open to suggestions on how he could implement full drag support while still keeping the `onRequestClose`.
 
@@ -25,7 +25,7 @@ Nishan noted he intentionally only added support for partial drag so the `onRequ
 
 
 
-On Android the [TextInput's selectionColor](https://reactnative.dev/docs/textinput#selectioncolor) does not change the handle color. fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com> fixed it on [this change](https://github.com/facebook/react-native/commit/5819538a087).
+On Android the [TextInput's selectionColor](https://reactnative.dev/docs/textinput#selectioncolor) does not change the handle color. fabriziobertoglio1987 fabrizio.bertoglio@gmail.com fixed it on [this change](https://github.com/facebook/react-native/commit/5819538a087).
 
 
 The method setCursorColor changes the cursor color of field `mCursorDrawable` using a reflection for Android Devices lower then API 28. This fix adds a reflection to change color of the left, center and right handles of a selection (mTextSelectHandleLeftRes, mTextSelectHandleRes and mTextSelectHandleRightRes).
@@ -73,7 +73,7 @@ Default Colors do not have issues
 
 # Fix dashed/dotted border-drawing when border-radius is 0 [Android]
 
-Summary [from PR](https://github.com/facebook/react-native/commit/3e5998e651e) by Hein Rutjes <hrutjes@gmail.com>:
+Summary [from PR](https://github.com/facebook/react-native/commit/3e5998e651e) by Hein Rutjes hrutjes@gmail.com:
 This PR fixes the border-style that is not respected when drawing a border with 0 border-radius on Android. This would cause the faster `drawRectangularBackgroundWithBorders` path to be used, but that uses rectangular drawing and doesn't support dashed/dotted stroke patterns.
 This PR changes the behavior to use the generic `drawRoundedBackgroundWithBorders` code-path which does support dashed/dotted border-styles.
 
@@ -91,11 +91,11 @@ The above diff [was reverted because it broke some internal tests](https://githu
 
 # Color props with value as null should default to "defaultColor" instead of transparent [Android]
 
-[Diff by hank121314 <hank121314@gmail.com>](https://github.com/facebook/react-native/commit/842bcb902ed)
+[Diff by hank121314 hank121314@gmail.com](https://github.com/facebook/react-native/commit/842bcb902ed)
 
 # Fix Dimensions not updating on Android
 
-[Commit summary](https://github.com/facebook/react-native/commit/c18a492858e) by Jonathan Andrew <jonny.andrew@protonmail.com>:
+[Commit summary](https://github.com/facebook/react-native/commit/c18a492858e) by Jonathan Andrew jonny.andrew@protonmail.com:
 
 The issue is caused by the Android `DeviceInfoModule` that provides initial screen dimensions and then subsequently updates those by emitting `didUpdateDimensions` events. The assumption in that implementation is that the initial display metrics will not have changed prior to the first check for updated metrics. However that is not the case as the device may be rotated (as shown in the attached video).
 
@@ -120,7 +120,7 @@ If you ever need to have Metro running with a different URI scheme, [this diff](
 
 # Make ImageBackground's style prop optional
 
-edenb-moveo <71688494+edenb-moveo@users.noreply.github.com> noticed how the `ImageBackground` component crashed when the style prop was not set, [his diff](https://github.com/facebook/react-native/commit/6c080167e6e) changes this by null checking the style prop.
+edenb-moveo 71688494+edenb-moveo@users.noreply.github.com noticed how the `ImageBackground` component crashed when the style prop was not set, [his diff](https://github.com/facebook/react-native/commit/6c080167e6e) changes this by null checking the style prop.
 
 
 # Fix Xcode 13 build "Undefined symbol" error

@@ -12,7 +12,7 @@ This is week 50 2021: December 6th to 12th.
 
 # Fling animation Make fling animator customizable
 
-Xin Chen <xch@fb.com> continued his work on improving and fixing edge cases with the Fling animation in the scroll views. This is related to last week's work where he fixed some edges cases with the scroll fling animation that came up in VR.
+Xin Chen xch@fb.com continued his work on improving and fixing edge cases with the Fling animation in the scroll views. This is related to last week's work where he fixed some edges cases with the scroll fling animation that came up in VR.
 
 
 [66243271a7a](https://github.com/facebook/react-native/commit/66243271a7a) Refactor predictFinalScrollPosition method to the helper class  
@@ -22,12 +22,12 @@ Xin Chen <xch@fb.com> continued his work on improving and fixing edge cases with
 
 # Custom name for codegen components
 
-Sota Ogo <sota@fb.com> [extended the codegen script to support custom names](https://github.com/facebook/react-native/commit/ba70ca4c584) which is useful for when the target name and component name are different.
+Sota Ogo sota@fb.com [extended the codegen script to support custom names](https://github.com/facebook/react-native/commit/ba70ca4c584) which is useful for when the target name and component name are different.
 
 
 # Relanded ScrollView `automaticallyAdjustKeyboardInsets`
 
-Marc Rousavy <marcrousavy@hotmail.com> had introduced `automaticallyAdjustKeyboardInsets` and made some fixes to the content inset, however it got reverted because it broke something internally in Facebook and finally this week it was re-introduced. See the PR [full description](https://github.com/facebook/react-native/pull/31402).
+Marc Rousavy marcrousavy@hotmail.com had introduced `automaticallyAdjustKeyboardInsets` and made some fixes to the content inset, however it got reverted because it broke something internally in Facebook and finally this week it was re-introduced. See the PR [full description](https://github.com/facebook/react-native/pull/31402).
 
 
 
@@ -42,14 +42,14 @@ Marc Rousavy <marcrousavy@hotmail.com> had introduced `automaticallyAdjustKeyboa
 
 This is an experimental API. [Commit](https://github.com/facebook/react-native/commit/f5f6fd70f2e)
 
-Note from Samuel Susla <samuelsusla@fb.com>:
+Note from Samuel Susla samuelsusla@fb.com:
 
 > Introduce a way to execute `onKeyPress` synchronously. This feature is experimental and will be changed in the future. It is not decided if marking native events as "sync" is going to be path forward with synchronous access.
 
 
 # Fire `AnimatedValue.stopAnimation` callback with correct native value
 
-The Animated value's `stopAnimation` takes a callback that returns the current value of the animation. Turns out this might not always be in sync with the actual native value according to Eric Rozell <ericroz@fb.com>. [This commit](https://github.com/facebook/react-native/commit/8ba771c3ddc) fixes this issue.
+The Animated value's `stopAnimation` takes a callback that returns the current value of the animation. Turns out this might not always be in sync with the actual native value according to Eric Rozell ericroz@fb.com. [This commit](https://github.com/facebook/react-native/commit/8ba771c3ddc) fixes this issue.
 
 ```javascript
   const anim = new Animated.Value(0);

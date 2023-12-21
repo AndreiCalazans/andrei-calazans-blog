@@ -12,13 +12,13 @@ This is week 42 of 2021: October 11th and 17th.
 
 # Added `ACCESS_MEDIA_LOCATION` to PermissionsAndroid 
 
-[Commit](https://github.com/facebook/react-native/commit/79db4835681) by Aditya Wasan <adityawasan55@gmail.com>
+[Commit](https://github.com/facebook/react-native/commit/79db4835681) by Aditya Wasan adityawasan55@gmail.com
 
 [PermissionsAndroid](https://reactnative.dev/docs/permissionsandroid)
 
 # Fixed incorrect offset position after scrollToItem [IOS]
 
-Xin Chen <xch@fb.com> [fixed an edge case](https://github.com/facebook/react-native/commit/55392f65a6a) where the offset measurement in the ScrollView was off after calling `scrollToIndex` or `scrollToItem` with animation false. 
+Xin Chen xch@fb.com [fixed an edge case](https://github.com/facebook/react-native/commit/55392f65a6a) where the offset measurement in the ScrollView was off after calling `scrollToIndex` or `scrollToItem` with animation false. 
 
 
 # Kotlin & Gradle version bumps
@@ -27,7 +27,7 @@ Xin Chen <xch@fb.com> [fixed an edge case](https://github.com/facebook/react-nat
 
 # Add hermesFlagsForVariant and deleteDebugFilesForVariant
 
-Geraint White <geraintwhite@gmail.com>'s commit adds two build.gradle config lambdas: `hermesFlagsForVariant` and  `deleteDebugFilesForVariant`.
+Geraint White geraintwhite@gmail.com's commit adds two build.gradle config lambdas: `hermesFlagsForVariant` and  `deleteDebugFilesForVariant`.
 
 Previously build.gradle would only give you a Hermes release configuration if the target name contained release. With the above change you can now set the release config as you wish - this is helpful if you have staging releases for instance where the target name does not contain "release" i.e., "your-app-staging".
 
@@ -43,7 +43,7 @@ You can set `hermesFlagsForVariant` and  `deleteDebugFilesForVariant` in `androi
 
 # Refactor touch event dispatch
 
-While [this change](https://github.com/facebook/react-native/commit/a2feaeb5f11) is only relevant internally to the touch event architecture for Android, it introduces improvements that should decrease allocations done when transforming events, according to Andrei Shikov <ashikov@fb.com>.
+While [this change](https://github.com/facebook/react-native/commit/a2feaeb5f11) is only relevant internally to the touch event architecture for Android, it introduces improvements that should decrease allocations done when transforming events, according to Andrei Shikov ashikov@fb.com.
 
 Essentially, Andrei Shikov reuses the event emitter's `receiveEvent` method directly to dispatch events instead of the previous custom dispatcher.
 
@@ -55,13 +55,13 @@ Essentially, Andrei Shikov reuses the event emitter's `receiveEvent` method dire
 
 # Stop using RTTI features in Fabric core and components
 
-Joshua Gross <joshuagross@fb.com>'s [commit](https://github.com/facebook/react-native/commit/6525f9b0828) removes a few dynamic casting from the codebase as an effort to possibly disabled RTTI in a near future.
+Joshua Gross joshuagross@fb.com's [commit](https://github.com/facebook/react-native/commit/6525f9b0828) removes a few dynamic casting from the codebase as an effort to possibly disabled RTTI in a near future.
 
 For Context, in C++, RTTI's have a bad rep for having bad performance, increasing bundle size to include the type informations, and for indicating a bad architecture.
 
 # Add Github Action to close stale PRs and issues
 
-Nicola Corti <ncor@fb.com>'s [commit](https://github.com/facebook/react-native/commit/37efe38e6cb) adds a Github Action to close stale issues/PRs that have one year of inactivity.
+Nicola Corti ncor@fb.com's [commit](https://github.com/facebook/react-native/commit/37efe38e6cb) adds a Github Action to close stale issues/PRs that have one year of inactivity.
 
 
 

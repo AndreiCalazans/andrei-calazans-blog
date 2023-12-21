@@ -11,13 +11,13 @@ This is week 41 of 2021: October 4th and 10th.
 
 # Update Metro config to use blockList instead of blacklistRE
 
-Summary from [commit](https://github.com/facebook/react-native/commit/7923804c28a) by Rob Hogan <rh389@users.noreply.github.com>:
+Summary from [commit](https://github.com/facebook/react-native/commit/7923804c28a) by Rob Hogan rh389@users.noreply.github.com:
 An [update to `metro`](https://github.com/facebook/metro/commit/94c0b541b4bfa17aee4efa0f1969565522ce830d#diff-1a3c1a959bb8c4e2e9743c03cb7a6d0c56648ffcfe129a11b9090bfc139622dd) which landed in metro 0.60 (RN 0.64+) deprecates the config `blacklistRE`, renaming it to `blockList`. Although the former is still supported it now generates a deprecation warning.
 
 
 # Fixes to the Appearance API
 
-According to Brent Kelly <brentkelly87@gmail.com> the Appearance API wasn't working as expected because of it wasn't listening to the right context in Android and for iOS there was a bug in the code that caused a mutation to the current color scheme value.
+According to Brent Kelly brentkelly87@gmail.com the Appearance API wasn't working as expected because of it wasn't listening to the right context in Android and for iOS there was a bug in the code that caused a mutation to the current color scheme value.
 
 Brent's [commit](https://github.com/facebook/react-native/commit/25a2c608f79) fixes this.
 
@@ -36,7 +36,7 @@ const isDarkMode = useColorScheme() === 'dark';
 # Fix multiline TextInput "jerk" movement when moving cursor 
 
 
-This [commit](https://github.com/facebook/react-native/commit/22801870f06) by Xiankun Cheng <xiankuncheng@gmail.com> fixes [30748](https://github.com/facebook/react-native/issues/30748): on iOS 14, when trying to hold down the space bar and move the cursor on a multi-line TextInput with lots of lines, the cursor could not be scrolled to the desired point. It works as expected on iOS 13 and before.
+This [commit](https://github.com/facebook/react-native/commit/22801870f06) by Xiankun Cheng xiankuncheng@gmail.com fixes [30748](https://github.com/facebook/react-native/issues/30748): on iOS 14, when trying to hold down the space bar and move the cursor on a multi-line TextInput with lots of lines, the cursor could not be scrolled to the desired point. It works as expected on iOS 13 and before.
 
 
 **Video Before:**
@@ -57,23 +57,23 @@ This [commit](https://github.com/facebook/react-native/commit/22801870f06) by Xi
 
 # Avoid logging sensitve param values in AppRegistry.runApplication
 
-[Commit](https://github.com/facebook/react-native/commit/e612d3a116f) by Wes Johnson <wjohnson@wealthsimple.com> who noticed that by default the RootView/ReactView that called `runApplication` logged all info level props passed to that components. In Wes' case there were sensitive information there that would leak to the device loss.
+[Commit](https://github.com/facebook/react-native/commit/e612d3a116f) by Wes Johnson wjohnson@wealthsimple.com who noticed that by default the RootView/ReactView that called `runApplication` logged all info level props passed to that components. In Wes' case there were sensitive information there that would leak to the device loss.
 
 
 
 # Add error handling to RuntimeScheduler
 
-[Commit](https://github.com/facebook/react-native/commit/27304fcd0bd) by Samuel Susla <samuelsusla@fb.com>, he extended the RuntimeScheduler to forward JavaScript errors to `ErrorUtils` - the error utils is used to add error handlers like the Error redbox in React Native.
+[Commit](https://github.com/facebook/react-native/commit/27304fcd0bd) by Samuel Susla samuelsusla@fb.com, he extended the RuntimeScheduler to forward JavaScript errors to `ErrorUtils` - the error utils is used to add error handlers like the Error redbox in React Native.
 
 
 # Update Modal's mock to not render its children when it is not visible
 
-[Commit](https://github.com/facebook/react-native/commit/ec614c16b33) by AntoineDoubovetzky <antoined@bam.tech> who found that when testing if a Modal is visible or not the mocked Modal still rendered its children forcing the unit test to check the `visible` prop instead of testing if the children rendered. His commit fixes this.
+[Commit](https://github.com/facebook/react-native/commit/ec614c16b33) by AntoineDoubovetzky antoined@bam.tech who found that when testing if a Modal is visible or not the mocked Modal still rendered its children forcing the unit test to check the `visible` prop instead of testing if the children rendered. His commit fixes this.
 
 
 # Remove shared responsibility between LogBox and ExceptionsManager native module
 
-[Commit](https://github.com/facebook/react-native/commit/c901c43d11a) by Lulu Wu <luluwu@fb.com>, there was an overlap between the LogBox and the ExceptionsManager. Now, LogBox will only be responsible for showing the error dialog when in DEV, while the ExceptionsManager will handle reporting the error.
+[Commit](https://github.com/facebook/react-native/commit/c901c43d11a) by Lulu Wu luluwu@fb.com, there was an overlap between the LogBox and the ExceptionsManager. Now, LogBox will only be responsible for showing the error dialog when in DEV, while the ExceptionsManager will handle reporting the error.
 
 
 # Community

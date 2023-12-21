@@ -13,15 +13,15 @@ This is week 43 of 2021: October 18th and 24th.
 
 # Fix enableVmCleanup not working for apps with product flavors
 
-Nicola Corti <ncor@fb.com> noticed the Gradle `enableVmCleanup` function wasn't cleaning up the extra `.so` files for apps with variants like name-staging for instance. [This commit](https://github.com/facebook/react-native/commit/a2b5e4cd825) fixes this.
+Nicola Corti ncor@fb.com noticed the Gradle `enableVmCleanup` function wasn't cleaning up the extra `.so` files for apps with variants like name-staging for instance. [This commit](https://github.com/facebook/react-native/commit/a2b5e4cd825) fixes this.
 
-Besides this work, Nicola Corti <ncor@fb.com> also contributed with a few other commits ([1](https://github.com/facebook/react-native/commit/c3e7ea0b5b4)) ([2](https://github.com/facebook/react-native/commit/bb981b20551)) ([3](https://github.com/facebook/react-native/commit/52b0cc03550)) ([4](https://github.com/facebook/react-native/commit/75b2e5cc973)) ([5](https://github.com/facebook/react-native/commit/bc93fefe130)) where he organizes the Gradle tasks into isolated tasks.
+Besides this work, Nicola Corti ncor@fb.com also contributed with a few other commits ([1](https://github.com/facebook/react-native/commit/c3e7ea0b5b4)) ([2](https://github.com/facebook/react-native/commit/bb981b20551)) ([3](https://github.com/facebook/react-native/commit/52b0cc03550)) ([4](https://github.com/facebook/react-native/commit/75b2e5cc973)) ([5](https://github.com/facebook/react-native/commit/bc93fefe130)) where he organizes the Gradle tasks into isolated tasks.
 
 
 
 # Strict Static View Config Validator
 
-In [this commit](https://github.com/facebook/react-native/commit/addf4dab512), Tim Yung <yungsters@fb.com> created a new `StaticViewConfigValidator` module that validates the difference between the static and native view configs. I don't fully understand how static and native view configs are different but it seems the view configs are used to establish the native component counterpart from the configs. 
+In [this commit](https://github.com/facebook/react-native/commit/addf4dab512), Tim Yung yungsters@fb.com created a new `StaticViewConfigValidator` module that validates the difference between the static and native view configs. I don't fully understand how static and native view configs are different but it seems the view configs are used to establish the native component counterpart from the configs. 
 
 If you understand how this is tied in with the architecture shoot me a DM. I would guess the static configs are generated from TurboModules but I'm uncertain.
 
@@ -33,7 +33,7 @@ If you understand how this is tied in with the architecture shoot me a DM. I wou
 When the user tapped the "Inner" text, Android is dispatching three events:
 topTouchStart, topTouchStart and topTouchEnd.
 
-David Vacca <dvacca@fb.com> identified that the information stored on the first two JS events is correct, but the problem is that it is duplicated.
+David Vacca dvacca@fb.com identified that the information stored on the first two JS events is correct, but the problem is that it is duplicated.
 
 # Disabled RTTI on Android by Default 
 
@@ -43,12 +43,12 @@ David Vacca <dvacca@fb.com> identified that the information stored on the first 
 
 # Load JSC or Hermes lib in static method
 
-Tuomas Jaakola <tuomas.jaakola@iki.fi> [introduced a change](https://github.com/facebook/react-native/commit/d839b24b06d) to make it clearer when a error happens while loading JSC or Hermes, previously the stack-trace was pointing to the wrong place.
+Tuomas Jaakola tuomas.jaakola@iki.fi [introduced a change](https://github.com/facebook/react-native/commit/d839b24b06d) to make it clearer when a error happens while loading JSC or Hermes, previously the stack-trace was pointing to the wrong place.
 
 
 # Deprecate Prop Types
 
-[With this commit](https://github.com/facebook/react-native/commit/3f629049ba9), Tim Yung <yungsters@fb.com> added a warning to every React Native component PropType to let you know it has been deprecated.
+[With this commit](https://github.com/facebook/react-native/commit/3f629049ba9), Tim Yung yungsters@fb.com added a warning to every React Native component PropType to let you know it has been deprecated.
 
 
 # More Android Permissions

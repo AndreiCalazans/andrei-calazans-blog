@@ -58,7 +58,7 @@ If Facebook was not running React Native in their production apps these bugs wou
 
 # Allow PlatformColor to work with RCTView border colors
 
-[Commit](https://github.com/facebook/react-native/commit/c974cbff04a) from Danilo Bürger <info@danilobuerger.de>
+[Commit](https://github.com/facebook/react-native/commit/c974cbff04a) from Danilo Bürger info@danilobuerger.de
 
 > Using `PlatformColor` with border colors doesn't work currently when switching dark mode as the information is lost when converting to `CGColor`. This change keeps the border colors around as `UIColor` so switching to dark mode works.
 
@@ -78,7 +78,7 @@ If Facebook was not running React Native in their production apps these bugs wou
 # Is a refactor of the `VirtualizedList` coming our way?
 
 
-It's what [this commit](https://github.com/facebook/react-native/commit/5cb2debbea5) indicates. Nick Gerleman <ngerlem@microsoft.com> added `CellRenderMask` module that will help track regions of cells/spacers within a list to render. 
+It's what [this commit](https://github.com/facebook/react-native/commit/5cb2debbea5) indicates. Nick Gerleman ngerlem@microsoft.com added `CellRenderMask` module that will help track regions of cells/spacers within a list to render. 
 
 > The implementation keeps this region list internally, splitting or merging regions when cells are added. This output will be used by the render function of a refactored VirtualizedList.
 

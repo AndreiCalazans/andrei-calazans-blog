@@ -12,7 +12,7 @@ This is week 46 of 2021: November 8th to 14th.
 
 # Make the `reactNativeArchitectures` property more discoverable
 
-Nicola Corti <ncor@fb.com> [added](https://github.com/facebook/react-native/commit/0f39a1076dc) `reactNativeArchitectures` property to gradle.properties for you to specify architecture on Android.
+Nicola Corti ncor@fb.com [added](https://github.com/facebook/react-native/commit/0f39a1076dc) `reactNativeArchitectures` property to gradle.properties for you to specify architecture on Android.
 ```diff
 diff --git a/template/android/gradle.properties b/template/android/gradle.properties
 index 11d6e02418e..389db0c1880 100644
@@ -32,7 +32,7 @@ index 11d6e02418e..389db0c1880 100644
 
 # Default {bubbling,direct}EventTypes to {} in Native VCs
 
-Ramanpreet Nara <ramanpreet@fb.com> continued the work to [make the Native View Configs match the functionality of the Static View Config](https://github.com/facebook/react-native/commit/36612a80609).
+Ramanpreet Nara ramanpreet@fb.com continued the work to [make the Native View Configs match the functionality of the Static View Config](https://github.com/facebook/react-native/commit/36612a80609).
 
 * The View Config defines the properties you can use/access for the native component counterpart.
 
@@ -41,7 +41,7 @@ Ramanpreet [also did further work](https://github.com/facebook/react-native/comm
 
 # Support RootView in UIManagerHelper.getSurfaceId
 
-Pieter De Baets <pieterdb@fb.com> had added `getSurfaceId` to UIManagerHelper to get the view tag for Fabric root views. He noticed `getSurfaceId` duplicates the logic for `getSurfaceIdForView` and thus refactors the code by removing `getSurfaceId` in favor of the legacy `getSurfaceIdForView` and extending this latter method to support getting the view tag.
+Pieter De Baets pieterdb@fb.com had added `getSurfaceId` to UIManagerHelper to get the view tag for Fabric root views. He noticed `getSurfaceId` duplicates the logic for `getSurfaceIdForView` and thus refactors the code by removing `getSurfaceId` in favor of the legacy `getSurfaceIdForView` and extending this latter method to support getting the view tag.
 
 ```diff
 +    if (view instanceof ReactRoot) {
@@ -52,7 +52,7 @@ Pieter De Baets <pieterdb@fb.com> had added `getSurfaceId` to UIManagerHelper to
 
 # Introduce RootView.onChildEndedNativeGesture method [Android] 
 
-Xin Chen <xch@fb.com> [added](https://github.com/facebook/react-native/commit/9b33c31ee02) `onChildEndedNativeGesture` to the RootView interface to let its implementations notify the JS side that a child gesture is ended on Android.
+Xin Chen xch@fb.com [added](https://github.com/facebook/react-native/commit/9b33c31ee02) `onChildEndedNativeGesture` to the RootView interface to let its implementations notify the JS side that a child gesture is ended on Android.
 
 Comment from code:
 
@@ -80,14 +80,14 @@ It is not yet clear how this will be used. But, the comment above implies allowi
 
 # Introduce RCTViewUtils
 
-[This commit](https://github.com/facebook/react-native/commit/9fc3fc83acd) is a demonstration by Phillip Pan <phillippan@fb.com> on how C functions are superior to Objective-C++ static class methods because they incur less binary size cost [[1]](https://swolchok.github.io/objcperf/)
+[This commit](https://github.com/facebook/react-native/commit/9fc3fc83acd) is a demonstration by Phillip Pan phillippan@fb.com on how C functions are superior to Objective-C++ static class methods because they incur less binary size cost [[1]](https://swolchok.github.io/objcperf/)
 
 He thus converts a static class method used in RCTView to a C function.
 
 
 # Fix crash on multiple shadow threads [Android]
 
-[This commit](https://github.com/facebook/react-native/commit/9d71b166a6c) by chenmo187 <1731581001@qq.com> fixes a crash on Android where caused by two separate threads accessing/mutating the same resource.
+[This commit](https://github.com/facebook/react-native/commit/9d71b166a6c) by chenmo187 1731581001@qq.com fixes a crash on Android where caused by two separate threads accessing/mutating the same resource.
 
 He explains this only happens when you have multiple tabs and with each having its own ReactInstanceManager (maybe caused by using react-native-navigation?), not sure. 
 

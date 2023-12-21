@@ -13,7 +13,7 @@ This is everything that happened in between 2nd of August and 8th of August 2021
 
 # Allows to set individual (left,top,right,bottom) dotted/dashed borders [Android] [Fix]
 
-With fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com> 's [fixes](https://github.com/facebook/react-native/commit/cb0e1d603aa), on Android, if a single border is specified and the `borderStyle` is dotted or dashed then each border gets drawn taking the border style and thickness into consideration. 
+With fabriziobertoglio1987 fabrizio.bertoglio@gmail.com 's [fixes](https://github.com/facebook/react-native/commit/cb0e1d603aa), on Android, if a single border is specified and the `borderStyle` is dotted or dashed then each border gets drawn taking the border style and thickness into consideration. 
 
 
 | **AFTER** | **AFTER** |
@@ -95,7 +95,7 @@ Case you were stil using `StatusBarIOS`, [it was removed](https://github.com/fac
 
 [This change](https://github.com/facebook/react-native/commit/fcead14b0ef) is a good summary about a deadlock bug caused by two threads trying to access the same resource.
 
-Commit message by Saad Najmi <saadnajmi2@gmail.com>:
+Commit message by Saad Najmi saadnajmi2@gmail.com:
 
 Internally in Microsoft code, we ran into a deadlock where the main queue and the UIManager queue were both trying to access `[RCTI18nUtil sharedInstance]`, and were blocked on each other. This is similar to an earlier issue with RCTScreenScale decsribed [here](https://github.com/facebook/react-native/issues/18096).
 
@@ -112,7 +112,7 @@ The fix is to not use NSUserDefaults, and simpy use atomic properties instead. W
 
 # Taps to overflowed Views [Fix] [Android]
 
-[This is an important fix](https://github.com/facebook/react-native/commit/e35a963bfb9) by Harry Yu <hy.harry.yu@gmail.com>. Previously, on Android, taps to a View that is overflown and had `overflow:visible` did not register the tap. His change fixes this issue.
+[This is an important fix](https://github.com/facebook/react-native/commit/e35a963bfb9) by Harry Yu hy.harry.yu@gmail.com. Previously, on Android, taps to a View that is overflown and had `overflow:visible` did not register the tap. His change fixes this issue.
 
 
 Summary:

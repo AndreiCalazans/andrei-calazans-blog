@@ -27,7 +27,7 @@ This teaches us that there will be a different DevMenu for Fabric mode with the 
 
 # Fix CMD + OPT + R with Bridgeless mode only [iOS]
 
-[In this commit](8c746dfc7e6) Ramanpreet Nara <ramanpreet@fb.com> adds a fix for the dev reload shortcut, the code that handles this shortcut in `RCTDevSettings.mm` only worked it was instantiated by the bridge which will no longer exist in Fabric mode. 
+[In this commit](8c746dfc7e6) Ramanpreet Nara ramanpreet@fb.com adds a fix for the dev reload shortcut, the code that handles this shortcut in `RCTDevSettings.mm` only worked it was instantiated by the bridge which will no longer exist in Fabric mode. 
 
 The change adds a listener to it that gets setup when the `RCTDevSettings` is first instantiated.
 
@@ -42,7 +42,7 @@ When PlatformColor is used with backgroundColor, this line would throw, as the o
 
 # Add mechanism to enforce certain Views always being visible in the View hierarchy [Android]
 
-[In this commit](https://github.com/facebook/react-native/commit/34903ba4185), Joshua Gross <joshuagross@fb.com> writes about this addition as an opt-in mechanism to allow native Android Views to be marked as "not clippable", soft exceptions will be logged if these Views are clipped from the View hierarchy.
+[In this commit](https://github.com/facebook/react-native/commit/34903ba4185), Joshua Gross joshuagross@fb.com writes about this addition as an opt-in mechanism to allow native Android Views to be marked as "not clippable", soft exceptions will be logged if these Views are clipped from the View hierarchy.
 
 He notes how telemetry components might rely on the component lifecycle like `onDraw` to work properly and for this reason they can't be clipped. This situation happened more often with Fabric and its View Flattening mechanism.
 
@@ -52,7 +52,7 @@ In JS the solution is to add `collapsable=false` to the parent component of the 
 
 # Added a Pressable Sticky Header Example to RNTester
 
-[Work from](https://github.com/facebook/react-native/commit/40a93914c69) Kacie Bawiec <kacieb@fb.com>:
+[Work from](https://github.com/facebook/react-native/commit/40a93914c69) Kacie Bawiec kacieb@fb.com:
 
 > Add a test case showing off a pressable sticky header to RNTester.
 

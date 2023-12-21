@@ -127,7 +127,7 @@ ed86891d012 Migrate NativeModules to initialize
 
 # Replace EventDispatcherImpl with LockFreeEventDispatcherImpl [Android]
 
-I wanted to include [this change](https://github.com/facebook/react-native/commit/05108211705) in this week's log, but I don't have much I can say about it. Joshua Gross <joshuagross@fb.com> explains in his commit that he is concerned with the performance implications of the original `EventDispatcherImpl` because it uses synchronized blocks to make it thread-safe. 
+I wanted to include [this change](https://github.com/facebook/react-native/commit/05108211705) in this week's log, but I don't have much I can say about it. Joshua Gross joshuagross@fb.com explains in his commit that he is concerned with the performance implications of the original `EventDispatcherImpl` because it uses synchronized blocks to make it thread-safe. 
 
 
 # Move isColorMeaningful to platform specific code

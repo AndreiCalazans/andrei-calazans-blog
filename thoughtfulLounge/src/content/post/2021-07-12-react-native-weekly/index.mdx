@@ -16,12 +16,12 @@ I'd love feedback on that post since I am certain it is very opinionated by my e
 
 # Upgrade folly to fix NDK 21 build issue (#31802)
 
-Kudo Chien <ckchien@gmail.com> made a PR upgrading Folly [to fix an issue](https://github.com/facebook/folly/pull/1593) building for NDK 21 on Android.
+Kudo Chien ckchien@gmail.com made a PR upgrading Folly [to fix an issue](https://github.com/facebook/folly/pull/1593) building for NDK 21 on Android.
 
 
 # Fix TouchableNativeFeedback ripple starts on previous touch location (#31777)
 
-From Nishan Bende <nishanbende@gmail.com> who initially [implemented the native ripple support on Android](https://github.com/facebook/react-native/commit/0823f299e56)
+From Nishan Bende nishanbende@gmail.com who initially [implemented the native ripple support on Android](https://github.com/facebook/react-native/commit/0823f299e56)
 
 
 Issue:
@@ -51,7 +51,7 @@ I wonder if this problem is inherited by the usage of Java Native Interfaces to 
 
 # Add ScrollView.automaticallyAdjustsScrollIndicatorInsets prop (on iOS) (#29809)
 
-Justin Huntington <justin@naraorganics.com> made a commit explaining the reasoning quite well and further explanations can be found in the original issue [28140](https://github.com/facebook/react-native/issues/28140)
+Justin Huntington justin@naraorganics.com made a commit explaining the reasoning quite well and further explanations can be found in the original issue [28140](https://github.com/facebook/react-native/issues/28140)
 
 In summary, iOS 13 added a new property `UIScrollView`: `automaticallyAdjustsScrollIndicatorInsets`. It changed how the `scrollIndicatorsInsets` property behaves, when set to `YES` any scroll insets **are added in addition** to the device's safe area, when set to `NO` it uses the older behavior prior to iOS 13 where these insets did not consider safe area.
 

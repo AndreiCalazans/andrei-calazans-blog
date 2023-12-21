@@ -11,7 +11,7 @@ The week 45 of 2021 was a slower than usual week, it contains all the work in-be
 
 # Workflow for version labels
 
-Lucas Bento <lucas.bsilva@outlook.com>'s [commit](https://github.com/facebook/react-native/commit/60352a95492) added Github actions to 1) create a label for each released version and 2) automatically apply this label version when an issue is opened mentioning the given version.
+Lucas Bento lucas.bsilva@outlook.com's [commit](https://github.com/facebook/react-native/commit/60352a95492) added Github actions to 1) create a label for each released version and 2) automatically apply this label version when an issue is opened mentioning the given version.
 
 If you want to take a look at the Github Actions Lucas created you can find them here: [Create version label](https://github.com/lucasbento/core-workflow-create-version-label) and [Apply version label](https://github.com/lucasbento/core-workflow-apply-version-label).
 
@@ -25,13 +25,13 @@ Add workflow to create version labels on new releases (#32508)
 
 # Improvements to Codegen
 
-Ramanpreet Nara <ramanpreet@fb.com> and Héctor Ramos <hramos@fb.com> made a few changes to the Codegen logic. 
+Ramanpreet Nara ramanpreet@fb.com> and Héctor Ramos <hramos@fb.com made a few changes to the Codegen logic. 
 
 Most notable [Ramanpreet refactored the use of string replace for the use of templates](https://github.com/facebook/react-native/commit/3848f48943d).
 
 # Fix split-screen app reconstruct
 
-somena1 <sophiaesiri.ee@gmail.com> fixed an issue related to split screen Android devices.  
+somena1 sophiaesiri.ee@gmail.com fixed an issue related to split screen Android devices.  
 
 > When switching between split screen or resizing the screen window on Android causes a restart by reconstructing the app components as described on this issue https://github.com/facebook/react-native/issues/25040
 
@@ -40,13 +40,13 @@ The fix is to add `screenLayout` and `smallestScreenSize` to `AndroidManifest`'s
 
 # Remove iOS 11 availability check
 
-[This commit](https://github.com/facebook/react-native/commit/9b059b67092) by Ken Tominaga <ken.for.develop@gmail.com> is a good reminder that React Native mininum iOS deployment target is iOS 11.
+[This commit](https://github.com/facebook/react-native/commit/9b059b67092) by Ken Tominaga ken.for.develop@gmail.com is a good reminder that React Native mininum iOS deployment target is iOS 11.
 
 
 
 # Check for double dispose when sending touch event [Android]
 
-Andrei Shikov <ashikov@fb.com> [found a double dispatching](https://github.com/facebook/react-native/commit/deb6fbd9291) issue with touch events on Android.
+Andrei Shikov ashikov@fb.com [found a double dispatching](https://github.com/facebook/react-native/commit/deb6fbd9291) issue with touch events on Android.
 
 ```java
 -      TouchesHelper.sendTouchEventModern(rctEventEmitter, this, /* useDispatchV2 */ true);
@@ -57,14 +57,14 @@ Andrei Shikov <ashikov@fb.com> [found a double dispatching](https://github.com/f
 
 # Ensure WritableMap is copied before consuming object
 
-[In another commit](https://github.com/facebook/react-native/commit/5c045861b98) Andrei Shikov <ashikov@fb.com> also fixed an issue with touch events where the touch objects would cause crash in production due to high-firing conditions for CANCEL events.
+[In another commit](https://github.com/facebook/react-native/commit/5c045861b98) Andrei Shikov ashikov@fb.com also fixed an issue with touch events where the touch objects would cause crash in production due to high-firing conditions for CANCEL events.
 
 And this was caused by the `WritableMap` object not being properly copied over.
 
 
 # Allow setting architecture in RNTester and release builds
 
-[Commit](https://github.com/facebook/react-native/commit/43c38cdc8e3) by Neil Dhar <neildhar@fb.com>
+[Commit](https://github.com/facebook/react-native/commit/43c38cdc8e3) by Neil Dhar neildhar@fb.com
 
 You can now do specify the native debug architecture when building the rn-tester:
 

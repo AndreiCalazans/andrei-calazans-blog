@@ -18,7 +18,7 @@ This week covers updates from **January 31st to February 6th 2022.**
 
 # Fix crash due to null WindowInsets on ReactRootView [Android]
 
-[This change](https://github.com/facebook/react-native/commit/6239e2f5ce8) by Elias Nahum <nahumhbl@gmail.com> fixes a crash happening on Android for apps that register different ReactRootViews. Maybe only for those using react-native-navigation?
+[This change](https://github.com/facebook/react-native/commit/6239e2f5ce8) by Elias Nahum nahumhbl@gmail.com fixes a crash happening on Android for apps that register different ReactRootViews. Maybe only for those using react-native-navigation?
 
 Great summary by Elias:
 
@@ -32,7 +32,7 @@ Great summary by Elias:
 
 # StatusBar API update for Android 11+
 
-Kuba Holuj <kubah@remitly.com> [refactored](https://github.com/facebook/react-native/commit/50c8e973f06) Android's `StatusBarModule.setStyle` to use [`WindowInsetsController#setSystemBarsAppearance`](https://developer.android.com/reference/kotlin/android/view/WindowInsetsController#setsystembarsappearance) for Android 11 (API 30). 
+Kuba Holuj kubah@remitly.com [refactored](https://github.com/facebook/react-native/commit/50c8e973f06) Android's `StatusBarModule.setStyle` to use [`WindowInsetsController#setSystemBarsAppearance`](https://developer.android.com/reference/kotlin/android/view/WindowInsetsController#setsystembarsappearance) for Android 11 (API 30). 
 
 ```java
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -51,7 +51,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
 # Introduce PlatformBaseViewConfig and fix SVC for RCTView
 
-Ramanpreet Nara <ramanpreet@fb.com> refactored the Static View Config to unify both platforms under one interface - the `PlatformBaseViewConfig`. _Remember the Static View Config declares what props the native layer supports._
+Ramanpreet Nara ramanpreet@fb.com refactored the Static View Config to unify both platforms under one interface - the `PlatformBaseViewConfig`. _Remember the Static View Config declares what props the native layer supports._
 
 This commit also goes over the internal architecture for how each platform defines its base ViewConfig. On iOS all props come from the ViewManagers and all HostComponents extend the View's ViewManager. On Android props also come from the Shadow Nodes and instead of View's ViewManager, the HostComponents extend a BaseViewManager class.
 
@@ -69,19 +69,19 @@ If you are still using PropTypes you should reconsider as React Native core is a
 
 # Fix ScrollView Snapping [Android]
 
-Pieter De Baets <pieterdb@fb.com> [fixed ScrollView's setSnapToInterval](https://github.com/facebook/react-native/commit/79975d146ef) offset calculation to take into consideration density of the Context/Activity instead of the screen.
+Pieter De Baets pieterdb@fb.com [fixed ScrollView's setSnapToInterval](https://github.com/facebook/react-native/commit/79975d146ef) offset calculation to take into consideration density of the Context/Activity instead of the screen.
 
 This is done by using `PixelUtil.getDisplayMetricDensity` instead of `DisplayMetricsHolder.getScreenDisplayMetrics`.
 
 # Support platform color with AnimatedColor
 
-[Continuation of last week](/posts/2022-01-30/react-native-weekly)'s work. Genki Kondo <gkondo@fb.com> introduced AnimatedColor API [and now landed support for us to use platform colors](https://github.com/facebook/react-native/commit/cb42049e0ae). 
+[Continuation of last week](/posts/2022-01-30/react-native-weekly)'s work. Genki Kondo gkondo@fb.com introduced AnimatedColor API [and now landed support for us to use platform colors](https://github.com/facebook/react-native/commit/cb42049e0ae). 
 
 
 
 # Implement Chrome DevTools inspector API -  Runtime.callFunctionOn 
 
-John Porto <jpporto@fb.com> [implemented the Chrome DevTools Protocol function - Runtime.callFunctionOn](https://github.com/facebook/react-native/commit/eb08af57a95) to enable proper inspection of Hermes through Chrome DevTools.
+John Porto jpporto@fb.com [implemented the Chrome DevTools Protocol function - Runtime.callFunctionOn](https://github.com/facebook/react-native/commit/eb08af57a95) to enable proper inspection of Hermes through Chrome DevTools.
 
 According to [Chrome DevTools](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-callFunctionOn) the `callFunctionOn` is responsible for:
 
@@ -101,7 +101,7 @@ These changes don't seem to impact OSS React Native, I think. Two bugs were fixe
 
 # Further Runtime Yielding Improvements
 
-Samuel Susla <samuelsusla@fb.com> [refactored RuntimeScheduler's yielding flag](https://github.com/facebook/react-native/commit/5e933fdd2a3) to use a counter for pending lambdas instead of a boolean flag. 
+Samuel Susla samuelsusla@fb.com [refactored RuntimeScheduler's yielding flag](https://github.com/facebook/react-native/commit/5e933fdd2a3) to use a counter for pending lambdas instead of a boolean flag. 
 Yield for each access to the runtime
 
 From Samuel's commit message:
@@ -112,12 +112,12 @@ From Samuel's commit message:
 
 # Build tests for RNTester
 
-[Commit by](https://github.com/facebook/react-native/commit/70062c13220) Gabriel Donadel Dall'Agnol <donadeldev@gmail.com>.
+[Commit by](https://github.com/facebook/react-native/commit/70062c13220) Gabriel Donadel Dall'Agnol donadeldev@gmail.com.
 
 
 # Attempt fix on App termination [iOS]
 
-Samuel Susla <samuelsusla@fb.com> [is attempting to fix](https://github.com/facebook/react-native/commit/9cd43340a7e) a Fabric crash on iOS when the app is closed by stoping all surfaces before the app is terminated.
+Samuel Susla samuelsusla@fb.com [is attempting to fix](https://github.com/facebook/react-native/commit/9cd43340a7e) a Fabric crash on iOS when the app is closed by stoping all surfaces before the app is terminated.
 
 
 
@@ -125,7 +125,7 @@ Samuel Susla <samuelsusla@fb.com> [is attempting to fix](https://github.com/face
 
 [Commit](https://github.com/facebook/react-native/commit/be260b9f479).
 
-Summary by Genki Kondo <gkondo@fb.com>:
+Summary by Genki Kondo gkondo@fb.com:
 
 When setting ScrollView's contentOffset, if the ScrollView hasn't been laid out yet when ReactScrollViewManager.setContentOffset is called, then scroll position is never set properly. This is because the actual scroll offset (0, 0) was being passed into setPendingContentOffsets, instead of the desired scroll offset. Thus, when ReactScrollView.onLayout gets called, ReactScrollView.scrollTo gets called with (0, 0).
 
@@ -144,9 +144,9 @@ Despite its deprecation in favor of the community module, some work went in to [
 # Dependency updates
 
 - [Danger.js was updated to v11 by Orta](https://github.com/facebook/react-native/commit/fbb9d33ceeb)  
-- [Updated gradle-download-task to 5.0.1](https://github.com/facebook/react-native/commit/a86cae7aacc) by Michel Kraemer <michel.kraemer@igd.fraunhofer.de>  
-- Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> [Bumped shelljs from 0.8.4 to 0.8.5](https://github.com/facebook/react-native/commit/e8f7a1b5761)  
-- Lorenzo Sciandra <notkelset@kelset.dev> [bumped CLI version to 7](https://github.com/facebook/react-native/commit/848ba6fb1db) to get new version of Metro (67)  
+- [Updated gradle-download-task to 5.0.1](https://github.com/facebook/react-native/commit/a86cae7aacc) by Michel Kraemer michel.kraemer@igd.fraunhofer.de  
+- Gabriel Donadel Dall'Agnol donadeldev@gmail.com [Bumped shelljs from 0.8.4 to 0.8.5](https://github.com/facebook/react-native/commit/e8f7a1b5761)  
+- Lorenzo Sciandra notkelset@kelset.dev [bumped CLI version to 7](https://github.com/facebook/react-native/commit/848ba6fb1db) to get new version of Metro (67)  
 
 # Community
 

@@ -23,9 +23,9 @@ These changes [1](https://github.com/facebook/react-native/commit/88fe26d98bf) a
 
 # More Swipeable Card Examples 
 
-Andrei Shikov <ashikov@fb.com> adds more examples for the swipeable card with swipe-out animation. [The example](https://github.com/facebook/react-native/commit/1cc2229380e) also tries to reuse the underlying views by ensuring the card reuses the same React node and changes position based on zIndex.
+Andrei Shikov ashikov@fb.com adds more examples for the swipeable card with swipe-out animation. [The example](https://github.com/facebook/react-native/commit/1cc2229380e) also tries to reuse the underlying views by ensuring the card reuses the same React node and changes position based on zIndex.
 
-Andrei Shikov <ashikov@fb.com> has two cool patterns here in his code:
+Andrei Shikov ashikov@fb.com has two cool patterns here in his code:
 - Usage of zIndex to conserve views 
 - Usage of `StyleSheet.compose`
 - Usage of `React.memo` to reset the Animated Value on prop change: `React.useMemo(() => new Animated.Value(0), [props.color])`
@@ -243,7 +243,7 @@ For those who don't know `StyleSheet.compose`:
 
 # Pressable Foreground Ripple Support
 
-Nishan Bende <nishanbende@gmail.com> [implemented support](https://github.com/facebook/react-native/commit/0823f299e56) for Android's ripple effect for the Pressable component in [`#31632`](https://github.com/facebook/react-native/pull/31632). 
+Nishan Bende nishanbende@gmail.com [implemented support](https://github.com/facebook/react-native/commit/0823f299e56) for Android's ripple effect for the Pressable component in [`#31632`](https://github.com/facebook/react-native/pull/31632). 
 
 <video controls style={{ width: "100%", height: "auto" }}>
   <source src="https://user-images.githubusercontent.com/23293248/120111371-4cecbf00-c18f-11eb-8acb-d10718d5483c.mov" type="video/mp4" />
@@ -275,7 +275,7 @@ Well [now they removed](https://github.com/facebook/react-native/commit/7d1d4dc0
 # Accessible colors for DynamicColorIOS (#31651)
 
 Summary:
-From Birkir Gudjonsson <birkir.gudjonsson@gmail.com>, [this commit](https://github.com/facebook/react-native/commit/4b9d9dda270) allows you to harvest the `UIAccessibilityContrastHigh` trait from iOS to show accessible colors when high contrast mode is enabled.
+From Birkir Gudjonsson birkir.gudjonsson@gmail.com, [this commit](https://github.com/facebook/react-native/commit/4b9d9dda270) allows you to harvest the `UIAccessibilityContrastHigh` trait from iOS to show accessible colors when high contrast mode is enabled.
 
 ```jsx
 // usage
@@ -312,7 +312,7 @@ This is how apple's own dynamic system colors work under the hood (https://devel
 # Fix `setSnapToOffsets` crashing on Android if `snapToOffsets` is null (#31681)
 
  
-Maxime Bertheau <maxime@frontapp.com>, in [this commit](https://github.com/facebook/react-native/commit/ba387b91d3c) fixes a `NullException` crash from Android.
+Maxime Bertheau maxime@frontapp.com, in [this commit](https://github.com/facebook/react-native/commit/ba387b91d3c) fixes a `NullException` crash from Android.
 
 
 # Use default priority for text input on change
@@ -346,7 +346,7 @@ They expect to see more Kotlin code in React Native. 🙌
 
 # Support user-defined PlatformColors on iOS (#31258)
 
-[Contribution from](https://github.com/facebook/react-native/commit/36c0a7dec12) Joel Arvidsson <joel.arvidsson@klarna.com>.
+[Contribution from](https://github.com/facebook/react-native/commit/36c0a7dec12) Joel Arvidsson joel.arvidsson@klarna.com.
 
 In summary it gives iOS feature parity with Android in the sense that one can use user-defined native colors, something even the docs claim is possible. It's useful as it enables accessibility features such as high contrast colors and makes implementing dark mode simple. For an example on how it can be used, see https://github.com/klarna-incubator/platform-colors
 

@@ -17,7 +17,7 @@ This week covers updates from **January 25th to January 30th 2022.**
 
 # Fixed capitalize Text style [iOS]
 
-MaeIg <larochmael@hotmail.fr> [fixed a broken behavior](https://github.com/facebook/react-native/commit/8b5a5d46451) when using the style `textTransform: 'capitalize'` on iOS. It didn't handle dates well.
+MaeIg larochmael@hotmail.fr [fixed a broken behavior](https://github.com/facebook/react-native/commit/8b5a5d46451) when using the style `textTransform: 'capitalize'` on iOS. It didn't handle dates well.
 
 
 | **Before** | **After** |
@@ -28,16 +28,16 @@ _Note the difference in the "th"_.
 
 # Github Action to apply version label on issues 
 
-Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> [included a Github action](https://github.com/facebook/react-native/commit/4f1f42b0761) to apply version labels to opened issues.
+Gabriel Donadel Dall'Agnol donadeldev@gmail.com [included a Github action](https://github.com/facebook/react-native/commit/4f1f42b0761) to apply version labels to opened issues.
 
 # Make Easing an object
 
 
-Marshall Roch <mroch@fb.com>'s [small change](https://github.com/facebook/react-native/commit/851e87a1a6b) is just a reminder that you should use object instead of classes if you don't need your element to be constructed or subclassed.
+Marshall Roch mroch@fb.com's [small change](https://github.com/facebook/react-native/commit/851e87a1a6b) is just a reminder that you should use object instead of classes if you don't need your element to be constructed or subclassed.
 
 
 # Enable earger initialization of Fabric
-David Vacca <dvacca@fb.com> [enabled eager initialization](https://github.com/facebook/react-native/commit/9df02fff6b2) of Fabric on Android which was [previously implemented](https://github.com/facebook/react-native/commit/756eec6cf5a57117810fab1b17d472328da0abb7) under a feature flag back in May 14th of 2021.
+David Vacca dvacca@fb.com [enabled eager initialization](https://github.com/facebook/react-native/commit/9df02fff6b2) of Fabric on Android which was [previously implemented](https://github.com/facebook/react-native/commit/756eec6cf5a57117810fab1b17d472328da0abb7) under a feature flag back in May 14th of 2021.
 
 According to David:
 
@@ -48,7 +48,7 @@ _ps: I don't know what TTRC means, if you do tweet at me_
 
 
 # Enable react/no-unstable-nested-components rule
-Pieter De Baets <pieterdb@fb.com> [added](https://github.com/facebook/react-native/commit/988fefc44d3) the [no unstabled nested components ESLINT](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-unstable-nested-components.md) rule.
+Pieter De Baets pieterdb@fb.com [added](https://github.com/facebook/react-native/commit/988fefc44d3) the [no unstabled nested components ESLINT](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-unstable-nested-components.md) rule.
 
 > Dynamic nested components can cause tricky performance issues in React, as the reconciler will not be able to reuse the previously mounted component tree.
 
@@ -70,22 +70,22 @@ function Component() {
 
 # Support update for fnm 
 
-Max Thirouin <git@moox.io> fixed the [fnm](https://github.com/Schniz/fnm) integration that stopped working since 0.64. 
+Max Thirouin git@moox.io fixed the [fnm](https://github.com/Schniz/fnm) integration that stopped working since 0.64. 
 
 _fnm is a "fast node manager" to manage node version._ 
 
 # Shipped RuntimeScheduler yielding
 
-Samuel Susla <samuelsusla@fb.com> [removed the feature](https://github.com/facebook/react-native/commit/16ed62a850d) flag around the RuntimeScheduler yielding feature, this is part of the concurrent React scheduler work. [Back in April's edition I wrote a bit about the RuntimeScheduler.](/posts/2021-04-26/react-native-weekly)
+Samuel Susla samuelsusla@fb.com [removed the feature](https://github.com/facebook/react-native/commit/16ed62a850d) flag around the RuntimeScheduler yielding feature, this is part of the concurrent React scheduler work. [Back in April's edition I wrote a bit about the RuntimeScheduler.](/posts/2021-04-26/react-native-weekly)
 
 # Fix TouchTargetHelper [Android]
 
-Xin Chen <xch@fb.com> [fixed the math](https://github.com/facebook/react-native/commit/45244ebce22) for detecting if children views are in parent's overflowInset area on Android. 
+Xin Chen xch@fb.com [fixed the math](https://github.com/facebook/react-native/commit/45244ebce22) for detecting if children views are in parent's overflowInset area on Android. 
 
 
 # Fix execution of animation when a toValue of AnimatedValue is used
 
-Genki Kondo <gkondo@fb.com> [fixed an Animated API](https://github.com/facebook/react-native/commit/8858c211242) issue where passing another Animated value to the `toValue` field didn't sync the values.  
+Genki Kondo gkondo@fb.com [fixed an Animated API](https://github.com/facebook/react-native/commit/8858c211242) issue where passing another Animated value to the `toValue` field didn't sync the values.  
 
 ```javascript
   it('should start tracking immediately on animation start', () => {
@@ -103,7 +103,7 @@ Genki Kondo <gkondo@fb.com> [fixed an Animated API](https://github.com/facebook/
 ```
 # Add markEvent to QuickPerformanceLogger
 
-Dmytro Voronkevych <zloy@fb.com> extended [(1)](https://github.com/facebook/react-native/commit/0e39b95a45b) & [(2)](https://github.com/facebook/react-native/commit/12a67425ab0) React Native's QuickPerformanceLogger to have a `markEvent` method.
+Dmytro Voronkevych zloy@fb.com extended [(1)](https://github.com/facebook/react-native/commit/0e39b95a45b) & [(2)](https://github.com/facebook/react-native/commit/12a67425ab0) React Native's QuickPerformanceLogger to have a `markEvent` method.
 
 ```javascript
   markEvent(
@@ -116,13 +116,13 @@ Dmytro Voronkevych <zloy@fb.com> extended [(1)](https://github.com/facebook/reac
 
 # Upgrade OkHttp to fix security vulnerability: CVE-2021-0341 [Android]
 
-owjsub <owen@subsplash.com> [upgraded](https://github.com/facebook/react-native/commit/d6db5c54640) OkHttp from 4.9.1 to 4.9.2 to fix [CVE-2021-0341.](http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2021-0341)
+owjsub owen@subsplash.com [upgraded](https://github.com/facebook/react-native/commit/d6db5c54640) OkHttp from 4.9.1 to 4.9.2 to fix [CVE-2021-0341.](http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2021-0341)
 
 
 
 # Introduce AnimatedColor
 
-Genki Kondo <gkondo@fb.com> is implementing [1](https://github.com/facebook/react-native/commit/ea90a76efef) [2](https://github.com/facebook/react-native/commit/d3a0c4129d6) [3](https://github.com/facebook/react-native/commit/3f49e6763e6) the AnimatedColor API. It will enable us to natively animate colors using the Animated API.
+Genki Kondo gkondo@fb.com is implementing [1](https://github.com/facebook/react-native/commit/ea90a76efef) [2](https://github.com/facebook/react-native/commit/d3a0c4129d6) [3](https://github.com/facebook/react-native/commit/3f49e6763e6) the AnimatedColor API. It will enable us to natively animate colors using the Animated API.
 
 It currently supports RGBA, string values, native driver for Android. Upcoming changes will include support for iOS native driver and platform colors.
 
@@ -136,14 +136,14 @@ I wonder if this is a sign that with Fabric fully enabled animation APIs like Re
 
 # Use AssetManager buffer instead of copying bundle
 
-Pieter De Baets <pieterdb@fb.com> [patched the JSLoader](https://github.com/facebook/react-native/commit/b3c69e85d78) on Android to avoid copying the buffer into a JSBigBufferString during startup. According to Pieter this is duplicate work on Android since it already allocates a copy of the bundle in memory while decompressing the asset from the APK.
+Pieter De Baets pieterdb@fb.com [patched the JSLoader](https://github.com/facebook/react-native/commit/b3c69e85d78) on Android to avoid copying the buffer into a JSBigBufferString during startup. According to Pieter this is duplicate work on Android since it already allocates a copy of the bundle in memory while decompressing the asset from the APK.
 
 _ps: Too bad that the impact of this on startup wasn't measured._
 
 
 # RNTester App updated Android intents
 
-Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> [updated Android's AndroidManifest intents](https://github.com/facebook/react-native/commit/b897db0a61b) to include http/https URLs, phone numbers, and geolocation since RNTester app is using SDK 31.
+Gabriel Donadel Dall'Agnol donadeldev@gmail.com [updated Android's AndroidManifest intents](https://github.com/facebook/react-native/commit/b897db0a61b) to include http/https URLs, phone numbers, and geolocation since RNTester app is using SDK 31.
 
 
 `android/app/src/main/AndroidManifest.xml`
@@ -173,17 +173,17 @@ Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> [updated Android's AndroidMani
 
 # Added missing sources JAR into published artifacts [Android] 
 
-Kudo Chien <ckchien@gmail.com> [added the missing source](https://github.com/facebook/react-native/commit/384e1a0c7bc) jar into published Android artifacts back which broke in 0.66 when we moved to `maven-publish`. According to Kudo, the lack of these artifacts is not ideal for debug or tracing code.
+Kudo Chien ckchien@gmail.com [added the missing source](https://github.com/facebook/react-native/commit/384e1a0c7bc) jar into published Android artifacts back which broke in 0.66 when we moved to `maven-publish`. According to Kudo, the lack of these artifacts is not ideal for debug or tracing code.
 
 
 # Apply transform matrix in Yoga due to overflowInset [Android]
 
-Xin Chen <xch@fb.com> [fixed an issue](https://github.com/facebook/react-native/commit/8aa87814f62) with Android's overflowInset values that are used to figure out which view touch events belong to. Turns out his recent implementation of the overflowInset were not working with native animations (useNativeDriver: true). 
+Xin Chen xch@fb.com [fixed an issue](https://github.com/facebook/react-native/commit/8aa87814f62) with Android's overflowInset values that are used to figure out which view touch events belong to. Turns out his recent implementation of the overflowInset were not working with native animations (useNativeDriver: true). 
 
 
 # Introduce RuntimeScheduler::callImmediates
 
-Samuel Susla <samuelsusla@fb.com> [implemented](https://github.com/facebook/react-native/commit/6351064b756) `RuntimeScheduler::callImmediates`.
+Samuel Susla samuelsusla@fb.com [implemented](https://github.com/facebook/react-native/commit/6351064b756) `RuntimeScheduler::callImmediates`.
 
 According to him:
 

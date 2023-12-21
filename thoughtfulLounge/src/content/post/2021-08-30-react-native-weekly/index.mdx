@@ -16,7 +16,7 @@ Week 35 - this is everything that happened between the 23rd and 29th of August 2
 
 # Fix Gradle pacakgeTask and asserts dir for Android libraries
 
-Change by Leon Kiefer <leon.k97@gmx.de>.
+Change by Leon Kiefer leon.k97@gmx.de.
 
 This is an issue that started at 0.63. When building an android library the package task has a different name, which was not handled correctly in the react.gradle file. The fix uses the existing `packageTask` variable which is correctly set for applications and libraries. 
 
@@ -25,7 +25,7 @@ This is an issue that started at 0.63. When building an android library the pack
 
 # Add codegen.js wrapper around generate-specs.sh
 
-Héctor Ramos <hramos@fb.com> [wrapped the Shell script with a Node.js program](https://github.com/facebook/react-native/commit/cfb6c3cd0a7), I guess to make it more user friendly.
+Héctor Ramos hramos@fb.com [wrapped the Shell script with a Node.js program](https://github.com/facebook/react-native/commit/cfb6c3cd0a7), I guess to make it more user friendly.
 
 Usage:
 `node ./codegen.js --srcs ./js --modules_library_name FBReactNativeSpec`
@@ -37,7 +37,7 @@ Now you can set AccessibilityRole to 'tabbar'. [Change](https://github.com/faceb
 
 # Add window to jest setup
 
-Timo Mämecke <timomeh@users.noreply.github.com> in this [commit](https://github.com/facebook/react-native/commit/bc1c533833b) fixes an issue with tests where some libraries checked if window is undefined to determine if the code is running on a server:
+Timo Mämecke timomeh@users.noreply.github.com in this [commit](https://github.com/facebook/react-native/commit/bc1c533833b) fixes an issue with tests where some libraries checked if window is undefined to determine if the code is running on a server:
 
 ```js
 const isServer = typeof window === 'undefined'
@@ -57,14 +57,14 @@ In C++, RTTI's have a bad rep for having bad performance, increasing bundle size
 
 # Fixed dynamic behavior of Text adjustsFontSizeToFit={true} [Android]
 
-A fix by Valentin Shergin <valentin.shergin@coinbase.com>. He explains the `adjustsFontSizeToFit` was implemented in a way that expected the Yoga to call `onMeasure` on every text size change, which doesn't happen.  
+A fix by Valentin Shergin valentin.shergin@coinbase.com. He explains the `adjustsFontSizeToFit` was implemented in a way that expected the Yoga to call `onMeasure` on every text size change, which doesn't happen.  
 
 Since he believe the issue is fixed in Fabric, and the proper fix would be too invasive, [he included a workaround](https://github.com/facebook/react-native/commit/59021521e7a) to mark the node as dirty to force remeasuring by Yoga. 
 
 
 # onKeyPress event not fired with numeric keys [Android]
 
-[Diff](https://github.com/facebook/react-native/commit/ee3e71f5361) by fabriziobertoglio1987 <fabrizio.bertoglio@gmail.com>
+[Diff](https://github.com/facebook/react-native/commit/ee3e71f5361) by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com
 
 The TextInput onKeyPress event is not fired when pressing numeric keys on Android.
 
@@ -81,7 +81,7 @@ The method sendKeyEvent will dispatchKeyEvent only for:
 
 The latest Android 12 Beta build titled BLUETOOTH_ADVERTISE as a `dangerous` permissions requiring approval for them.
 
-[Diff](https://github.com/facebook/react-native/commit/2bcc6fac384) by Connor Tumbleson <connor@sourcetoad.com>
+[Diff](https://github.com/facebook/react-native/commit/2bcc6fac384) by Connor Tumbleson connor@sourcetoad.com
 
 
 
@@ -93,7 +93,7 @@ The latest Android 12 Beta build titled BLUETOOTH_ADVERTISE as a `dangerous` per
 
 [This change](https://github.com/facebook/react-native/commit/25c5d194ad3), while subtle, explains an interesting on going change to a new linker the core team is rolling out.
 
-Summary by Vincent Lee <leevince@fb.com>:
+Summary by Vincent Lee leevince@fb.com:
 LLD, our new iOS linker, is an ongoing effort to migrate our old outdated ld64 linker. As part of our effort to rollout LLD to all apps, we are making sure LLD reaches parity with ld64.
 
 Due to Identical Code Folding (ICF), LLD and ld64 handles strings differently. LLD treats each string as a separate object in memory even if the values of the strings are the same. ld64 happens to aggregate these values across files. This behavior creates a subtle difference on our codebase when we start comparing by value or by reference.
@@ -111,13 +111,13 @@ Part of the lean core initiative. [Removal](https://github.com/facebook/react-na
 
 # Show RedBox for C++ errors
 
-Sota Ogo <sota@fb.com> [hooked up the cxx error](https://github.com/facebook/react-native/commit/d6c879edbad) to the redbox, previously they were only being logged and with Fabric more errors will come from C++.
+Sota Ogo sota@fb.com [hooked up the cxx error](https://github.com/facebook/react-native/commit/d6c879edbad) to the redbox, previously they were only being logged and with Fabric more errors will come from C++.
 
 
 
 # Remove unsupported values for android_hyphenationFrequency [Android]
 
-[Diff](https://github.com/facebook/react-native/commit/a0d30b848a0) by Genki Kondo <gkondo@fb.com>
+[Diff](https://github.com/facebook/react-native/commit/a0d30b848a0) by Genki Kondo gkondo@fb.com
 
 ```diff
 diff --git a/Libraries/Text/TextProps.js b/Libraries/Text/TextProps.js
@@ -147,7 +147,7 @@ index b2a39e58df7..3942a5998cd 100644
 
 [This](https://github.com/facebook/react-native/commit/1acf3346145) fixes https://github.com/facebook/react-native/issues/20666 and https://github.com/facebook/react-native/issues/21918.
 
-Notes from Valentin Shergin <valentin.shergin@coinbase.com>:
+Notes from Valentin Shergin valentin.shergin@coinbase.com:
 
 This is pretty much the same as 51b3529f6c2ca354800c0cf6ecb8eb3115eaa36e but implemented for Android.
 Now Text exposes the actual base-line offset value that allows Yoga to position it properly when `alignItems: baseline` is requested.
@@ -162,7 +162,7 @@ After:
 
 # Optimize font handling on iOS (#31764)
 
-[A commit](https://github.com/facebook/react-native/commit/4ac42d88ef6) by Adlai Holler <adlai@google.com>. Certainly interesting to see a Google employee making a contribution to React Native ☺️. Adlai is someone who has contributed to Flutter as well.
+[A commit](https://github.com/facebook/react-native/commit/4ac42d88ef6) by Adlai Holler adlai@google.com. Certainly interesting to see a Google employee making a contribution to React Native ☺️. Adlai is someone who has contributed to Flutter as well.
 
 Summary by Adlai:
 
@@ -187,7 +187,7 @@ After:
 
 [Commit](https://github.com/facebook/react-native/commit/1bc885b8b85)
 
-Summary by Neil Dhar <neildhar@fb.com>:
+Summary by Neil Dhar neildhar@fb.com:
 Ship libjsi as a standalone dynamic library. This prevents problems
 with exception handling caused by duplicate typeinfo across multiple
 shared libs, and reduces bundle size by removing duplicate copies of

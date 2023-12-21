@@ -13,7 +13,7 @@ This is week 48 of 2021: November 22nd to 28th.
 
 # Complete Fabric Native Component Example [Android]
 
-[Last week](/posts/2021-11-22/react-native-weekly) we saw the commit that introduced the Fabric native component on iOS, this week, Nicola Corti <ncor@fb.com> [added the Android version](https://github.com/facebook/react-native/commit/2162bce44bb).
+[Last week](/posts/2021-11-22/react-native-weekly) we saw the commit that introduced the Fabric native component on iOS, this week, Nicola Corti ncor@fb.com [added the Android version](https://github.com/facebook/react-native/commit/2162bce44bb).
 
 A few things to notice:
 
@@ -131,7 +131,7 @@ index 00000000000..839d6ab4dbb
 
 # Fix onLayout prop bug on KeyboardAvoidingView
 
-[Work by](https://github.com/facebook/react-native/commit/9c5e177a79c) Jeffrey Hyer <jeffrey.hyer@rainfocus.com>, he fixed an issue where the KeyboardAvoidingView didn't work as expected when you provided it with the `onLayout` prop.
+[Work by](https://github.com/facebook/react-native/commit/9c5e177a79c) Jeffrey Hyer jeffrey.hyer@rainfocus.com, he fixed an issue where the KeyboardAvoidingView didn't work as expected when you provided it with the `onLayout` prop.
 
 According to Jeffrey: This happens because the KeyboardAvoidingView component relies on the onLayout prop internally, so when we supply the prop ourselves it overrides the internal implementation.
 
@@ -143,7 +143,7 @@ According to Jeffrey: This happens because the KeyboardAvoidingView component re
 
 # Introduce macros to mock C functions
 
-Phillip Pan <phillippan@fb.com> [introduced RCTMockDef](https://github.com/facebook/react-native/commit/749a9207b6f), a set of macros to mock C functions. If you are curious he adds an example of how to use it.
+Phillip Pan phillippan@fb.com [introduced RCTMockDef](https://github.com/facebook/react-native/commit/749a9207b6f), a set of macros to mock C functions. If you are curious he adds an example of how to use it.
 
 
 
@@ -155,7 +155,7 @@ Phillip Pan <phillippan@fb.com> [introduced RCTMockDef](https://github.com/faceb
 +        classpath("com.android.tools.build:gradle:7.0.1")
 ```
 
-[as a consequence of the above bump](https://github.com/facebook/react-native/commit/a5469f9d7fd), Nicola Corti <ncor@fb.com> updated the `libruntimeexector` to be a shared lib instead of a static lib, he comments:
+[as a consequence of the above bump](https://github.com/facebook/react-native/commit/a5469f9d7fd), Nicola Corti ncor@fb.com updated the `libruntimeexector` to be a shared lib instead of a static lib, he comments:
 
 > AGP 7.x is changing the path where we can find the precompiled static libraries. Therefore is getting complicated to share prebuilt `.a` files. I'm updating `libruntimeexecutor` to be a shared library instead so this will solve this issue for now.
 
@@ -168,7 +168,7 @@ Phillip Pan <phillippan@fb.com> [introduced RCTMockDef](https://github.com/faceb
 
 # Use NSInteger for NS_ENUM instead of NSUInteger
 
-[Small chore](https://github.com/facebook/react-native/commit/b8f0e975b7f) by Phillip Pan <phillippan@fb.com> for the code to follow [Apple's recommendation](https://developer.apple.com/library/content/releasenotes/ObjectiveC/ModernizationObjC/AdoptingModernObjective-C/AdoptingModernObjective-C.html).
+[Small chore](https://github.com/facebook/react-native/commit/b8f0e975b7f) by Phillip Pan phillippan@fb.com for the code to follow [Apple's recommendation](https://developer.apple.com/library/content/releasenotes/ObjectiveC/ModernizationObjC/AdoptingModernObjective-C/AdoptingModernObjective-C.html).
 
 
 

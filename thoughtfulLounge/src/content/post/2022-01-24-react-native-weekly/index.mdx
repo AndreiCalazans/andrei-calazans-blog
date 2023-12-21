@@ -18,15 +18,15 @@ This week covers updates from **January 18th to January 24th 2022.**
 
 # Improvements to MapBuffer
 
-Andrei Shikov <ashikov@fb.com> introduced a few improvements like [1](https://github.com/facebook/react-native/commit/5b489d5f95b), [2](https://github.com/facebook/react-native/commit/c338fff5212), [3](https://github.com/facebook/react-native/commit/b173bf3c0e9), [4](https://github.com/facebook/react-native/commit/d287598d237) to the MapBuffer which is a data type for transferring props between C++ and other VMs. 
+Andrei Shikov ashikov@fb.com introduced a few improvements like [1](https://github.com/facebook/react-native/commit/5b489d5f95b), [2](https://github.com/facebook/react-native/commit/c338fff5212), [3](https://github.com/facebook/react-native/commit/b173bf3c0e9), [4](https://github.com/facebook/react-native/commit/d287598d237) to the MapBuffer which is a data type for transferring props between C++ and other VMs. 
 
 # Fix NPE in ScrollView due to JS error [Android]
 
-Joshua Gross <joshuagross@fb.com> [fixed a null expection error crash](https://github.com/facebook/react-native/commit/2151d115271) happening in the ScrollView that would happen a consequence of an error happening from JavaScript, this NPE would hide the real reason of the crash - the JS error. 
+Joshua Gross joshuagross@fb.com [fixed a null expection error crash](https://github.com/facebook/react-native/commit/2151d115271) happening in the ScrollView that would happen a consequence of an error happening from JavaScript, this NPE would hide the real reason of the crash - the JS error. 
 
 # Auto-label PR opened against release branches
 
-Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> added this life of quality improvement by using Danger, see [the commit](https://github.com/facebook/react-native/commit/43e07a4941a) if you are interested on this works.
+Gabriel Donadel Dall'Agnol donadeldev@gmail.com added this life of quality improvement by using Danger, see [the commit](https://github.com/facebook/react-native/commit/43e07a4941a) if you are interested on this works.
 
 
 # Fix Alert's dismiss UI blocker [iOS]
@@ -51,12 +51,12 @@ For instance, calling `Alert.alert` as below than dismissing it.
     })
 ```
 
-Asaf Korem <asaf.korem@gmail.com> [fixes the underlying method](https://github.com/facebook/react-native/commit/a46a99e1203) by using the appropriate API for dismissing: `setHidden:YES`
+Asaf Korem asaf.korem@gmail.com [fixes the underlying method](https://github.com/facebook/react-native/commit/a46a99e1203) by using the appropriate API for dismissing: `setHidden:YES`
 
 
 # Fix hitSlop to be set with a single value [IOS]
 
-Pieter De Baets <pieterdb@fb.com> [fixed an iOS only](https://github.com/facebook/react-native/commit/3addafa5257) issue where hitSlop was not set with a single value.
+Pieter De Baets pieterdb@fb.com [fixed an iOS only](https://github.com/facebook/react-native/commit/3addafa5257) issue where hitSlop was not set with a single value.
 
 It was interesting to see how in Fabric this was already fixed because of the shared logic for all platforms.
 
@@ -66,7 +66,7 @@ It was interesting to see how in Fabric this was already fixed because of the sh
 
 [Issue 32898](https://github.com/facebook/react-native/issues/32898) described an bug in Android's dev environment where on connecting a JS bundle and having it fail the user would see a blank screen after reloading the JS bundle with the fix.
 
-[This commit](https://github.com/facebook/react-native/commit/c8d823b9bd9) by Sam Kline <samkline@users.noreply.github.com> fixes the issue by appropriately resetting ReactInstanceManager's state when createReactContext has an issue - this allows it to correctly restart.
+[This commit](https://github.com/facebook/react-native/commit/c8d823b9bd9) by Sam Kline samkline@users.noreply.github.com fixes the issue by appropriately resetting ReactInstanceManager's state when createReactContext has an issue - this allows it to correctly restart.
 
 ```java
 // Reset state and bail out. This lets us try again later.
@@ -77,27 +77,27 @@ It was interesting to see how in Fabric this was already fixed because of the sh
 
 # Fix RedBox displaying with LogBox on logged errors [IOS]
 
-[This commit](https://github.com/facebook/react-native/commit/9d2df5b8ae9) by Liam Jones <liam@stardive.co.uk> fixes an issue where calling `console.error` caused the RedBox to appear alongside the LogBox.
+[This commit](https://github.com/facebook/react-native/commit/9d2df5b8ae9) by Liam Jones liam@stardive.co.uk fixes an issue where calling `console.error` caused the RedBox to appear alongside the LogBox.
 
 
 
 # Migrate ScreenshotManager from NativeModule to TurboModule in RNTester
 
-Paige Sun <paigesun@fb.com> [added a patch](https://github.com/facebook/react-native/commit/b13e41d98e8) to migrate the ScreenshotManager to use its TurboModule version.
+Paige Sun paigesun@fb.com [added a patch](https://github.com/facebook/react-native/commit/b13e41d98e8) to migrate the ScreenshotManager to use its TurboModule version.
 
 While this is a simple change, what caught my attention was her comment that states how in "Bridgeless" mode using `NativeModules.<module>` will throw an error, it made me wonder if this means that TurboModules are backwards compatible, maybe not? 
 
 
 # Add platformConfig to the Animated API
 
-Eric Rozell <ericroz@fb.com> [added a way to pass an extra config object called platformConfig](https://github.com/facebook/react-native/commit/4a227ce2ab3) to the Animated API which can be helpful to optimize and experiment with different behaviors on different platforms, he gives the example of `react-native-windows`.  
+Eric Rozell ericroz@fb.com [added a way to pass an extra config object called platformConfig](https://github.com/facebook/react-native/commit/4a227ce2ab3) to the Animated API which can be helpful to optimize and experiment with different behaviors on different platforms, he gives the example of `react-native-windows`.  
 
 > The ability to pass an additional property bag to further configure NativeAnimated is useful for a few reasons, e.g., experimentation with multiple implementations of the NativeAnimated module.
 
 
 # Remove Detox 
 
-Lorenzo Sciandra <notkelset@kelset.dev> [removed Detox](https://github.com/facebook/react-native/commit/ac206aa814c) since was not being used in the core repo. At least for now until it is decided that it is needed again.
+Lorenzo Sciandra notkelset@kelset.dev [removed Detox](https://github.com/facebook/react-native/commit/ac206aa814c) since was not being used in the core repo. At least for now until it is decided that it is needed again.
 
 # Add `vendor/bundle` into .gitignore template 
 
@@ -106,16 +106,16 @@ Lorenzo Sciandra <notkelset@kelset.dev> [removed Detox](https://github.com/faceb
 
 # Add menu to test-manual-e2e script
 
-Gabriel Donadel Dall'Agnol <donadeldev@gmail.com> [extended the `test-manual-e2e`](https://github.com/facebook/react-native/commit/1ec399781df) script in the core repo to have a menu for you to choose which test you want to run. This script is specially useful to run things in the core repo like running the RNTester app or starting a template app.
+Gabriel Donadel Dall'Agnol donadeldev@gmail.com [extended the `test-manual-e2e`](https://github.com/facebook/react-native/commit/1ec399781df) script in the core repo to have a menu for you to choose which test you want to run. This script is specially useful to run things in the core repo like running the RNTester app or starting a template app.
 
 # Continue work on matching SVC and NVCs
 
-Ramanpreet Nara <ramanpreet@fb.com> [continued the work](https://github.com/facebook/react-native/commit/0343e697fdb) of making the Static View Configs match the Native View Configs and vice-versa. Learn more about this in [last weeek's post](/posts/2022-01-17/react-native-weekly).
+Ramanpreet Nara ramanpreet@fb.com [continued the work](https://github.com/facebook/react-native/commit/0343e697fdb) of making the Static View Configs match the Native View Configs and vice-versa. Learn more about this in [last weeek's post](/posts/2022-01-17/react-native-weekly).
 
 
 # Fix race condition in Websocket's implementation [IOS]
 
-Michelle Laurenti <asmeikal@me.com> [fixed an](https://github.com/facebook/react-native/commit/86db62b7a8b) where a race condition caused the WebSocket frame payloads to be processed incorrectly.
+Michelle Laurenti asmeikal@me.com [fixed an](https://github.com/facebook/react-native/commit/86db62b7a8b) where a race condition caused the WebSocket frame payloads to be processed incorrectly.
 
 According to the commit message:
 
@@ -127,7 +127,7 @@ According to the commit message:
 
 # Add pointerEvents prop support [Android]
 
-With Xin Chen <xch@fb.com> [patch](https://github.com/facebook/react-native/commit/48f6967ae88), Android's ScrollView now supports [pointerEvents prop](https://reactnative.dev/docs/next/view#pointerevents).
+With Xin Chen xch@fb.com [patch](https://github.com/facebook/react-native/commit/48f6967ae88), Android's ScrollView now supports [pointerEvents prop](https://reactnative.dev/docs/next/view#pointerevents).
 
 # Updated doc to disable Fabric in the RNTester
 

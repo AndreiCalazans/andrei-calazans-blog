@@ -28,7 +28,7 @@ b22a6d6e9d9 Remove Picker from Modal example
 
 # Avoid re-encoding images when uploading local files [FIX] [iOS]
 
-Arthur Lee <arthur.lee@chime.com> summarizes in his PR that when you upload a local image file the module behind it (`RCXTNetowrkTask`) ends up using `RCTLocalAssetImageLoader` to load that image, however during this load it puts that image onto a `UIImage` and re-encodes it using `UIImageJPEGRepresentation` with maximum compression quality. This inflates the size of the JPG specially for images previously compressed.
+Arthur Lee arthur.lee@chime.com summarizes in his PR that when you upload a local image file the module behind it (`RCXTNetowrkTask`) ends up using `RCTLocalAssetImageLoader` to load that image, however during this load it puts that image onto a `UIImage` and re-encodes it using `UIImageJPEGRepresentation` with maximum compression quality. This inflates the size of the JPG specially for images previously compressed.
 
 His [commit](https://github.com/facebook/react-native/commit/f78526ce3d4) fixes the issue by always using the  `RCTFileRequestHandler` for file loads irregardless if it is an image, this module puts the file into a `NSData` which is the required type for `multipart` data appending. 
 
@@ -150,7 +150,7 @@ Summary:
 > In stopSurface we destroy these EventEmitters which is not a threadsafe operation. Wrap usage and destruction of these wrappers to prevent crashes.
 
 
-This was not the only change, they are struggling with null pointers being passed around and called unchecked. Joshua Gross <joshuagross@fb.com> in this [PR](https://github.com/facebook/react-native/commit/006f5afe120) tries to make the entire EventEmitter module more resilient around null pointers.
+This was not the only change, they are struggling with null pointers being passed around and called unchecked. Joshua Gross joshuagross@fb.com in this [PR](https://github.com/facebook/react-native/commit/006f5afe120) tries to make the entire EventEmitter module more resilient around null pointers.
 
 
 # Flipper Update

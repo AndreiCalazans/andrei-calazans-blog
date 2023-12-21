@@ -13,7 +13,7 @@ This is week 51 2021: December 13th to 19th. Yo the year is almost gone now.
 
 # RCTAppSetupUtils helper
 
-Sota Ogo <sota@fb.com> refactored the iOS template by [moving the initial set up for iOS](https://github.com/facebook/react-native/commit/73a04d14525) in AppDelegate to a helper class.
+Sota Ogo sota@fb.com refactored the iOS template by [moving the initial set up for iOS](https://github.com/facebook/react-native/commit/73a04d14525) in AppDelegate to a helper class.
 
 The `RCTAppSetupUtils.mm` will make it easier to setup the new architecture.
 
@@ -22,12 +22,12 @@ Sota also renamed `AppDelegate.m` to `AppDelegate.mm` on this [other commit](htt
 
 # Fixed Mac M1 postinstall failure
 
-Simon Farshid <Yonom@users.noreply.github.com> and William Bell <williambell9708@outlook.com> [fixed the issue](https://github.com/facebook/react-native/commit/9cd40923362) where the postinstall workaround script failed on the Mac M1 if didn't set the `IPHONEOS_DEPLOYMENT_TARGET`
+Simon Farshid Yonom@users.noreply.github.com> and William Bell <williambell9708@outlook.com [fixed the issue](https://github.com/facebook/react-native/commit/9cd40923362) where the postinstall workaround script failed on the Mac M1 if didn't set the `IPHONEOS_DEPLOYMENT_TARGET`
 
 
 # Trigger codegen discovery when building
 
-Sota Ogo <sota@fb.com> made two changes to `react_native_pods.rb` related to the codegen discovery script, it finds where the codegen module are. Since it runs on Pod install, to avoid having to call pod install every time we build Sota added a trigger for calling this script on build. 
+Sota Ogo sota@fb.com made two changes to `react_native_pods.rb` related to the codegen discovery script, it finds where the codegen module are. Since it runs on Pod install, to avoid having to call pod install every time we build Sota added a trigger for calling this script on build. 
 
 He also modified it to only trigger the codegen discovery script for in-app library changes, if you need to make a temporary change to a library within node_modules you can call `USE_CODEGEN_DISCOVERY=1 pod install` to update the source.
 
@@ -38,7 +38,7 @@ He also modified it to only trigger the codegen discovery script for in-app libr
 
 # New architecture support for template app
 
-Sota Ogo <sota@fb.com> made a few commits to update the template app in the React Native repo to support the new architecture for iOS. With these changes, on the iOS template app you will able to enable the new architecture by running `RCT_NEW_ARCH_ENABLE=1 pod install`.
+Sota Ogo sota@fb.com made a few commits to update the template app in the React Native repo to support the new architecture for iOS. With these changes, on the iOS template app you will able to enable the new architecture by running `RCT_NEW_ARCH_ENABLE=1 pod install`.
 
 I'm not entirely sure if the `react-native-community/cli` points to the `react-native/template` but you can just download the `template` folder in `react-native` repo and run it with the new architecture enabled to test it.
 
