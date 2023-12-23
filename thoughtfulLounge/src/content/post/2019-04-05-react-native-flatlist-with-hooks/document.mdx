@@ -1,0 +1,189 @@
+
+<div>
+
+We want to render a list of finite items, it will render a list of random Startup names and also keep a local state of the selected favourites. 
+
+<div style={{ marginTop: 40, marginBottom: 20, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+<img style={{ display: 'block', margin: '0 auto' }} width="350" height="620" src={require('./FlatListWithFavorites.gif')} />
+<p>FlatList Gif</p>
+</div>
+
+
+
+Startup names list with React.Component, we could write it as the following:
+
+```jsx
+const data = randomWords({ exactly: 30, wordsPerString: 2 });
+
+export class StartUpNames extends React.Component {
+  state = {
+    favorites: [],
+  };
+
+  handlePress = (item) => {
+    this.setState(prevState => {
+      const { favorites } = prevState;
+      const isFavorite = favorites.includes(item);
+      return {
+        favorites: isFavorite
+          ? favorites.filter(title => title !== item)
+          : [item, ...favorites],
+      };
+    });
+  }
+
+  renderItem = ({ item, index }) => {
+    return (
+      <Row
+        title={item}
+        isFavorite={this.state.favorites.includes(item)}
+        onPress={this.handlePress}
+      />
+    );
+  };
+
+  // Names are randomly generated, add index for safety.
+  keyExtractor = (item, index) => item + index;
+
+  render() {
+    const { navigation } = this.props;
+    const { favorites } = this.state;
+    return (
+      <View style={styles.flex}>
+        <Header
+          navigate={navigation.navigate}
+          onMore={() => navigation.navigate('FavoriteStartUpNames')}
+          goBack={navigation.goBack}
+        />
+        <FlatList
+          extraData={favorites}
+          contentContainerStyle={styles.container}
+          data={data} // data is a constant values in the File scope.
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
+        />
+      </View>
+    );
+  }
+}
+```
+
+Special note to `extraData={favorites}` this is required since each item needs to know if it has been favourited. Besides the above, the FlatList is ordinary.
+
+How can we re-write this with hooks?
+
+```jsx
+const Row = ({ title, isFavorite, onPress }) => {
+  return (
+    <React.Fragment>
+      <View style={styles.row}>
+        <Text style={styles.rowText}>{title}</Text>
+        <IconButton
+          color={isFavorite ? colors.heartRed : colors.darkGray}
+          icon="favorite"
+          size={18}
+          onPress={() => onPress(title)}
+        />
+      </View>
+      <Divider />
+    </React.Fragment>
+  );
+};
+
+function keyExtractor(item: string, index: number) {
+  return item + index;
+}
+
+const data = randomWords({ exactly: 30, wordsPerString: 2 });
+
+function keyExtractor(item, index) {
+  return item + index;
+}
+
+const renderItem = ({ item, index, favorites, setFavorite }) => {
+  return <Row
+    title={item}
+    isFavorite={favorites.includes(item)}
+    onPress={item => {
+      setFavorite((favoriteItems) => {
+        let isFavorite = favoriteItems.includes(item);
+        if (isFavorite) {
+          return favoriteItems.filter((title) => title !== item);
+        }
+        return [item, ...favoriteItems];
+      });
+    }}
+  />;
+};
+
+export const StartUpNames = ({ navigation }) => {
+  const [favorites, setFavorite] = useState([]);
+  const renderItemCall = useCallback(({ item, index }) => renderItem({ item, index, favorites, setFavorite }));
+  return (
+    <View style={styles.flex}>
+      <Header
+        navigate={navigation.navigate}
+        onMore={() => navigation.navigate('FavoriteStartUpNames')}
+        goBack={navigation.goBack}
+      />
+      <FlatList
+        extraData={favorites}
+        contentContainerStyle={styles.container}
+        data={data} // data is a constant values in the File scope.
+        renderItem={renderItemCall}
+        keyExtractor={keyExtractor}
+      />
+    </View>
+  );
+};
+``` 
+
+Straight forward. There is a mindset change here, to avoid inline functions on the props, we are using useCallbackFor example this line:
+
+```jsx
+onMore={() => navigation.navigate('FavoriteStartUpNames')}
+``` 
+Could be turned into a useCallback.
+
+```jsx
+const onMoreCall = useCallback(() => navigation.navigate('FavoriteStartUpNames'), []);
+...
+<FlatList 
+  ...
+  onMore={onMoreCall}
+/>
+```
+
+The `[]` means it has no dependencies to worry about.
+There is performance issue with having an extra data dependency in the list which is not related to hooks, everytime our favoritesupdates it re-renders the whole list. This is not desired. 
+To avoid unnecessary re-renders on the Row component, we can leverage the memo
+API provided by React. Here is how it would look like if we wrapped the Row component with it:
+
+```jsx
+function propsAreEqual(prev, next) {
+  return prev.isFavorite === next.isFavorite;
+}
+
+const Row = memo(({ title, isFavorite, onPress }) => {
+  return (
+    <React.Fragment>
+      <View style={styles.row}>
+        <Text style={styles.rowText}>{title}</Text>
+        <IconButton
+          color={isFavorite ? colors.heartRed : colors.darkGray}
+          icon="favorite"
+          size={18}
+          onPress={() => onPress(title)}
+        />
+      </View>
+      <Divider />
+    </React.Fragment>
+  );
+}, propsAreEqual);
+```
+
+Previous to Hooks, we would need to transform Row into a class component and use shouldComponentUpdateto determine if the re-render was needed.
+
+To conclude, hooks brought a new way to do the same old things.
+
+</div>

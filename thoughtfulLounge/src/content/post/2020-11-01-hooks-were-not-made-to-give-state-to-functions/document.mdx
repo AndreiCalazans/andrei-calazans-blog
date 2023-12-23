@@ -1,0 +1,144 @@
+When I ask someone why were hooks created, I often get the simple answer of "to give functions state". That is not entirely true.
+
+Hooks were made to solve a set of real problems that React had previously to its implementation. The solution to these problems were in fact hooks - **a simpler lightweight primitive to add state or lifecycle to a component without classes**.
+
+But, what were the problems React had? 
+
+When React Hooks were introduced in React Conf 2018, [Sophie Alpert](https://twitter.com/sophiebits) presented three problems the React framework faced:
+
+- Reusing Logic
+- Giant Components
+- Confusing Classes
+
+
+<img style={{ width: '100%' }} src={require('./todays_react_problem_0.png')} />
+
+
+# Reusing Logic
+
+In order to reuse logic, the standard way was to lift up the logic into a wrapper. And with this emerged two patterns, first, Higher-Order-Components and another one called Render Props (some also described it as a Function-As-Child-Component).
+
+There are multiple posts on HOC and Render Props, take your time to go over them if you never heard of them.  
+
+
+Both patterns had similar problems. The main problem that was used as an argument by Sophie was the resulting "wrapper hell". Both HOC and Render Props added wrappers to your component tree, resulting in this unexpected large tree of components.
+
+<img style={{ width: '100%' }} src="https://blog.martinwork.co.kr/images/react/react-hooks01.png" />
+
+
+# Giant Components
+
+Classes and lifecycles introduced a lot of boilerplate and fragmentation of your code.  
+
+Take the following screenshot as an example:
+
+<img style={{ width: '100%' }} src={require('./react_class_fragmentation.jpeg')} />
+
+* The code highlighted in black is boilerplate forced by the usage of Classes. 
+* The code highlighted in yellow is logic related to resizing.
+* The code highlighted in teal is related to the page title plus user name.
+
+And as you can see by looking at the screenshot the logic ends up fragmented in multiple places. With hooks, it removes the boilerplate and groups the logic in blocks. The new approach makes it easier to understand the component.
+
+<img style={{ width: '100%' }} src={require('./react_hooks_colocation.png')} />
+
+*These screenshots were shared on Twitter by [Sunil Pai](https://twitter.com/threepointone), although I did not find the original tweet, I did find a reference to it [here](https://twitter.com/housecor/status/1141361071770542082?s=20)*
+
+
+# Confusing Classes
+
+<blockquote class="comment">
+<p>
+  Classes are hard for humans.
+</p>
+<br/>
+<p>
+- Sophie Alpert
+</p>
+</blockquote>
+
+When to use or not a constructor. Do I need to bind the `this` keyword? Do I not? Do I inline the binding or do I add it in the constructor? Which lifecycle do I use? And so on.
+
+So many questions related to using Class components that I even made two videos about it, [one](https://www.youtube.com/watch?v=tIK8ndsC4SE) and [two](https://www.youtube.com/watch?v=pTREFnFCh5E&t=2s). 
+
+
+<blockquote class="comment">
+<p>
+  Classes are also hard for machines
+</p>
+<br/>
+<p>
+- Sophie Alpert
+</p>
+</blockquote>
+
+
+[10:07](https://youtu.be/dpw9EHDh2bM?t=607)
+
+Sophie mentions how minified classes do not get their method names minified and any unused methods do not get stripped.
+
+
+
+# Thus
+
+The React Core team realized these 3 problems weren't separate problems.
+
+
+
+<blockquote class="comment">
+<p>
+  These aren't separate problems.
+</p>
+<br/>
+<p>
+- Dan Abramov
+</p>
+</blockquote>
+
+<i>12:42</i> <p class="was_said">because these are not three separate problems we think that these are three symptoms of one problem and the</p>
+
+
+
+<blockquote class="comment">
+<p>
+  The problem was the lack of a smaller lightweight primitive to add state or lifecycle other than classes.
+</p>
+<br/>
+<p>
+- Dan Abramov
+</p>
+</blockquote>
+
+<i>12:51</i> <p class="was_said">
+problem is that react does not provide a
+simpler smaller lightweight primitive to
+add state or lifecycle than a class
+component and so once you add a class
+component you can split it up further
+without introducing the wrapper hell and
+</p>
+
+<blockquote class="comment">
+<p>
+   Mixin had already solved this.
+</p>
+<br/>
+<p>
+- Dan Abramov
+</p>
+</blockquote>
+
+<i>13:18</i> <p class="was_said">
+years you might remember then when react
+came out it actually included a solution
+to this problem it was make sense so
+mix-ins allows you to reuse some methods
+</p>
+
+
+Nevertheless, mixins are not recommended. [Mixins are considered harmful.](https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html)
+
+# Conclusion
+
+With the aim of improving logic reuse, component size, and component complexity, React hooks was created.
+

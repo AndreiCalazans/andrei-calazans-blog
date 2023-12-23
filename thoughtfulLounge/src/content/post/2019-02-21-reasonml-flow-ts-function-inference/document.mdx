@@ -1,0 +1,118 @@
+
+<div>
+
+It's interesting how in ReasonML we don't need to worry much about writing types, its inference engine is nicely capable of
+infering most behavior. Take the following example:
+
+Imagine we want to use a function which takes another function as a callback parameter and calls it on its return. 
+
+**Plain JavaScript**
+
+```jsx
+const myFunction = () => 'some-string';
+
+const useSomeFunction = (anyFunction) => {
+  return anyFunction();
+}
+
+const result = useSomeFunction(myFunction); 
+/*
+  * Expect result to be equal to 'some-string',
+  * therefore its type should infer to string. 
+*/
+
+```
+
+Based on the JavaScript snippet above, `result` should always infer its type to the return value of the function passed to `useSomeFunction`. Now let's
+see how the different type checkers for JavaScript behave in this scenario.
+
+
+**TypeScript**
+
+```jsx
+const myFunction = () => 'some-string';
+
+const useSomeFunction = <FnType extends (...args: any[]) => any>(anyFunction: FnType): ReturnType<FnType> => {
+  return anyFunction();
+}
+
+const result = useSomeFunction(myFunction);
+// result is correctly infered to `string`
+
+```
+
+With TypeScript we can no longer just write the function, we must help TS to infer its bits. There are
+a couple things going on here.
+
+First to be able to infer any function passed as an argument to 
+`useSomeFunction` we must define a generic, which we called `FnType`, cast it as an extension of a function
+which can have any arguments and return anything `(...args: any[]) => any`. At the end to infer the return,
+we must get the return value of our generic function `FnType` by calling it with `ReturnType`.
+
+
+**Flow**
+
+```jsx
+const myFunction = () => 'some-string';
+
+function useSomeFunction<FnType: Function>(anyFunction: FnType): $Call<FnType> {
+  return anyFunction();
+}
+
+const result = useSomeFunction(myFunction);
+// result is correctly infered to `string`
+
+```
+
+With Flow it's not so different, a generic must also be defined, but instead of extending it we define its 
+type to be of a `Function`. Again the return is defined as `$Call<FnType>`. $Call is an utility helper just like `ReturnType`
+which gets the type of that function's return.
+
+
+**ReasonML**
+
+```jsx
+let myFunction = () => "some-string";
+
+let useSomeFunction = (anyFunction) => anyFunction();
+
+/* result is correctly infered to `string` */
+let result = useSomeFunction(myFunction);
+
+```
+
+With ReasonML no type annotation is required, its engine is capable of infering the type based on the use. 
+For example.
+
+It knows `anyFunction` is a function because we are calling it inside `useSomeFunction`. If we instead added a
+number:
+
+```jsx
+let myFunction = () => "some-string";
+
+let useSomeFunction = (anyFunction) => anyFunction + 2;
+
+let result = useSomeFunction(myFunction);
+
+```
+
+The above code would throw the following error:
+
+```jsx
+This has type:
+  unit -> string
+But somewhere wanted:
+  int
+```
+
+It knows that `anyFunction` has type of `unit -> string` but you were doing an addition so you wanted an `int`.
+
+This ability of infering types based on usage is an amazing feature of ReasonML, it lets you code faster
+and confidently. It's no wonder why Developers coming from other JavaScript Static types fall in love with ReasonML, 
+Static typing JS application can be become verbose and troublesome with TypeScript and Flow since one must know multiple helpers
+to achieve inference correctly. 
+
+
+This post was originally a Tweet, you can find it here: https://twitter.com/Andrei_Calazans/status/1098596699092779008
+
+</div>

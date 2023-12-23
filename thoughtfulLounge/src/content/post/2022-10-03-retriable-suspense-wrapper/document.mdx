@@ -1,0 +1,169 @@
+
+Rencetly, While I was thinking about the retry mechanism on Relay I realized how this could be solved purely at the Suspense level.
+
+Relay makes use of Suspense to a) trigger data requests and b) handle loading and error boundaries. This made me realize that we could retry a failed request by re-mounting that given component. 
+
+The following is an example of a catch error and retry logic for a "Suspenseful" component.
+
+<img src={require('./retry-demo.gif')} width="250px" />
+
+**Code**
+
+`App.js`
+
+```javascript
+import React, {Suspense, useEffect} from 'react';
+import {Button, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+
+import {RetriableSuspenseWrapper} from './RetriableSuspenseWrapper';
+
+const Resource = {
+  status: 'idle', // idle | pending | done
+  cache: null,
+  reset: function () {
+    this.status = 'idle';
+    this.cache = null;
+  },
+  read: function (throwError) {
+    if (throwError) {
+      this.reset();
+      throw new Error('Intentional failure ');
+    }
+
+    if (this.status === 'done') {
+      return this.cache;
+    }
+
+    this.cache = new Promise(res => {
+      setTimeout(() => {
+        res('REMOTE_DATA');
+      }, 1500);
+    }).then(resolution => {
+      this.status = 'done';
+      this.cache = resolution;
+    });
+
+    throw this.cache;
+  },
+};
+
+const styles = StyleSheet.create({
+  verticalSpacer: {height: 10},
+  title: {fontWeight: 'bold', fontSize: 18},
+  container: {
+    flex: 1,
+    background: 'lightgray',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+const ReadResource = ({throwError}) => {
+  const data = Resource.read(throwError);
+  useEffect(() => {
+    console.log('mount');
+    return () => console.log('unmount');
+  }, []);
+  return <Text>Hello world: {data}</Text>;
+};
+
+const App = () => {
+  const [id, setId] = React.useState(0);
+  const [triggerError, setTriggerError] = React.useState(false);
+  const errorFallback = ({error, retry}) => (
+    <View>
+      <Text>Sorry, something went wrong: {error.message}</Text>
+      <Button
+        title="Want to retry?"
+        onPress={() => {
+          setTriggerError(false);
+          retry();
+        }}
+      />
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>A retriable suspense wrapper</Text>
+      <View style={styles.verticalSpacer} />
+      <Suspense fallback={<Text>Suspense Loading...</Text>}>
+        {/* Using a new key will destroy component and remount it. */}
+        <View key={id}>
+          <RetriableSuspenseWrapper errorFallback={errorFallback}>
+            <ReadResource throwError={triggerError} />
+          </RetriableSuspenseWrapper>
+        </View>
+      </Suspense>
+      <View style={styles.verticalSpacer} />
+      <Button
+        title="Reload without cache reset"
+        onPress={() => {
+          setId(_id => ++_id);
+        }}
+      />
+
+      <Button
+        title="Reload everything"
+        onPress={() => {
+          Resource.reset();
+          setId(_id => ++_id);
+        }}
+      />
+      <Button title="Trigger error" onPress={() => setTriggerError(p => !p)} />
+    </SafeAreaView>
+  );
+};
+export default App;
+
+```
+
+`RetriableSuspenseWrapper.js`
+
+```javascript
+import React from 'react';
+
+export class RetriableSuspenseWrapper extends React.Component {
+  state = {
+    error: undefined,
+  };
+
+  componentDidCatch() {
+    // probaly want to log this
+    // console.warn(error, errorInfo);
+  }
+
+  static getDerivedStateFromError(error) {
+    return {error};
+  }
+
+  retry = () => {
+    this.setState({error: undefined});
+  };
+
+  render() {
+    if (this.state.error) {
+      return this.props.errorFallback({
+        retry: this.retry,
+        error: this.state.error,
+      });
+    }
+
+    return this.props.children;
+  }
+}
+
+```
+
+
+**What's happening here?**
+
+The logic is pretty straight forward. We render `RetriableSuspenseWrapper`'s child component wrapped by a [React error boundary](https://reactjs.org/docs/error-boundaries.html), when there is an error we render the `errorFallback` prop with a retry callback.
+
+The `Resource` in App.js is just a poorman's suspense resource, if you don't understand that reach out to me and I can write a post about it separately.
+
+If your suspending resource has logic to a) re-fetch on mount  and b) resets cached state when there is an error you should see your suspense element suspend again and refetch. 
+
+I feel like this should __just work (TM)__ with Relay, I will verify that next.
+

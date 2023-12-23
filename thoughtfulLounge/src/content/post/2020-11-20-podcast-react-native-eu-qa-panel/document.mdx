@@ -1,0 +1,370 @@
+
+[Youtube Video](https://www.youtube.com/watch?v=OHSe66Dhs7M&t=737s)
+
+# Participants
+
+- Monica Restrepo - Software Engineer at Major League Soccer
+- Kudo Chien - Software Engineer at CloudMosa
+- Eloy Duran - Principal Software Engineer at Microsoft
+- Ram N - an Engineering Manager at Oculus
+- Mike G. (Host) - Callstack CTO
+
+Questions grouped in 3 parts
+
+- New Architecture
+- Multiple Platforms
+- General Development Questions
+
+
+
+# Q: What's the status of React Native's re-architecture? 
+
+
+Ram mentions how there are no final date for the new architecture. It is an ongoing process. There were goals to finalize the work in 2020, but these were hindered by Covid-19. 
+
+
+<blockquote class="comment">
+<p>
+  Internally at Facebook we are already testing Fabric and Turbo Modules ... testing in heavily under way
+</p>
+<br/>
+<p>
+- Ram N @ 14:27
+</p>
+</blockquote>
+
+Plus, he also mentions Oculus started using Turbo Modules for its native modules. Facebook is trying a different approach focusing on screen by screen transition.
+
+
+**For Open Source**. at 15:36 he says both Fabric and Turbo modules are out there despite not being buildable due to the difference of the build systems used internally at Facebook. 
+
+*Facebook uses Buck to manage React Native builds internally. While the open source repository of React Native uses a mix of Gradlew and Xcode.*
+
+## He invites you to try to get it working with Gradlew. 
+
+
+<blockquote class="comment">
+<p>
+  Internally at Facebook we are already testing Fabric and Turbo Modules ... testing in heavily under way
+</p>
+<br/>
+<p>
+- Ram N @ 14:27
+</p>
+</blockquote>
+
+
+# Q: Where to keep up with the new changes coming to React Native? 
+
+
+<blockquote class="comment">
+<p>
+  That's the reason the repository discussions and proposals was created.
+</p>
+<br/>
+<p>
+- Ram N @ 17:50
+</p>
+</blockquote>
+
+[repository discussions and proposals](https://github.com/react-native-community/discussions-and-proposals)
+
+I also am keeping track of these changes on my own site, [here](https://andrei-calazans.com/posts/2020-10-27/keeping-up-with-react-native).
+
+<blockquote class="comment">
+<p>
+  The React Native Community organization at Github also has a Release repo.
+ 
+</p>
+<br/>
+<p>
+- Monica Restrepo @ 19:00
+</p>
+</blockquote>
+
+[React Native Community organization at Github](https://github.com/react-native-community)
+
+# Q: What's the feature you are most excited about?
+
+<blockquote class="comment">
+<p>
+  Turbo Modules. Tackles type safety and performance. 
+</p>
+<br/>
+<p>
+- Monica Restrepo @ 19:00
+</p>
+</blockquote>
+
+
+
+<blockquote class="comment">
+<p>
+  JSI. It's the foundation that builds all these new features. 
+</p>
+<br/>
+<p>
+- Ram N
+</p>
+</blockquote>
+
+He mentions NativeScript uses something similar to JSI in both the binding plus how it auto generates the bindings through code generation. 
+
+**JSI is ready**
+
+
+<blockquote class="comment">
+<p>
+  Fabric. Will enable fast scrolling and a better async UI work.
+</p>
+<br/>
+<p>
+- Eloy Duran
+</p>
+</blockquote>
+
+
+<blockquote class="comment">
+<p>
+  Fabric as well. It will make it easier to have out of tree platform.
+</p>
+<br/>
+<p>
+- Kudo
+</p>
+</blockquote>
+
+Kudo means platforms that are not supported by React Native core repository by default.
+
+
+Cross-platform comes to the topic next specially given how React Native has received contributions from Microsoft to create React Native bindings for Windows and Macos.
+
+# Q: What opportunities do we envision when it comes to sharing code between web, mobile, and desktop apps?
+
+Note, Eloy works with Microsoft.
+
+<blockquote class="comment">
+<p>
+  Any non-UI code or not dependent on the OS can be shared.
+</p>
+<br/>
+<p>
+- Eloy Duran
+</p>
+</blockquote>
+
+He mentions his experience at Artsy, and how if they ported their app to desktop the entire data layer would just work.
+
+
+<blockquote class="comment">
+<p>
+  Large portions of the UI would just work as well. The difference might be how you want it to look.
+</p>
+<br/>
+<p>
+- Eloy Duran
+</p>
+</blockquote>
+
+Eloy restates React Native's philosophy - that is not about writing it once and running it everwhere but rather learn once write everywhere. 
+
+
+
+<blockquote class="comment">
+<p>
+  There are some fundamental differences between mobile and desktop apps
+</p>
+<br/>
+<p>
+- Kudo
+</p>
+</blockquote>
+
+For example, the desktop UI has touchable and mouse over feedback plus multi-window support. These are not fully supported by React Native yet. 
+
+
+<blockquote class="comment">
+<p>
+  Microsft is currently working with React Native to bridge these touchable and mouse over feedbacks required by desktops.
+</p>
+<br/>
+<p>
+- Eloy Duran
+</p>
+</blockquote>
+
+
+
+
+# React Platforms as a Principle
+
+Ram digresses about how React's declarative paradigm makes it attractive to write renders for multiple platforms. 
+
+There are many React renderers available:
+- React 360
+- React Music?
+- React-pdf
+- React-ape
+- React DOM 
+
+    The list goes on. There is a large list [here](http://iamdustan.com/react-renderers/)
+
+    These are all siblings. Therefore, the data fetching layer can be reused across these libraries with the only difference at the UI layer. 
+
+
+<blockquote class="comment">
+<p>
+  It is very critical to embrace the platforms. We don't want to give up any platform specific interactions.
+</p>
+<br/>
+<p>
+- Ram N.
+</p>
+</blockquote>
+
+This goes hand-in-hand with Eli White's arguments of React Native's principles which you can learn from [here](https://andrei-calazans.com/posts/2020-10-20/podcast-eli-white-react-native-principles)
+
+
+# Q: Would a Skia renderer binding of React Native and synchronous access of the bridge make React Native an interesting alternative for Flutter developers?
+
+
+<blockquote class="comment">
+<p>
+  I've heard Flutter developers don't like React Native just because they don't like JavaScript. 
+</p>
+<br/>
+<p>
+- Kudo
+</p>
+</blockquote>
+
+
+Kudo goes on to say that [his Skia binding](https://github.com/Kudo/react-native-skia) is just an attempt to further learn about Fabric. And he does not think it makes a case for Flutter developers. His binding/project is very immature.
+
+
+<blockquote class="comment">
+<p>
+  I don't like to compare Flutter with React Native. They are different and there are good things on both sides.
+</p>
+<br/>
+<p>
+- Ram N.
+</p>
+</blockquote>
+
+Nevertheless, there is a place for both synchronous and asynchronous UI interactions. Depends on the priority of events.
+
+To learn more about [Flutter versus React Native I wrote a post that outlines everything you need to know](https://andrei-calazans.com/posts/2019-07-30/choose-between-flutter-react-native).
+
+
+<blockquote class="comment">
+<p>
+  It's like apples and oranges since they are not the same thing. 
+</p>
+<br/>
+<p>
+- Eloy Duran
+</p>
+</blockquote>
+
+
+
+<blockquote class="comment">
+<p>
+  There is a car manufectures that uses Flutter to render directly to a hardware, in a an embedded system. 
+</p>
+<br/>
+<p>
+- Mike G.
+</p>
+</blockquote>
+
+This makes perfect sense.
+
+
+# Q: For Eloy at Microsoft, how do you sync your React Native fork with the main repo?  
+
+
+react-native-windows is the most in-sync with the main repo.
+
+react-native-macos is the most out-of-sync with the main repo.
+
+Eloy mentions they pull all the changes and reapply to merge it with their forks. It's a very manual process. For Android,  they are using a set of patches strategy which gets applied to the base. 
+
+Windows has a slightly different Turbo Module API which they are working with RN to sync it.
+
+
+
+<blockquote class="comment">
+<p>
+  The concept of React Native was so great that it was faster for out-of-tree platforms to appear than for React Native to keep up with them.
+</p>
+<br/>
+<p>
+- Mike G.
+</p>
+</blockquote>
+
+Then he goes on to say how there is an ongoing effort to make out-of-tree platforms easier to create and maintain.
+
+*According to Mike someone banned the term "out-of-tree" platforms for just platforms 😅*
+
+
+# Q: Biggest performance problem you have faced with React Native? 
+
+
+<blockquote class="comment">
+<p>
+  Despite my focus on native performance and startup on React Native Europe, we also need be careful with JavaScript thread being super busy.
+</p>
+<br/>
+<p>
+- Param N.
+</p>
+</blockquote>
+
+
+Monica goes on to say how they at MLS are not exempt of performance issues. They have a lot of native code in their project and their biggest challenge has been a massive upgrade of their legacy android code to Android X.
+
+<blockquote class="comment">
+<p>
+  Legacy code on Android made it hard to upgrade to Android X.
+</p>
+<br/>
+<p>
+- Monica Restrepo 
+</p>
+</blockquote>
+
+# Q: What's the biggest challenge of transitioning a native development team/app to React Native?
+
+<blockquote class="comment">
+<p>
+  Divide the process in chunks and determine the compatibility
+</p>
+<br/>
+<p>
+- Monica Restrepo 
+</p>
+</blockquote>
+
+Monica says that despite React Native being amazing there are still third-party providers that don't follow the React Native mindset and thus require some tweaking. 
+
+To summarize, ideally you have to figure out what are the limitations and capabilities the native APIs you use have. Plus how do they fit with React Native.
+
+
+<blockquote class="comment">
+<p>
+  It's not only technological, but also about people.
+</p>
+<br/>
+<p>
+- Elloy Duran
+</p>
+</blockquote>
+
+You have to take into consideration the learning process of the native engineers and their psychological impact.
+
+Elloy's point goes in hand with the arguments that tried to explain why React Native failed at Airbnb.
+
+

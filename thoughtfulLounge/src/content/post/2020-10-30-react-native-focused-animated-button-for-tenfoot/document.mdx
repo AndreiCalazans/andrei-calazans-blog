@@ -1,0 +1,89 @@
+
+On 10ft devices visual feedback is required not only for presses but also for focus. The following is a simple implementation of such. 
+
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src={require('./AnimateItem.mp4')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+
+
+
+## Code
+
+```jsx
+
+ type Props = {
+    title: string;
+    onSelect: (title: string) => void;
+}
+
+function button(props: Props) {
+    const { onSelect, hub } = props;
+    const [isFocused, setFocused] = React.useState(false);
+    const animatedValue = React.useRef(new Animated.Value(0));
+    const textStyle = {
+        color: 'white',
+        fontWeight: isFocused ? 900 : 400,
+        opacity: animatedValue.current?.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0.5, 1],
+        }),
+        transform: [
+            {
+                scale: animatedValue.current.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 1.15],
+                }),
+            },
+        ],
+    };
+
+    const bottomBorderStyle = {
+        opacity: animatedValue.current?.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1],
+        }),
+        backgroundColor: '#053C69',
+        height: 3,
+        marginVertical: 4,
+        width: "80%",
+    };
+
+    const buttonStyle = { marginHorizontal: getScaledValue(35), alignItems: 'center' };
+
+    React.useLayoutEffect(() => {
+        Animated.spring(animatedValue.current, {
+            toValue: isFocused ? 1 : 0,
+            /**
+             * useNativeDriver: true only allows you to animate transform and opacity.
+             */
+            useNativeDriver: true,
+        }).start();
+    }, [isFocused]);
+
+    const handleFocus = () => {
+        setFocused(true);
+
+    };
+
+    const handleBlur = () => {
+        setFocused(false);
+    };
+
+    return (
+        <TouchableOpacity // You can later replace this for Touchable component if supported.
+            onPress={onPress}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            style={buttonStyle}
+        >
+            <Animated.Text style={textStyle}>{hub.Name}</Animated.Text>
+            <Animated.View style={bottomBorderStyle}></Animated.View>
+        </TouchableOpacity>
+    );
+}
+```
+
+

@@ -1,0 +1,743 @@
+
+In this tutorial, I go over how to create a native module in C++ to extend the functionality of React Native You.i components by tapping into its counterparts
+
+# Extending Functionality Of Native Elements
+
+The lists in `react-native-youi`: `ListRef`, `ScollView`, `FlatList`, all use `CYIListView` underneath as their counterpart.
+
+For your knowledge. All scene views in You.i Engine extends from CYISceneView and CYISceneNode.
+
+`CYIListView extends CYISceneView extends CYISceneNode`
+
+Knowing so helps when you need to check if a view element supports a given feature. You can view the public methods supported by these classes in the [Engine's documentation](https://developer.youi.tv/API_Docs/6.2/core/html/classCYISceneNode.html).
+
+Since not all features available in `CYIListView` are bridged to React Native, you can extend the lists with a native module to enable these features.
+
+For example, the ScrollView and FlatList don't have a prop for when its descendants receives or loses focus. But, the underlying [CYISceneNode has event signals for when its descendants received or lost focus](https://developer.youi.tv/API_Docs/6.2/core/html/classCYISceneNode.html#aa7012af7a3d5828dd4aa17429cacffc7). We can implement a native module to bridge these events.
+
+# The Goal
+
+- Add onListLostFocus Event
+- Add onListGainedFocus Event
+- Add onFocusChanged Event
+
+We want to encapsulate our module in a component that can be used by both the ScrollView and FlatList.
+
+The type interface will look like this:
+
+```
+type Base = {
+    onListLostFocus?: () => void;
+    onListGainedFocus?: (index: number) => void;
+    onFocusChanged?: (index: number) => void;
+};
+
+type WithScrollViewProps = {
+    scrollComponent: typeof ScrollView;
+    children?: ReactNode;
+} & Base &
+    ScrollViewProps;
+
+type WithFlatListProps<T> = {
+    scrollComponent: typeof FlatList;
+} & Base &
+    FlatListProps<T>;
+
+
+const ScrollViewExtension<T> = (props: WithScrollViewProps | WithFlatListProps<T>) => ReactNode;
+```
+
+# The Steps
+
+To achieve our goal let's break down the work in multiple steps:
+
+1. Implement Native Module
+
+2. Implement JS Component Interface
+
+# Write the native module class header in C++:
+
+For now we are going to:
+
+- Define the header file for the CounterpartExtension class
+- Add a method called extendCounterpart that takes a tag as an argument
+- Export the module with the name CounterpartExtension
+
+Create a file called `CounterpartExtension.h` inside `<root>/youi/src`.
+
+```diff
+@@ -0,0 +1,11 @@
++#pragma once
++
++#include <youireact/NativeModule.h>
++
++class YI_RN_MODULE(CounterpartExtension) {
++public:
++    CounterpartExtension();
++    YI_RN_EXPORT_NAME(CounterpartExtension);
++    YI_RN_EXPORT_METHOD(extendCounterpart)(uint64_t tag);
++};
++
+
+```
+
+> _Few things to notice here is the usage of macros like `YI_RN_MODULE` and others. These are to make our life easier. If you are curious to see what they are translating to take a look at this file: `~/youiengine/<engine_version>/include/react/youireact/NativeModule_inl.h`_
+
+# Implement the native module class in C++:
+
+Next we want to:
+
+- Write the implementation file (.cpp)
+- Write the method extendCounterpart
+- Get the counterpart element from the shadow tree using our React tag number
+
+Create a file called `CounterpartExtension.cpp` inside `<root>/youi/src` with the following content.
+
+```diff
+
+@@ -0,0 +1,28 @@
++#include "CounterpartExtension.h"
++
++#include <youireact/NativeModuleRegistry.h>
++#include <scenetree/YiSceneManager.h>
++
++#include <youireact/IBridge.h>
++#include <youireact/ShadowTree.h>
++
++using namespace folly;
++using namespace std;
++
++#define TAG "CounterpartExtension"
++
++YI_RN_INSTANTIATE_MODULE(CounterpartExtension);
++YI_RN_REGISTER_MODULE(CounterpartExtension);
++
++
++YI_RN_DEFINE_EXPORT_METHOD(CounterpartExtension, extendCounterpart)(uint64_t tag)
++{
++    // ShadowRegistry contains all of the items available in the ShadowTree (similar to the virtual DOM).
++    auto &shadowRegistry = GetBridge().GetShadowTree().GetShadowRegistry();
++    auto pComponent = shadowRegistry.Get(tag);
++    YI_ASSERT(pComponent, TAG, "Shadow view with tag %" PRIu64 " not found in ShadowRegistry.", tag);
++
++    // For every React Native component we have a corresponding Widget (counterpart) in the Engine.
++    auto pCounterpart = pComponent->GetCounterpart(); //CYISceneNode
++    YI_ASSERT(pCounterpart, TAG, "Shadow view with tag %" PRIu64 " doesn't have a counterpart.", tag);
++}
+
+```
+
+---
+
+> **SIDE NOTE - ** This is where you can start modifying the settings of your counterpart. When you retrieve a CYISceneNode counterpart you can cast it to the node it extends. For example, a FlatList extends the CYIListView so you can cast the CYISceneNode retrieved for a FlatList to a CYIListView by doing: `CYIListView * pListView = dynamic_cast<CYIListView *>(pCounterpart)` and so on.
+
+---
+
+# Connect to the CYISceneNode focus signals:
+
+Since we want to access methods available to the CYISceneNode. We do not need to cast it to any other CYINode.
+
+Now we can connect to [the focus signals](https://developer.youi.tv/API_Docs/6.2/core/html/classCYISceneNode.html#aa7012af7a3d5828dd4aa17429cacffc7).
+
+```diff
+M youi/src/CounterpartExtension.cpp
+@@ -25,4 +25,16 @@ YI_RN_DEFINE_EXPORT_METHOD(CounterpartExtension, extendCounterpart)(uint64_t tag
+     // For every React Native component we have a corresponding Widget (counterpart) in the Engine.
+     auto pCounterpart = pComponent->GetCounterpart(); //CYISceneNode
+     YI_ASSERT(pCounterpart, TAG, "Shadow view with tag %" PRIu64 " doesn't have a counterpart.", tag);
++
++    pCounterpart->DescendantLostFocus.Connect([](){
++        // Do what you need here.
++    });
++
++    pCounterpart->DescendantGainedFocus.Connect([](){
++        // Do what you need here.
++    });
++
++    pCounterpart->DescendantsChangedFocus.Connect([](){
++        // Do what you need here.
++    });
+ }
+```
+
+Within these lambda callbacks we can implement any logic we like. Now, every time a child of our view receives or loses focus one of these callbacks will be called.
+
+Since we rely only on the CYISceneNode, this module can be used with any React Native component (View, FlatList, ScrollView, TouchableOpacity, etc.).
+
+# How to send events back to React Native's JavaScript thread?
+
+We can send events by:
+
+- Extend yi::react::EventEmitterModule
+- Emit events with ReactComponent::EmitEvent (See `~/youiengine/<engine_version>/include/react/youireact/nodes/ReactComponent.h`)
+
+# Extend Event Emitter
+
+```diff
+M youi/src/CounterpartExtension.h
+@@ -1,8 +1,9 @@
+ #pragma once
+
+ #include <youireact/NativeModule.h>
++#include <youireact/modules/EventEmitter.h>
+
+-class YI_RN_MODULE(CounterpartExtension) {
++class YI_RN_MODULE(CounterpartExtension, yi::react::EventEmitterModule) {
+ public:
+     CounterpartExtension();
+     YI_RN_EXPORT_NAME(CounterpartExtension);
+```
+
+```diff
+M youi/src/CounterpartExtension.cpp
+@@ -11,7 +11,7 @@ using namespace std;
+
+ #define TAG "CounterpartExtension"
+
+-YI_RN_INSTANTIATE_MODULE(CounterpartExtension);
++YI_RN_INSTANTIATE_MODULE(CounterpartExtension, yi::react::EventEmitterModule);
+ YI_RN_REGISTER_MODULE(CounterpartExtension);
+
+```
+
+### Add Event Emitter To Implementation
+
+Now we can emit events back to JavaScript EventEmitter made available by extending `yi::react::EventEmitterModule`.
+
+Notice what is the type definition of EmitEvent
+
+`void EmitEvent(const std::string &event, folly::dynamic arguments);`
+
+You can check it out here `~/youiengine/<engine_version>/include/react/youireact/modules/EventEmitter.h`
+
+The `folly::dynamic` argument is a dynamic object. (@TODO - link basic intro into using folly::dynamic.)
+
+```diff
+M youi/src/CounterpartExtension.cpp
+@@ -11,6 +11,10 @@ using namespace std;
+
+ #define TAG "CounterpartExtension"
+
++#define LIST_GAINED_FOCUS "ListGainedFocus"
++#define LIST_LOST_FOCUS "ListLostFocus"
++#define LIST_CHANGED_FOCUS "ListChangedFocus"
++
+ YI_RN_INSTANTIATE_MODULE(CounterpartExtension, yi::react::EventEmitterModule);
+ YI_RN_REGISTER_MODULE(CounterpartExtension);
+
+@@ -28,13 +32,16 @@ YI_RN_DEFINE_EXPORT_METHOD(CounterpartExtension, extendCounterpart)(uint64_t tag
+
+-    pCounterpart->DescendantLostFocus.Connect([](){
++    pCounterpart->DescendantLostFocus.Connect([this](){
+         // Do what you need here.
++        EmitEvent(LIST_LOST_FOCUS, {});
+     });
+
+-    pCounterpart->DescendantGainedFocus.Connect([](){
++    pCounterpart->DescendantGainedFocus.Connect([this](){
++        EmitEvent(LIST_GAINED_FOCUS, {});
+         // Do what you need here.
+     });
+
+-    pCounterpart->DescendantsChangedFocus.Connect([](){
++    pCounterpart->DescendantsChangedFocus.Connect([this](){
++        EmitEvent(LIST_CHANGED_FOCUS, {});
+         // Do what you need here.
+     });
+ }
+
+```
+
+But, if you try the above you will notice this won't work. This is because EventEmitterModule requires you to define the supported events by this class. You can do that by calling `SetSupportedEvents` in the constructor:
+
+```diff
+M youi/src/CounterpartExtension.cpp
+@@ -18,6 +18,13 @@ using namespace std;
+ YI_RN_INSTANTIATE_MODULE(CounterpartExtension, yi::react::EventEmitterModule);
+ YI_RN_REGISTER_MODULE(CounterpartExtension);
+
++CounterpartExtension::CounterpartExtension() {
++    SetSupportedEvents({
++        LIST_GAINED_FOCUS,
++        LIST_LOST_FOCUS,
++        LIST_CHANGED_FOCUS
++    });
++}
+
+ YI_RN_DEFINE_EXPORT_METHOD(CounterpartExtension, extendCounterpart)(uint64_t tag)
+ {
+
+```
+
+# Write the React Component to extend the counterpart functionality
+
+In this part we want to create a component that will add the functionality of listening to focus events from children to any React Native component.
+
+To do this we will create a component that takes any other component as prop and adds the props we want.
+
+```TypeScript
+type Props = {
+    onListLostFocus?: () => void;
+    onListGainedFocus?: (index: number) => void;
+    onFocusChanged?: (index: number) => void;
+};
+```
+
+To go step by step. Let's first just add the file and a component that renders the component passed via props.
+
+```diff
+A CounterpartExtender.js
+@@ -0,0 +1,6 @@
++import React from 'react';
++
++export const CounterpartExtender = ({ component, ...remainingProps }) => {
++  const Comp = component;
++  return <Comp  {...remainingProps} />
++}
+```
+
+The component above can be used as follow `<CounterpartExtender component={View} />`, component can be any React Native component for now.
+
+**Get rendered component reference**
+
+```diff
+M CounterpartExtender.js
+@@ -1,6 +1,7 @@
+-import React from 'react';
++import React, { useRef } from 'react';
+
+ export const CounterpartExtender = ({ component, ...remainingProps }) => {
++  const compRef = useRef(null);
+   const Comp = component;
+-  return <Comp  {...remainingProps} />
++  return <Comp ref={compRef}  {...remainingProps} />
+ }
+```
+
+Since this is a functional component. We must do two things. Use `forwardRef` case anyone needs to reference the component passed down, and also use `useImperativeHandle` to pass the ref back up.
+
+> Note, if the usage of forwardRef & useImperativeHandle new to you read [React docs](https://reactjs.org/docs/hooks-reference.html#useimperativehandle) or check this [blog post](https://andrei-calazans.com/posts/2020-08-14/using-react-refs)
+
+```diff
+M CounterpartExtender.js
+@@ -1,7 +1,9 @@
+-import React, { useRef } from 'react';
++import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+
+-export const CounterpartExtender = ({ component, ...remainingProps }) => {
++export const CounterpartExtender = forwardRef(({ component, ...remainingProps }, ref) => {
+   const compRef = useRef(null);
++  // Send the ref back up to parent
++  useImperativeHandle(ref, () => compRef.current);
+   const Comp = component;
+   return <Comp ref={compRef}  {...remainingProps} />
+-}
++})
+```
+
+# Call extendCounterpart
+
+First, the `CounterpartExtension` is a native module you created, so it is available in the `NativeModules` singleton exported by `react-native`.
+
+We can get the `CounterpartExtension` and call the `extendCounterpart` method by doing:
+
+```diff
+M CounterpartExtender.js
+@@ -1,9 +1,16 @@
+-import React, { useRef, forwardRef, useImperativeHandle } from 'react';
++import React, { useRef, forwardRef, useImperativeHandle, useEffect } from 'react';
++import { NativeModules, findNodeHandle } from 'react-native';
+
+ export const CounterpartExtender = forwardRef(({ component, ...remainingProps }, ref) => {
+   const compRef = useRef(null);
+   // Send the ref back up to parent
+   useImperativeHandle(ref, () => compRef.current);
+   const Comp = component;
++
++    useEffect(() => {
++        const listTag = findNodeHandle(compRef.current);
++        NativeModules.CounterpartExtension.extendCounterpart(listTag);
++    }, []);
++
+   return <Comp ref={compRef}  {...remainingProps} />
+ })
+```
+
+Remember that our `extendCounterpart` method accepts a `uint64_t tag` which you can get it by using the `findNodeHandle` method provided by `react-native`.
+
+# Listen to events
+
+Import the `NativeEventEmitter` to listen to events coming from the `CounterpartExtension` module.
+
+```diff
+M CounterpartExtender.js
+@@ -1,15 +1,51 @@
+ import React, { useRef, forwardRef, useImperativeHandle, useEffect } from 'react';
+-import { NativeModules, findNodeHandle } from 'react-native';
++import { NativeModules, findNodeHandle, NativeEventEmitter } from 'react-native';
+
+-export const CounterpartExtender = forwardRef(({ component, ...remainingProps }, ref) => {
++const CounterpartExtensionEmitter = new NativeEventEmitter(
++    NativeModules.CounterpartExtension
++);
++
++export const CounterpartExtender = forwardRef(({
++  component,
++  onListLostFocus,
++  onListGainedFocus,
++  onFocusChanged,
++  ...remainingProps
++}, ref) => {
+   const compRef = useRef(null);
+   // Send the ref back up to parent
+   useImperativeHandle(ref, () => compRef.current);
+   const Comp = component;
+
+     useEffect(() => {
+-        const listTag = findNodeHandle(compRef.current);
+-        NativeModules.CounterpartExtension.extendCounterpart(listTag);
++      const listTag = findNodeHandle(compRef.current);
++      NativeModules.CounterpartExtension.extendCounterpart(listTag);
++
++      const listeners = [];
++
++      if (onListLostFocus) {
++        listeners.push(CounterpartExtensionEmitter.addListener(
++          "ListLostFocus",
++          onListLostFocus
++        ));
++      }
++
++      if (onListGainedFocus) {
++        listeners.push(CounterpartExtensionEmitter.addListener(
++          "ListGainedFocus",
++          onListGainedFocus
++        ));
++      }
++
++      if (onFocusChanged) {
++        listeners.push(CounterpartExtensionEmitter.addListener(
++          "ListChangedFocus",
++          onFocusChanged
++        ));
++      }
++
++      return () => listeners.forEach(listener => listener.remove());
++
+     }, []);
+
+   return <Comp ref={compRef}  {...remainingProps} />
+```
+
+Two things are happening here: we attach listeners in useEffect and remove them during the clean up callback.
+
+# Using CounterpartExtender
+
+Add the native files to your `SourceList.cmake`:
+
+```diff
+M youi/SourceList.cmake
+@@ -4,8 +4,10 @@
+ set (YI_PROJECT_SOURCE
+     src/App.cpp
+     src/AppFactory.cpp
++    src/CounterpartExtension.cpp
+ )
+
+ set (YI_PROJECT_HEADERS
+     src/App.h
++    src/CounterpartExtension.h
+ )
+```
+
+Use with your components:
+
+_We will remove the init templated JSX._
+
+```diff
+
+M index.youi.js
+@@ -2,47 +2,29 @@
+  * Basic You.i RN app
+  */
+ import React, { Component } from "react";
+-import { AppRegistry, Image, StyleSheet, Text, View } from "react-native";
++import { AppRegistry, Button, StyleSheet, View } from "react-native";
+ import { FormFactor } from "@youi/react-native-youi";
++import { CounterpartExtender } from './CounterpartExtender';
+
+ export default class YiReactApp extends Component {
+   render() {
+     return (
+-      <View style={styles.mainContainer}>
+-        <View style={styles.headerContainer}>
+-          <View
+-            style={styles.imageContainer}
+-            focusable={true}
+-            accessible={true}
+-            accessibilityLabel="You i TV logo"
+-            accessibilityHint="Image in your first app"
+-            accessibilityRole="image"
+-          >
+-            <Image
+-              style={styles.image}
+-              source={{ uri: "res://drawable/default/youi_logo_red.png" }}
+-            />
+-          </View>
+-        </View>
+-        <View style={styles.bodyContainer} focusable={true} accessible={true}>
+-          <Text
+-            style={styles.headlineText}
+-            accessibilityLabel="Welcome to your first You I React Native app"
+-          >
+-            Welcome to your first You.i React Native app!
+-          </Text>
+-          <Text
+-            style={styles.bodyText}
+-          >
+-            For more information on where to go next visit
+-          </Text>
+-          <Text
+-            style={styles.bodyText}
+-            accessibilityLabel="https://developer dot you i dot tv"
+-          >
+-            https://developer.youi.tv
+-          </Text>
+-        </View>
++      <View
++        style={styles.mainContainer}
++      >
++        <CounterpartExtender
++          component={View}
++          onListLostFocus={(e) => console.log('Lost Focus', e)}
++          onListGainedFocus={(e) => console.log('Gained Focus', e)}
++          onFocusChanged={(e) => console.log('Changed Focus', e)}
++          style={{ backgroundColor: 'lightblue' }}
++        >
++          <Button title="Button One" />
++          <Button title="Button Two" />
++          <Button title="Button Three" />
++          <Button title="Button Four" />
++        </CounterpartExtender>
++          <Button title="Outside box" />
+       </View>
+     );
+   }
+```
+
+Then build your app:
+
+`youi-tv build -p osx`
+
+Start the metro bundler
+
+`yarn start`
+
+Run the executable app
+
+`youi-tv run -p osx`
+
+Move around and you will see how the callbacks get called.
+
+![Sample](../../static/img/extended_counterpart_native_sample.png "Sample")
+
+# Supporting multiple CounterpartExtenders
+
+You will notice that if you use more than one CounterpartExtender, each one will get notified when there is an event. This happens because the native modules are in essence a singleton class. Thus, it requires some extra logic to know which component to notify.
+
+**Identifying via React Tag**
+
+We can use the React tag number to only notify the correct component. In your component you can filter the events coming from the module by the React tag.
+
+Thus, let's send the React Tag as a param of the event so our `CounterpartExtender` can differentiate, we will use the `folly::dynamic` library to help us create a dynamic object:
+
+```diff
+M youi/src/CounterpartExtension.cpp
+@@ -37,18 +37,23 @@ YI_RN_DEFINE_EXPORT_METHOD(CounterpartExtension, extendCounterpart)(uint64_t tag
+     auto pCounterpart = pComponent->GetCounterpart(); //CYISceneNode
+     YI_ASSERT(pCounterpart, TAG, "Shadow view with tag %" PRIu64 " doesn't have a counterpart.", tag);
+
+-    pCounterpart->DescendantLostFocus.Connect([this](){
+-        // Do what you need here.
+-        EmitEvent(LIST_LOST_FOCUS, {});
++    pCounterpart->DescendantLostFocus.Connect([this, tag](){
++        dynamic data = dynamic::object;
++        data["tag"] = tag;
++        EmitEvent(LIST_LOST_FOCUS, data);
+     });
+
+-    pCounterpart->DescendantGainedFocus.Connect([this](){
+-        EmitEvent(LIST_GAINED_FOCUS, {});
++    pCounterpart->DescendantGainedFocus.Connect([this, tag](){
++        dynamic data = dynamic::object;
++        data["tag"] = tag;
++        EmitEvent(LIST_GAINED_FOCUS, data);
+         // Do what you need here.
+     });
+
+-    pCounterpart->DescendantsChangedFocus.Connect([this](){
+-        EmitEvent(LIST_CHANGED_FOCUS, {});
++    pCounterpart->DescendantsChangedFocus.Connect([this, tag](){
++        dynamic data = dynamic::object;
++        data["tag"] = tag;
++        EmitEvent(LIST_CHANGED_FOCUS, data);
+         // Do what you need here.
+     });
+ }
+```
+
+All events now return the React tag to which parent they belong to.
+
+Then in the `CounterpartExtender` we can now filter the events -- we create `whenTag` function to only pipe the event callback when the tags match:
+
+```diff
+
+M CounterpartExtender.js
+@@ -5,6 +5,10 @@ const CounterpartExtensionEmitter = new NativeEventEmitter(
+     NativeModules.CounterpartExtension
+ );
+
++function whenTag(parentTag, callback) {
++  return ({ tag }) => parentTag == tag && callback();
++}
++
+ export const CounterpartExtender = forwardRef(({
+   component,
+   onListLostFocus,
+@@ -26,21 +30,21 @@ export const CounterpartExtender = forwardRef(({
+       if (onListLostFocus) {
+         listeners.push(CounterpartExtensionEmitter.addListener(
+           "ListLostFocus",
+-          onListLostFocus
++          whenTag(listTag, onListLostFocus)
+         ));
+       }
+
+       if (onListGainedFocus) {
+         listeners.push(CounterpartExtensionEmitter.addListener(
+           "ListGainedFocus",
+-          onListGainedFocus
++          whenTag(listTag, onListGainedFocus)
+         ));
+       }
+
+       if (onFocusChanged) {
+         listeners.push(CounterpartExtensionEmitter.addListener(
+           "ListChangedFocus",
+-          onFocusChanged
++          whenTag(listTag, onFocusChanged)
+         ));
+       }
+
+
+```
+
+# Further Customization for CYIListViews
+
+We can take this further. Our CounterpartExtender already supports using it with FlatList and ScrollView. But, we want to add more functionality to it so we can get the index of the element that received focused.
+
+To achieve so we will have to learn two things, how to cast our `CYISceneNode` to a `CYIListView` and how to use its methods inside the lambda callback.
+
+# Cast CYISceneNode to a CYIListView
+
+If we know the React tag we have is a React Native component that underneath extends the `CYIListView` we can cast its `CYISceneNode` to it.
+
+How do you find out?
+
+You can ask the Engine team or dig around the headers for the React Counterparts in `~/youiengine/<engine_version>/include/react/youireact/nodes`.
+
+For example, the `FlatList` and `ScrollView` both use the `ShadowScrollView` which uses the `CYIListView` counterpart.
+
+**Casting**
+
+```diff
+M youi/src/CounterpartExtension.cpp
+@@ -5,6 +5,7 @@
+
+ #include <youireact/IBridge.h>
+ #include <youireact/ShadowTree.h>
++#include <view/YiListView.h>
+
+ using namespace folly;
+ using namespace std;
+@@ -37,6 +38,8 @@ YI_RN_DEFINE_EXPORT_METHOD(CounterpartExtension, extendCounterpart)(uint64_t tag
+     auto pCounterpart = pComponent->GetCounterpart(); //CYISceneNode
+     YI_ASSERT(pCounterpart, TAG, "Shadow view with tag %" PRIu64 " doesn't have a counterpart.", tag);
+
++    CYIListView * pListView = dynamic_cast<CYIListView *>(pCounterpart);
++
+     pCounterpart->DescendantLostFocus.Connect([this, tag](){
+         dynamic data = dynamic::object;
+         data["tag"] = tag;
+```
+
+By casting you transformed you `CYISceneNode` into a `CYIListView`, and now you can call all of its public methods.
+
+# Return the item index in an event
+
+We only want to return an index when the parent is a `CYIListView`. And know this since the dynamic cast will return a `nullptr` if the cast fails.
+
+```diff
+M youi/src/CounterpartExtension.cpp
+@@ -46,16 +46,28 @@ YI_RN_DEFINE_EXPORT_METHOD(CounterpartExtension, extendCounterpart)(uint64_t tag
+         EmitEvent(LIST_LOST_FOCUS, data);
+     });
+
+-    pCounterpart->DescendantGainedFocus.Connect([this, tag](){
++    pCounterpart->DescendantGainedFocus.Connect([this, tag, pListView](){
+         dynamic data = dynamic::object;
+         data["tag"] = tag;
++
++        if (pListView)
++        {
++            data["index"] = pListView->GetFocusedItemIndex();
++        }
++
+         EmitEvent(LIST_GAINED_FOCUS, data);
+         // Do what you need here.
+     });
+
+-    pCounterpart->DescendantsChangedFocus.Connect([this, tag](){
++    pCounterpart->DescendantsChangedFocus.Connect([this, tag, pListView](){
+         dynamic data = dynamic::object;
+         data["tag"] = tag;
++
++        if (pListView)
++        {
++            data["index"] = pListView->GetFocusedItemIndex();
++        }
++
+         EmitEvent(LIST_CHANGED_FOCUS, data);
+         // Do what you need here.
+     });
+```
+
+This way we will only receive an index when the `CYIListView` cast succeeds.
+
+And don't forget to pass down the `index` in the callback of your events in `CounterpartExtender`.
+
+```diff
+M CounterpartExtender.js
+@@ -6,7 +6,7 @@ const CounterpartExtensionEmitter = new NativeEventEmitter(
+ );
+
+ function whenTag(parentTag, callback) {
+-  return ({ tag }) => parentTag == tag && callback();
++  return ({ tag, index }) => parentTag == tag && callback(index);
+ }
+
+ export const CounterpartExtender = forwardRef(({
+```
+
+But, how do I know which methods to use in the `CYIListView`?
+
+Remember to check the [documentation for it](https://developer.youi.tv/API_Docs/6.2/core/html/classCYIListView.html#aa8f8f5e2af50ab1f176d7a3aa7596173). In general, the You.i Engine has many features that are no exposed to `React Native` since the `react-native-youi` is relative new compared to the engine.
+
+# Conclusion
+
+That's it. We hope with this guide you are able to get a better grasp of how the You.i Engine works plus how you can take the `React Native You.i` binding even further by leveraging C++ and the Engine One's existing features.
+
+# Link to sample
+
+The sample is stored [here](https://github.com/AndreiCalazans/YouiEngineExtendRnComponents).
+

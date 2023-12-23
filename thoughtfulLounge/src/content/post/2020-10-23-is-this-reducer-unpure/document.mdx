@@ -1,0 +1,90 @@
+
+# TL:DR;
+
+Non-referential mutations that do not cause side-effects can not classify a reducer as unpure.
+
+
+# Unpure Reducer?
+
+Would you consider the following reducer unpure? 
+
+```jsx 
+
+export const reducer = (state: any, action: any) => {
+    switch (action.type) {
+        case Actions.TRIVIA_INIT: 
+            state = { ...state, trivia: action.payload, errors: { ...state.errors, triviaLoad: false }, loading: { ...state.loading, triviaLoad: false } };
+            break;
+        case Actions.TRIVIA_INIT_LOAD_ERROR:
+            state = { ...state, errors: {...state.errors, triviaLoad: true }, loading: { ...state.loading, triviaLoad: false }};
+            break;
+        case Actions.TRIVIA_INIT_LOAD:
+            state = { ...state, errors: {...state.errors, triviaLoad: false }, loading: { ...state.loading, triviaLoad: true } };
+            break;
+        case Actions.SET_RESULTS:
+            let total = 0, answers: any = [];
+            state.trivia.map( (t: any, idx: any ) => {
+                if ( t.correct_answer === action.payload[idx] ) {
+                    answers[idx] = true;
+                    total += 1;
+                } else answers[idx] = false;
+            });
+            state = { ...state, results: { ...state.results, answers, total } };
+            break;
+    }
+    return state;
+}
+
+```
+
+
+# **What Is Unpure?**
+
+
+Purity and side-effects, the connection. A function when called with the same arguments multiple times should always result in the same output. This is the main principle of function purity. It also means that a function should not have any side-effects, that is cause effects on other parts of our program. 
+
+# Can We Consider The Reducer Above Unpure? 
+
+You might say yes because of the mutation of state (`state = ...`). However, this quickly becomes a lesson on how JavaScript treats references.
+
+See this [StackOverflow answer](https://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value#:~:text=Javascript%20is%20always%20pass%20by,a%20new%20primitive%20or%20object.)
+
+In the answer you learn the difference between passing by value and reference. Objects are passed by reference, you can reassign it but if you modify one of its values you cause an unexpected side-effect. 
+
+
+For example:
+
+```jsx 
+function reassign(x) {
+  x = 12;
+}
+
+function changeValue(x) {
+  x.value = 33; // changes property of the object that has external reference
+}
+
+const a = 0;
+const b = { value: 12 };
+
+console.log(a) // 0
+reassign(a); 
+console.log(a) // 0
+
+console.log(b) // { value: 12 }
+reassign(a); 
+console.log(b) // { value: 12 }
+
+
+console.log(b) // { value: 12 }
+changeValue(a);  
+console.log(b) // { value: 33 }
+
+
+```
+
+
+# Conclusion
+
+The reducer above is not unpure. It does not change the value of the state object, it reassigns it. It would be unpure if it did `state.trivia = newObject`, but it is not the case. 
+
+Some might argue it is best to avoid mutations all together to not end up in these thoughtful conundrums. Nevertheless, one must always have the team's agreement on the approach plus outweigh the pros and cons. There are moments were mutation is desired given it should perform better than constantly creating new object values.  

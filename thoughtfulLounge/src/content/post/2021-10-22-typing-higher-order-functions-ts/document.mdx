@@ -1,0 +1,285 @@
+
+
+This is a funny story of how I needed TypeScript to properly type a situation and I couldn't figure it out so I ended up with an easier solution to the problem. Once I had the time, I took a deep dive into an actual type safe solution, this post is the result of this deep-dive.
+
+<hr />
+
+I [tweeted this](https://twitter.com/Andrei_Calazans/status/1449029976351772685) the other day.
+
+How do you type a function like `cacheResource`
+
+Code:
+
+```typescript
+const cacheResource = (callbackFn) => (...args) {
+    // if cache I'll return the results early of the callback
+    return callbackFn(...args);
+}
+```
+
+# Requirements
+
+There is more. The callback function I am passing to `cacheResource` is an asynchronous function that returns a Promise. _This makes things harder_.
+
+What I essentially want to do is:
+
+1) Cache an asynchronous function:
+
+```typescript
+type SomeAsyncFunction = (userId: string) => Promise<{ name: string, age: number }>;
+
+const cachedAsyncOne = cacheResource(someAsyncFunction, 'key_one');
+
+```
+2) Maintain the type signature of the cached function
+
+then use this `cachedAsyncOne` which will result early if we have the results of that function from a previous call. 
+
+But, all this while being type safe, I want `cacheAsyncOne` to match the type signature of `SomeAsyncFunction`.
+
+
+
+3) I want `cacheResource` function to be generic
+
+I need to be able to use `cacheResource` with any function without losing the original function's type or having to assert the type.
+
+
+
+# The easy option
+
+When I tried this during work I couldn't find a solution, I kept running into errors from TypeScript and I didn't have patience to figure it out. Thus, my solution was to have `cacheResource` only need to figure out the return type of the callback function instead of its arguments and return type.  
+
+The following is what I came up with:
+
+```typescript
+const cacheResource = async <T>(cacheKey: string, requestResource: () => Promise<T>) => {
+  const cachedData = await cache.get(cacheKey);
+  if (cachedData) {
+    return cachedData;
+  }
+
+  const data = await requestResource();
+  await cache.set(cacheKey, data);
+  return data;
+}
+```
+
+The above allows me to do:
+
+```typescript
+const user = cacheResource('user_data', () => getUser(params));
+```
+
+
+The above solution has one shortcoming. It is not a higher order function, so I can't for example export a `cachedUserRequest` have it reuse everywhere.
+
+
+# The Real Solution
+
+This is the actual solution:
+
+
+```typescript
+
+// Utility helper to get the type out of a Promise 
+type ReturnPromiseType<T extends (...args: any) => Promise<any>> = T extends (...args: any) => Promise<infer R> ? R : any;
+
+const cacheResource = <F extends (...args: any[]) => any>(callback: F, cacheKey: string) => async (...args: Parameters<F>): Promise<ReturnPromiseType<F>> => {
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+        return cachedData as ReturnType<F>; // assertion required because my cache returns unknown.
+    }
+    const data = await callback(...args);
+    cache.set(cacheKey, data);
+    return data;
+}
+
+```
+
+The above allows me to have:
+
+```typescript
+
+const promisedFn = async (argOne: number) => new Promise<number>(res => setTimeout(() => res(argOne + 1), 500));
+const promisedTwo = async (name: string) => new Promise<string>(res => setTimeout(() => res(String(name + 1)), 500));
+const promisedThree = async (name: string, age: number) => new Promise<{name: string, age: number }>(res => setTimeout(() => res({ name, age }), 500));
+
+const cachedFunction = cacheResource(promisedFn, 'one'); // (argOne: number) => Promise<number>
+const cachedFunctionTwo = cacheResource(promisedTwo, 'second'); // (name: string) => Promise<string>
+const cachedFunctionThree = cacheResource(promisedThree, 'third') // (name: string, age: number) => Promise<{name: string; age: number;}>
+
+```
+
+[Playground](https://www.typescriptlang.org/play?#code/FAFwngDgpgBASlEBXATgOwAooPYFsCWAzlACqRQA8JMUAHiFGgCaEwAUAdFwIYoDmhAFwxuaMAEoYAXgB8MLHiKVRYGXKkxqdBs1ace-ISLGTZ8nAWIV8aAGZQU8OQH54MYSoDcwYAGNsaIQgML7cvgAWUAiE2Ki+sBoUAMLcADapAEZhANYAYkhoviD4ATT0jCzsXBy8Ah5iANoAuqZyCpbKYmpsoelZvtnCKX05+YXFAQA0MNlQYMJBKDZ8rSKEYIVVBnXyvNy4iA6EyWmZowVFJWgy4sLtShQIyOj3xGTQJyMDY5cBatJyADewBgoJCASCMCY3BA3GkIgA7tx8MFemcBvoaoZxN4wTAUIhUGgoTDuN4AL4+fyBYJ8RAAVWIjg0bHwTAWICWaBWAPMimIHAJMVSADcoGxATA0PsoMIAOQAESQTCgcpg5JxVIhqLCkSYAHEGUz4aEIlEoDE4uK6SBGQ5pnKkEy5TiYAB6N3sNkcrk8syvSiS6UHH3LTzqmTAIA)
+
+
+But, how did I get to this solution is a story of its own.
+
+
+
+# Step One - Using Generics
+
+
+In essense this is what we want to do. The returned function's argument must be of the same type of the callback's argument.
+```typescript
+const cacheResource = (callback, key) => (...args) => {
+    return callback(...args);
+}
+```
+
+The above implies `any` for everything and errors out if you are in strict mode.
+
+
+We could set the type of the callback and arguments as static but then this wouldn't be a reusable function.
+
+Instead, we know we can use generics, so we try:
+
+
+```typescript
+const cacheResource = <CallbackFunction extends Function>(callback: CallbackFunction, key: string) => (...args: any[]) => {
+    return callback(...args);
+}
+
+const getUser = (id: string) => ({ name: 'Dude' });
+
+const cachedGetUser = cacheResource(getUser, 'user'); // (...args: any[]) => any
+```
+
+[Playground](https://www.typescriptlang.org/play?#code/MYewdgzgLgBMCGwAWBTASiiICuAnYKMAvDADwDC8ANlQEaIDWAYtmMFAJbgwoAeUKMABMIMFm07gAfAAoENesAYAuGJQWNx7LmAA0MBigCeq6Lg5gA5gEpiUmDIB0z+LksRV8MEYDaAXVsiewBvACgYCJhcFCg8MDhqOkYnFzcIawBuUIBfUNDQSFhLGIBVCBRcYgcOIVMocytA+xlgmDB4AFsUVQByABFsIRQemGzMvILoBOQUIQBxUvLKkgQZjCw8AhliqDKK-R7sJZ7MmAB6M4dnR1d3T29-JpgvI1CgA)
+
+_(*) `Function` is an utility type provided by TypeScript._
+
+
+The above does solve having a reusable function but the type is infering to `any`.
+
+
+# Step Two - Matching the return and argument types
+
+To get TypeScript to infer the type from the callback function we need to connect the type assertions. We need to say that the returned function arguments and return are the same as the `CallbackFunction`.
+
+To do this we need a way to (1) get the return type of `CallbackFunction` and (2) get the arguments of `CallbackFunction`.
+
+
+To get `CallbackFunction`'s return type we can use the [`ReturnType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype) utility provided by TypeScript.
+
+
+To get `CallbackFunction`'s arguments we can use the [`Parameters`](https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype) utility provided by TypeScript.
+
+```typescript
+
+const cacheResource = <CallbackFunction extends Function>(callback: CallbackFunction, key: string) => (...args: Parameters<CallbackFunction>): ReturnType<CallbackFunction> => {
+    return callback(...args);
+}
+
+const getUser = (id: string) => ({ name: 'Dude' });
+
+const cachedGetUser = cacheResource(getUser, 'user'); // (id: string) => { name: string; }
+
+```
+
+[Playground](https://www.typescriptlang.org/play?ssl=7&ssc=91&pln=1&pc=1#code/MYewdgzgLgBMCGwAWBTASiiICuAnYKMAvDADwDC8ANlQEaIDWAYtmMFAJbgwoAeUKMABMIMFm07gAfAAoENesAYAuGJQWNx7LmAA0MBigCeq6Lg5gA5gEpiUmDIB0z+LksRVABVfwAtigFcCApqOk1WbWlrVQwoPDAAFSMABxQQjSUtSTB7InsAbwAoGBKYXAD4uFDFBicXNwhrAG5CgF9CwtBIWEsAgFUIFFxiBw4hUyhzK1s8h3yYMD8UVQByABFsIRQVmFbmjq7oKuQUIQBxfsHhkgQTjCw8AhleqAGh-RXsK5XmmAB6P6jcYwMwWGx2GDzRb+CZTSxNXaFIA)
+
+At this point `cachedGetUser` finaly has the right type. But, we have two errors at the usage `Parameters` and `ReturnType`:
+
+
+```
+Type 'CallbackFunction' does not satisfy the constraint '(...args: any) => any'.
+  Type 'Function' is not assignable to type '(...args: any) => any'.
+    Type 'Function' provides no match for the signature '(...args: any): any'.(2344)
+```
+
+Turns out the `Function` type doesn't equal the generic `(...args: any) => any` expected by both `Parameters` and `ReturnType` so we need to change it.
+
+
+By looking at the error we change it to: `(...args: any) => any`
+
+```typescript
+const cacheResource = <CallbackFunction extends (...args: any) => any>(callback: CallbackFunction, key: string) => (...args: Parameters<CallbackFunction>): ReturnType<CallbackFunction> => {
+    return callback(...args);
+}
+```
+
+But now we have another error 😅 - [playground](https://www.typescriptlang.org/play?#code/MYewdgzgLgBMCGwAWBTASiiICuAnYKMAvDADwDC8ANlQEaIDWAYtmMFAJbgwoAeUKMABMIMABQA6KfFwBzCAC4Y8MAE8AlMQB8ytVrEIa9YAyWUjjFm07gANDAYpVS6Lg5hZmojsnS5imAAFGXgAWxQBXAgKajpLVnYuMC11JQwoPDAAFVUABxQYixMrRPAdbxgAbwAoGDqYXAjMuFjjBl8JGXl1AG5qgF9q6tBIWFkIgFUIFFxicQ4hFyg3Dy8fSpgwMJQlAHIAEWwhFF2Yft6hkegW5BQhAHFJ6dmSBFuMLDwCMXGoKZn7LtsM9dr0YAB6cHzRYwVzuTzaKqbbZLFayHpnapAA)
+
+On `return callback(...args)` we see:
+
+```
+Type 'Parameters<CallbackFunction>' must have a '[Symbol.iterator]()' method that returns an iterator.(2488)
+```
+
+
+At least this was easy to [find someone who figured it out](https://github.com/microsoft/TypeScript/issues/41728), all we needed to do is change our generic function signature to: `(...args: any[]) => any` we forgot to declara `...args` as `any[]` (the array adds the iterator).
+
+
+
+# Step Three - Declaring the callback as a promise
+
+The last part is making sure we set the callback as a promise. For this, we need to set the return types as Promises.
+
+```typescript
+const cacheResource = <CallbackFunction extends (...args: any[]) => Promise<any>>(callback: CallbackFunction, key: string) => async (...args: Parameters<CallbackFunction>): ReturnType<CallbackFunction> => {
+    return callback(...args);
+}
+
+const getUser = (id: string) => Promise.resolve({ name: 'Dude' });
+
+const cachedGetUser = cacheResource(getUser, 'user'); // (id: string) => Promise<{ name: string; }>
+```
+
+
+But! We are not done, there is an error.
+
+At `ReturnType<CallbackFunction>` it complains:
+
+```
+The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<any>'?
+```
+
+Well this is because we turned the return function into an async function so it expects to return a Promise. So we wrap it with a Promise as so `Promise<ReturnType<CallbackFunction>>`. 
+
+But, the above solution returns the incorrect type, it returns a Promise with another Promise: `Promise<Promise<User>>`
+
+To solve for the above we need to extract the type from the returned Promise of the `CallbackFunction` for the result to be `Promise<User>`.
+
+Thankfullly there are people smarter than me who [answered a question on how to unbox the type from a promise here](https://stackoverflow.com/a/67040496). So at the end we need to include this utility:
+
+```typescript
+type ReturnPromiseType<T extends (...args: any) => Promise<any>> = T extends (...args: any) => Promise<infer R> ? R : any;
+```
+
+And use it here as `Promise<ReturnPromiseType<CallbackFunction>>`
+
+```typescript
+type ReturnPromiseType<T extends (...args: any) => Promise<any>> = T extends (...args: any) => Promise<infer R> ? R : any;
+
+const cacheResource = <CallbackFunction extends (...args: any[]) => Promise<any>>(callback: CallbackFunction, key: string) => async (...args: Parameters<CallbackFunction>): Promise<ReturnPromiseType<CallbackFunction>> => {
+    const data = await callback(...args);
+    return data;
+}
+
+const getUser = (id: string) => Promise.resolve({ name: 'Dude' });
+
+const cachedGetUser = cacheResource(getUser, 'user'); // (id: string) => Promise<{ name: string; }>
+```
+
+[Playground](https://www.typescriptlang.org/play?#code/FAFwngDgpgBASlEBXATgOwAooPYFsCWAzlACqRQA8JMUAHiFGgCaEwAUAdFwIYoDmhAFwxuaMAEoYAXgB8MLHiKVRYGXKkxqdBs1ace-ISLGTZ8nAWIV8aAGZQU8OQH54MYSoDcwYAGNsaIQgML7cvgAWUAiE2Ki+sBoUAMLcADapAEZhANYAYkhoviD4ATT0jCzsXBy8Ah5iANoAuqZyCpbKYmpsoelZvtnCKX05+YXFAQA0MNlQYMJBKDZ8rSKEYIVVBnXyvNy4iA6EyWmZowVFJWgy4sLtShQIyOj3xGTQJyMDY5cBatJyADewBgoJCASCMCY3BA3GkIgA7tx8MFemcBvoaoZxN4wTAUIhUGgoTDuN4AL4+fyBYJ8RAAVWIjg0bHwTAWICWaBWAPMimIHAJMVSADcoGxATA0PsoMIAOQAESQTCgcpg5JxVIhqLCkSYAHEGUz4aEIlEoDE4uK6SBGQ5pnKkEy5TiYAB6N3sNkcrk8syvSiS6UHH3LTzqmTAIA)
+
+
+# Update
+
+When I shared this post on Twitter, [Mauro Titimoli](https://twitter.com/maurotitimoli) pointed out another way to solve it as well:
+
+```typescript
+type Fn<TArgs extends any[], TResult> = (...args: TArgs) => TResult;
+
+const test = <TArgs extends any[], TResult extends Promise<any>>(fn: Fn<TArgs, TResult>) => (...args: TArgs) => fn(...args);
+```
+
+[Playground](https://www.typescriptlang.org/play?#code/C4TwDgpgBAYgdgHgCoEEBOBzAzlCAPYCOAExwEM4QBtAXQBookAlCLAVwBtgA+KAXigAKAHSiymLAC5G6bAEp+vZq07AA3ACgNAYwD2cLMCiFD-KMlk58hEuUq0Gy9l1wEipKAAU0ugLYBLLAgEChBubkEAMzhpeAsJRxZnHgU+XhExCWlUCVTeaIzhcXlNHX1TNBUXARNgQUEwAAZpQzR-OAwGMABGaTg2XwAjCDQ8rx8AoOFKrF0OADcIBu65OUEAImA0Ngh1hm7GuS0gA)
+
+His approach helps TypeScript to infer the arguments and return of the callback function by connecting the generics together `TArgs extends any[], TResult extends Promise<any>` and `Fn<TArgs, TResult>`. This teaches us a lesson about TypeScript's inference engine, it can infer if you can tie the generics together.
+
+# That is it 😅
+
+If read the whole thing you should pat yourself in the back, you now have a better understanding of TypeScript's generics, function types, `Parameters` and `ReturnType` utility, and might be able to figure out how inference works if you paid attention to `ReturnPromiseType`. Congratulations.
+

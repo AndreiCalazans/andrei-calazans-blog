@@ -1,0 +1,75 @@
+
+I picked a broken service in the company that got ignored because the maintainer left the company, at this point I had no idea how things worked.
+
+The problem seemed to be that we expected an environment variable to be defined within a Github Action task but it was not.
+
+My immediate thought was to solve this by doing:
+
+```diff
++	       env: 
++         API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
++        API_PASSWORD: ${{ secrets.API_PASSWORD }}
+```
+
+However, when we ran the Action again it did not work.
+
+
+# The problem
+
+We are using `docker/build-push-action@v2` to run a Dockerfile and build a Docker image, and push it to Dockerhub. 
+
+When building this image we depend on the `process.env.API_ENDPOINT` to generate the latest GraphQL types from the server and it failed at this point because the variables were not defined.
+
+
+# How to solve the problem?
+
+<mark>At first I had no idea.</mark>
+
+And since the `env` field simply didn't work I did some research and found out that in order to make things a bit safer Docker allows you to pass `--secrets` to the `build` command that can read from the environment or even the local file system.
+
+# How do you access a Github secret within a Dockerfile when running Github Actions?
+
+I also didn't know, until I found this: [build-push-action/issues/390](https://github.com/docker/build-push-action/issues/390). 
+
+**Reading the secret**
+
+It turns out you can grab the secret passed via the `docker build --secrets` by using the `RUN` command as:
+
+`RUN --mount=type=secret,id=API_ENDPOINT` 
+
+This makes the secret `API_ENDPOINT` available as a file at  `/run/secrets/API_ENDPOINT` which you can in turn read and write to the environment variable by doing: `export API_ENDPOINT=$(cat /run/secrets/API_ENDPOINT)`  
+
+The end resut in my Dockerfile was:
+
+```docker
+RUN --mount=type=secret,id=API_ENDPOINT \
+  --mount=type=secret,id=API_PASSWORD \
+   export API_ENDPOINT=$(cat /run/secrets/API_ENDPOINT) && \
+   export API_PASSWORD=$(cat /run/secrets/API_PASSWORD) && \
+   yarn gen
+```
+
+
+**Writing the secret**
+
+We already had the Github secret set, and we also already knew that `docker/build-push-action@v2`  accepted the field  `secrets:` from Github Actions.
+
+```yaml
+...
+-
+      name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: g2idocker/auth:latest
+        secrets: |
+            "API_ENDPOINT=${{ secrets.API_ENDPOINT }}"
+            "API_PASSWORD=${{ secrets.API_PASSWORD }}"
+     -
+...
+```
+
+# That's it
+
+I write this for myself because I'm sure I might need this again one day.

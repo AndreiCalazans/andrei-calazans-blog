@@ -1,0 +1,53 @@
+import { ClassSetState, SetStateExample } from './SetStateExample';
+
+1. [Unmergeable State](#unmergeable)
+2. [Mergeable State](#mergeable)
+2. [Conclusion](#conclusion)
+
+
+<h2 id="unmergeable">Unmergeable state</h2>
+
+
+React's `useState` setter function does not automatically merge your state. This behavior is different from the class's `setState` function.
+
+For example:
+
+
+```jsx
+// Inside a functional component
+[state, setState] = useState({ name: 'Andrei' });
+
+// In a callback. When you call setState:
+setState({ age: 12 }); 
+```
+
+
+What is the resulting state after the setState call?
+
+<SetStateExample />
+
+
+
+<h2 id="mergeable">Mergeable State</h2>
+
+With Class' `setState` the behavior is different:
+
+```jsx
+// Inside a class component
+state = { name: 'Andrei' };
+
+// In a callback. When you call this.setState:
+this.setState({ age: 12 }); 
+
+```
+
+<ClassSetState />
+
+
+
+<h2 id="conclusion">Conclusion</h2>
+
+Don't be a victim to this change of behavior when you migrate to the `useState` and `useReducer` hooks. 
+
+
+
