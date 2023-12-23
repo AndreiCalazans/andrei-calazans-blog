@@ -87,7 +87,7 @@ Create a file called `CounterpartExtension.h` inside `<root>/youi/src`.
 
 ```
 
-> _Few things to notice here is the usage of macros like `YI_RN_MODULE` and others. These are to make our life easier. If you are curious to see what they are translating to take a look at this file: `~/youiengine/<engine_version>/include/react/youireact/NativeModule_inl.h`_
+> _Few things to notice here is the usage of macros like `YI_RN_MODULE` and others. These are to make our life easier. If you are curious to see what they are translating to take a look at this file: `~/youiengine/engine_version/include/react/youireact/NativeModule_inl.h`_
 
 # Implement the native module class in C++:
 
@@ -175,7 +175,7 @@ Since we rely only on the CYISceneNode, this module can be used with any React N
 We can send events by:
 
 - Extend yi::react::EventEmitterModule
-- Emit events with ReactComponent::EmitEvent (See `~/youiengine/<engine_version>/include/react/youireact/nodes/ReactComponent.h`)
+- Emit events with ReactComponent::EmitEvent (See `~/youiengine/engine_version/include/react/youireact/nodes/ReactComponent.h`)
 
 # Extend Event Emitter
 
@@ -214,7 +214,7 @@ Notice what is the type definition of EmitEvent
 
 `void EmitEvent(const std::string &event, folly::dynamic arguments);`
 
-You can check it out here `~/youiengine/<engine_version>/include/react/youireact/modules/EventEmitter.h`
+You can check it out here `~/youiengine/engine_version/include/react/youireact/modules/EventEmitter.h`
 
 The `folly::dynamic` argument is a dynamic object. (@TODO - link basic intro into using folly::dynamic.)
 
