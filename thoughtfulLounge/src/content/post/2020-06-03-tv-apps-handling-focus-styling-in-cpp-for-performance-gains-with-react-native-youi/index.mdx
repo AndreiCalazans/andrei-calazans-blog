@@ -4,6 +4,8 @@ description: "When specifying the behavior of a data structure component, there 
 publishDate: "2020-06-03"
 tags: ["react","react-native","You.i"]
 ---
+import user_input_explanation_cpp from './user_input_explanation_cpp.png';
+import border_on_focus from './border_on_focus.gif';
 
 
 1. [Why](#Why)
@@ -28,25 +30,26 @@ If you are building a TV app on very low-end devices like Fire TV stick and Roku
   <h2 id="current_scenario">The Current Scenario</h2>
 </div>
 
-User input is handled first in C++, then the events for `onFocus` and `onBlur` are dispatched for the JavaScript callbacks to be handle them. This results in an inevitable lag. Thus, if you are applying a visual feedback in React when the item receives focus or blur, it will happen after the actual input was handled. 
+User input is handled first in C++, then the events for `onFocus` and `onBlur` are dispatched for the JavaScript callbacks to be handle them. This results in an inevitable lag. Thus, if you are applying a visual feedback in React when the item receives focus or blur, it will happen after the actual input was handled.
 
-<img alt='User input explanation architecture' src={require('./user_input_explanation_cpp.png')} />
+<img alt='User input explanation architecture'
+src={user_input_explanation_cpp.src} />
 
-Initially, the difference between when the input is handled in C++ and the dispatch of the events to JavaScript is very little. However, since the JavaScript executor is running in a separate thread, it can be busy when the events are dispatched, thus causing the lag to increase. 
+Initially, the difference between when the input is handled in C++ and the dispatch of the events to JavaScript is very little. However, since the JavaScript executor is running in a separate thread, it can be busy when the events are dispatched, thus causing the lag to increase.
 
 <div>
   <h2 id="affect_effects">After Effects and Timelines</h2>
 </div>
 
-Since responding to events in C++ will result in a faster response, You.I Engine has a few default timelines in some AE widgets/components which have their timelines handled in C++. For instance, when you make use of the After Effects CYIPushButtonView, it has `FocusIn` and `FocusOut` timelines which you do not have to connect to in JavaScript for them to be played, they are automatically handled  by the Engine in C++ when the events occur. 
+Since responding to events in C++ will result in a faster response, You.I Engine has a few default timelines in some AE widgets/components which have their timelines handled in C++. For instance, when you make use of the After Effects CYIPushButtonView, it has `FocusIn` and `FocusOut` timelines which you do not have to connect to in JavaScript for them to be played, they are automatically handled  by the Engine in C++ when the events occur.
 
-There are some cases where using AE is not desired by the team. In these cases you can explore the following alternative to animate your button in response to Focus In and Focus out. 
- 
+There are some cases where using AE is not desired by the team. In these cases you can explore the following alternative to animate your button in response to Focus In and Focus out.
+
 <div>
   <h2 id="styling_in_js">Styling In JavaScript</h2>
 </div>
 
-What many decide to do is have a local state for focus, and when the button's `onFocus` and `onBlur` update that state to change the styling or trigger an animation. As was stated before this results in a lag. 
+What many decide to do is have a local state for focus, and when the button's `onFocus` and `onBlur` update that state to change the styling or trigger an animation. As was stated before this results in a lag.
 
 <div>
   <h2 id="styling_in_cpp">Styling in C++</h2>
@@ -74,7 +77,7 @@ class Button extends Component {
 
 If we wanted to add visual feedback natively to it, we can write a Native Module achieve this.
 
-`ButtonFocusManager.h` 
+`ButtonFocusManager.h`
 
 ```jsx
 ifndef ButtonFocusManager_h
@@ -86,7 +89,7 @@ class YI_RN_MODULE(ButtonFocusManager)
 {
 public:
     ButtonFocusManager();
-    
+
     YI_RN_EXPORT_NAME(ButtonFocusManager);
 
    YI_RN_EXPORT_METHOD(setItem)(uint64_t tag);
@@ -123,7 +126,7 @@ YI_RN_DEFINE_EXPORT_METHOD(ButtonFocusManager, setItem)(uint64_t tag)
     auto pComponent = shadowRegistry.Get(tag);
     YI_ASSERT(pComponent, TAG, "Shadow view with tag %" PRIu64 " not found in ShadowRegistry.", tag);
 
-    // For every React Native component we have a corresponding Widget (counterpart) in the Engine. 
+    // For every React Native component we have a corresponding Widget (counterpart) in the Engine.
     auto pCounterpart = pComponent->GetCounterpart();
     YI_ASSERT(pCounterpart, TAG, "Shadow view with tag %" PRIu64 " doesn't have a counterpart.", tag);
 
@@ -146,7 +149,7 @@ YI_RN_DEFINE_EXPORT_METHOD(ButtonFocusManager, setItem)(uint64_t tag)
 
 Result:
 
-<img width="100%" alt='Gif sample of module working' src={require('./border_on_focus.gif')} />
+<img width="100%" alt='Gif sample of module working' src={border_on_focus.src} />
 
 <div>
   <h2 id="conclusion">Conclusion</h2>

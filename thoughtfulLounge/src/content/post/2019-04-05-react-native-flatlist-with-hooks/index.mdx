@@ -4,13 +4,15 @@ description: "React Native recently added support to React hooks. Here is an ove
 publishDate: "2019-04-05"
 tags: ["react","react-native","hooks"]
 ---
+import FlatListWithFavorites from './FlatListWithFavorites.gif';
 
 <div>
 
 We want to render a list of finite items, it will render a list of random Startup names and also keep a local state of the selected favourites. 
 
 <div style={{ marginTop: 40, marginBottom: 20, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-<img style={{ display: 'block', margin: '0 auto' }} width="350" height="620" src={require('./FlatListWithFavorites.gif')} />
+<img style={{ display: 'block', margin: '0 auto' }} width="350" height="620"
+src={FlatListWithFavorites.src} />
 <p>FlatList Gif</p>
 </div>
 
@@ -142,19 +144,19 @@ export const StartUpNames = ({ navigation }) => {
     </View>
   );
 };
-``` 
+```
 
 Straight forward. There is a mindset change here, to avoid inline functions on the props, we are using useCallbackFor example this line:
 
 ```jsx
 onMore={() => navigation.navigate('FavoriteStartUpNames')}
-``` 
+```
 Could be turned into a useCallback.
 
 ```jsx
 const onMoreCall = useCallback(() => navigation.navigate('FavoriteStartUpNames'), []);
 ...
-<FlatList 
+<FlatList
   ...
   onMore={onMoreCall}
 />

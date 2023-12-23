@@ -5,13 +5,15 @@ publishDate: "2022-10-03"
 tags: ["react","Suspense"]
 ---
 
+import retryDemo from './retry-demo.gif';
+
 Rencetly, While I was thinking about the retry mechanism on Relay I realized how this could be solved purely at the Suspense level.
 
-Relay makes use of Suspense to a) trigger data requests and b) handle loading and error boundaries. This made me realize that we could retry a failed request by re-mounting that given component. 
+Relay makes use of Suspense to a) trigger data requests and b) handle loading and error boundaries. This made me realize that we could retry a failed request by re-mounting that given component.
 
 The following is an example of a catch error and retry logic for a "Suspenseful" component.
 
-<img src={require('./retry-demo.gif')} width="250px" />
+<img src={retryDemo.src} width="250px" />
 
 **Code**
 
@@ -169,7 +171,7 @@ The logic is pretty straight forward. We render `RetriableSuspenseWrapper`'s chi
 
 The `Resource` in App.js is just a poorman's suspense resource, if you don't understand that reach out to me and I can write a post about it separately.
 
-If your suspending resource has logic to a) re-fetch on mount  and b) resets cached state when there is an error you should see your suspense element suspend again and refetch. 
+If your suspending resource has logic to a) re-fetch on mount  and b) resets cached state when there is an error you should see your suspense element suspend again and refetch.
 
 I feel like this should __just work (TM)__ with Relay, I will verify that next.
 

@@ -4,39 +4,43 @@ description: "This post will walk you through the steps to create a Native View 
 publishDate: "2020-10-25"
 tags: ["react-native","You.i","how-to"]
 ---
+import rn_component_tree from './rn_component_tree.png';
+import counterpart_shadow_tree from './counterpart_shadow_tree.png';
+import ShadowNodeSpec from  './ShadowNodeSpec.png';
+import ManagerModuleSpec from './ManagerModuleSpec.png';
 
 1. [How React Native You.i Renders?](#Rendering)
-2. [How do you create a Native View Module](#HowToCreate)  
-2.1. [The Custom ShadowView](#CustomShadowView)  
-2.2. [The Custom Manager Module](#CustomManagerModule)  
-2.3. [JSX Component](#JSXComponent)  
-2.4. [Dealing With Layout Updates](#LayoutUpdates)   
-2.5. [Adding Props](#AddingProps)  
-     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2.5.1. [Value Props](#AddValueProps)  
-     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2.5.2. [Event Props](#EventProps)  
-2.5. [Adding Methods](#Methods)  
-2.5. [Adding Commands](#Commands)  
-3. [Why](#Why)  
+2. [How do you create a Native View Module](#HowToCreate)
+2.1. [The Custom ShadowView](#CustomShadowView)
+2.2. [The Custom Manager Module](#CustomManagerModule)
+2.3. [JSX Component](#JSXComponent)
+2.4. [Dealing With Layout Updates](#LayoutUpdates)
+2.5. [Adding Props](#AddingProps)
+     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2.5.1. [Value Props](#AddValueProps)
+     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2.5.2. [Event Props](#EventProps)
+2.5. [Adding Methods](#Methods)
+2.5. [Adding Commands](#Commands)
+3. [Why](#Why)
 
 
 
 <h1 id="Rendering">How React Native You.i Renders?</h1>
 
-Differently to React Native that uses each platform's UI widgets, You.i has its own rendering engine. And it provides a React Native binding for us to leverage its features. 
+Differently to React Native that uses each platform's UI widgets, You.i has its own rendering engine. And it provides a React Native binding for us to leverage its features.
 
 
-In order to render your JSX component tree, it keeps in memory a representation of it nicknamed Shadow Tree. It then renders its widgets based on the Shadow Tree you constructed via React Native. 
+In order to render your JSX component tree, it keeps in memory a representation of it nicknamed Shadow Tree. It then renders its widgets based on the Shadow Tree you constructed via React Native.
 
 
-The Shadow Tree lives in the main thread controlled in C++. Its nodes are composed of Counterparts. The Counterparts are JSX Components equivalents to the You.i Rendering Engine. For example, a React Native is represented by a CYISceneView Counterpart. 
+The Shadow Tree lives in the main thread controlled in C++. Its nodes are composed of Counterparts. The Counterparts are JSX Components equivalents to the You.i Rendering Engine. For example, a React Native is represented by a CYISceneView Counterpart.
 
 **The React Native Component Tree:**
 
-<img style={{ width: '100%' }} src={require('./rn_component_tree.png')} />
+<img style={{ width: '100%' }} src={rn_component_tree.src} />
 
 **Resulting Shadow Tree:**
 
-<img style={{ width: '100%' }} src={require('./counterpart_shadow_tree.png')} />
+<img style={{ width: '100%' }} src={counterpart_shadow_tree.src} />
 
 Hence we need to create a Shadow Node to create a custom native view.
 
@@ -44,40 +48,40 @@ Hence we need to create a Shadow Node to create a custom native view.
 
 <h1 id="HowToCreate">How do you create a Native View?</h1>
 
-We need to create a Shadow Node and a Manager for us to set the props, events, and methods it supports. 
+We need to create a Shadow Node and a Manager for us to set the props, events, and methods it supports.
 
 ### ShadowNode Overview
 
-<img style={{ width: '100%' }} src={require('./ShadowNodeSpec.png')} />
+<img style={{ width: '100%' }} src={ShadowNodeSpec.src} />
 
 
 ### ManagerModule Overview
 
-<img style={{ width: '100%' }} src={require('./ManagerModuleSpec.png')} />
+<img style={{ width: '100%' }} src={ManagerModuleSpec.src} />
 
 <br/>
 <br/>
 
-The Shadow Node is responsible for setting what the Counterpart will be. The counterpart is responsible for the rendering. 
+The Shadow Node is responsible for setting what the Counterpart will be. The counterpart is responsible for the rendering.
 
 
 You.i's Engine One has multiple scene views you can use, see the following [link](https://developer.youi.tv/API_Docs/5.18/core/html/group__sceneview.html) to its documentation. Not all of these views are supported by React Native You.i, which makes it a perfect case for us to bridge it ourselves to leverage its features.
 
-For this example, we will simply create a custom CYISceneView. This is the groundwork that would be required for us to embed a completely native view into our React Native You.i App. 
+For this example, we will simply create a custom CYISceneView. This is the groundwork that would be required for us to embed a completely native view into our React Native You.i App.
 
 
 <h2 id="CustomShadowView">The Custom ShadowView</h2>
 
-Create a class that extends the ShadowView. The ShadowView is a common base class used for You.i's views. 
+Create a class that extends the ShadowView. The ShadowView is a common base class used for You.i's views.
 
 **Tip: You can always explore the available classes by looking inside ~/youiengine/<engine_versio>/include**
 
-If you look in **~/youiengine/6.0.0/include/react/youireact/nodes/ShadowView.h** and search for the virtual methods you will see all of the methods you can override/implement yourself. 
+If you look in **~/youiengine/6.0.0/include/react/youireact/nodes/ShadowView.h** and search for the virtual methods you will see all of the methods you can override/implement yourself.
 
-Despite the many options, we will focus only on the **CreateCounterpart** and **GetCounterpart**  for now. 
+Despite the many options, we will focus only on the **CreateCounterpart** and **GetCounterpart**  for now.
 
 
-Remember: 
+Remember:
 
 > The Counterparts are JSX Components equivalents to the You.i Rendering Engine. For example, a React Native is represented by a CYISceneView Counterpart
 
@@ -166,7 +170,7 @@ CYISceneView *NativeShadowView::GetCounterpart()
 <h2 id="CustomManagerModule">The Custom Manager Module</h2>
 
 
-```jsx   
+```jsx
 #pragma once
 
 #include <youireact/modules/components/AbstractComponentManagerModule.h>
@@ -192,7 +196,7 @@ protected:
 ```
 
 
-```jsx   
+```jsx
 
 #include "NativeManager.h"
 #include "NativeShadowView.h"
@@ -222,12 +226,12 @@ void NativeManager::SetupProperties()
 {
 
     IViewManager::SetupProperties();
-    
+
 }
 
 ```
 
-The You.i Core team has made it easy for us to implement a manager module by providing us with Macros (YI\_RN\_OVERRIDE\_*) to override the virtual methods. 
+The You.i Core team has made it easy for us to implement a manager module by providing us with Macros (YI\_RN\_OVERRIDE\_*) to override the virtual methods.
 
 Once you have these two classes you need to include them in your SourceList.cmake file for it to be included during compilation.
 
@@ -269,17 +273,17 @@ render() {
 
 <h2 id="LayoutUpdates">Dealing With Layout Updates</h2>
 
-Both the ShadowView and AbstractComponentManagerModule has OnLayoutApplied callbacks for you to add any logic when this happens. You will only need to worry about these if you are using the ShadowView as a window to another native element. 
+Both the ShadowView and AbstractComponentManagerModule has OnLayoutApplied callbacks for you to add any logic when this happens. You will only need to worry about these if you are using the ShadowView as a window to another native element.
 
 
 <h2 id="AddingProps">Adding Props</h2>
 
-When adding props, there are two separate ways to implement them. The first way is for props that represent values. The second way are for props that are callbacks/event handlers. 
+When adding props, there are two separate ways to implement them. The first way is for props that represent values. The second way are for props that are callbacks/event handlers.
 
 
 <h3 id="AddValueProps">Value Props</h3>
 
-To set value props, you need to configure them in two places within the Manager Module class, in GetNativeProps and  SetupProperties. 
+To set value props, you need to configure them in two places within the Manager Module class, in GetNativeProps and  SetupProperties.
 
 
 <mark>GetNativeProps</mark>
@@ -320,7 +324,7 @@ It is up to you when you want to perform logic based on the prop update. To keep
 
 <h3 id="EventProps">Event Props</h3>
 
-For event props, you need to define the event name and callback name in the ShadowNode using the **YI\_RN\_DIRECT\_\*** macros. 
+For event props, you need to define the event name and callback name in the ShadowNode using the **YI\_RN\_DIRECT\_\*** macros.
 
 ```jsx
 
@@ -342,7 +346,7 @@ public:
     YI_RN_EXPORT_DIRECT_EVENT_NAME(onStateChangeName);
 
 private:
-    
+
     virtual std::unique_ptr<CYISceneNode> CreateCounterpart(CYISceneManager *pSceneManager) override;
 
     YI_TYPE_BASES(NativeShadowView, ShadowView);
@@ -384,7 +388,7 @@ With the above you can now emit back to JSX by calling **EmitDirectEvent**. This
 
 <h2 id="Methods">Methods</h2>
 
-Implementing methods are the same as any other Native Modules in You.i. The methods are implemented in the manager module, and thus you can see the following docs for more information on this.  
+Implementing methods are the same as any other Native Modules in You.i. The methods are implemented in the manager module, and thus you can see the following docs for more information on this.
 
 The following is a promisified method.
 
@@ -406,7 +410,7 @@ YI_RN_DEFINE_EXPORT_METHOD(NativeShadowView, callCpp)(Callback onLoaded, Callbac
 
 ```
 
-Both methods and commands are defined in the manager module. And thus, you won't be able to access them through a reference of the ShadowView, but rather through the manager module that gets globally exported. 
+Both methods and commands are defined in the manager module. And thus, you won't be able to access them through a reference of the ShadowView, but rather through the manager module that gets globally exported.
 
 In the NativeManagerModule implementation you registered the manager module by calling the following macro:
 
@@ -425,14 +429,14 @@ NativeModules.NativeManager.callCpp({})
 
 ```
 
-Notice there is a catch. If you render multiple NativeShadowView components and you call a method of your NativeManager you won't know which NativeShadowView is this method being called for. 
+Notice there is a catch. If you render multiple NativeShadowView components and you call a method of your NativeManager you won't know which NativeShadowView is this method being called for.
 
-To solve this issue, you can get the `reactTag` number of the rendered NativeShadowView and find the ReactComponent equivalent in the ShadowRegistry in C++. There is an example [here](https://www.notion.so/andreicalazans/C-Native-Modules-035296b8a7184df29af46da26d156178) on how to do that.  
+To solve this issue, you can get the `reactTag` number of the rendered NativeShadowView and find the ReactComponent equivalent in the ShadowRegistry in C++. There is an example [here](https://www.notion.so/andreicalazans/C-Native-Modules-035296b8a7184df29af46da26d156178) on how to do that.
 
 
 <h2 id="Commands">Commands</h2>
 
-Commands, similar to Methods, allows you to call a C++ method but with one extra feature, it automatically converts the `reactTag` number into the ReactComponent that lives in the ShadowRegistry.   
+Commands, similar to Methods, allows you to call a C++ method but with one extra feature, it automatically converts the `reactTag` number into the ReactComponent that lives in the ShadowRegistry.
 
 
 Header:
@@ -473,7 +477,7 @@ To dispatch a view manager command you always need the reactTag of the rendered 
 
 <h1 id="Why">Why would you want to implement a native view module?</h1>
 
-I dare to say that the greatest value delivered by You.i is not the react-native binding, but their underlying engine. It has many features that are not fully bridged to React Native and thus by learning how to implement a native view module you can leverage them. 
+I dare to say that the greatest value delivered by You.i is not the react-native binding, but their underlying engine. It has many features that are not fully bridged to React Native and thus by learning how to implement a native view module you can leverage them.
 
 A second argument is to take advantage of C++ powers. While 95% of the time doing things in JavaScript will be just fine, you can optimize edge cases by leveraging C++.
 
