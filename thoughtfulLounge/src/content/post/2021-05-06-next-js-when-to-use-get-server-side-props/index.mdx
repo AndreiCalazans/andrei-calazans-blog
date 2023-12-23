@@ -4,15 +4,17 @@ description: "This was a recent doubt that I had, and when I researched the answ
 publishDate: "2021-05-06"
 tags: ["react","next.js"]
 ---
-I think many are using Next.js and missing this information from the doc: Your "getServerSideProps" shouldn't be making network requests, it blocks the page from loading entirely which shows a blank page to your users. 
+import nextJsPic from './nextjs_doc.jpg';
 
-<img style={{ width: '100%' }} src={require('./nextjs_doc.jpg')} />
+I think many are using Next.js and missing this information from the doc: Your "getServerSideProps" shouldn't be making network requests, it blocks the page from loading entirely which shows a blank page to your users.
 
-Instead, your "getServerSideProps" should either read directly from your database to retrieve the data, or you should not use it at all and possibly prefer client side fetching where you can display an initial loading state or at least some UI while data is loading. 
+<img style={{ width: '100%' }} src={nextjsPic.src} />
 
-But Andrei, what if I need static rendering to have the best SEO? 
+Instead, your "getServerSideProps" should either read directly from your database to retrieve the data, or you should not use it at all and possibly prefer client side fetching where you can display an initial loading state or at least some UI while data is loading.
 
-Maybe the answer is "getStaticProps" with a smart revalidate logic? 
+But Andrei, what if I need static rendering to have the best SEO?
+
+Maybe the answer is "getStaticProps" with a smart revalidate logic?
 
 Maybe [Server Components](https://github.com/facebook/react/pull/20970 ) will improve this? I don't know.
 
