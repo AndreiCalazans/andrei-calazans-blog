@@ -5,11 +5,11 @@ publishDate: "2020-10-27"
 tags: ["react-native","state","UI"]
 ---
 
-*Inspired by https://maxrozen.com/keeping-up-with-react-libraries/* 
+*Inspired by https://maxrozen.com/keeping-up-with-react-libraries/*
 
 **<mark>Warning - Highly opinionated material 😂</mark>**
 
-This post is organic, I will continue to update it with relevant stuff related to React Native. 
+This post is organic, I will continue to update it with relevant stuff related to React Native.
 
 [See history of changes](https://github.com/AndreiCalazans/andrei-calazans-blog/commits/master/src/routes/posts/2020-10-27-keeping-up-with-react-native)
 
@@ -47,11 +47,11 @@ Also, use [FormidableLabs' ESLINT plugin](https://github.com/FormidableLabs/esli
 
 You can use the Animated API with `useNativeDriver: true` for most simple animations. But, for more complex animations that are driven by user interaction like swipes and scrolls make sure you are using something that uses reanimated under-the-hood.
 
-- [react-native-redash](https://github.com/wcandillon/react-native-redash) 
+- [react-native-redash](https://github.com/wcandillon/react-native-redash)
 Redash is a utility library powered by reanimated made by William Candillon, creator of `[Can it be done in React Native?](https://www.youtube.com/user/wcandill)` series.
 
-- [react-native-reanimated](https://github.com/software-mansion/react-native-reanimated) 
-And reanimated itself. Version 2 of this library is a complete rewrite making it way more developer friendly, previous version had a steep curving learn. 
+- [react-native-reanimated](https://github.com/software-mansion/react-native-reanimated)
+And reanimated itself. Version 2 of this library is a complete rewrite making it way more developer friendly, previous version had a steep curving learn.
 
 <h2 id="Companies">Companies</h2>
 
@@ -78,18 +78,18 @@ Short list of impressive companies that are using React Native:
 - [react-native-paper](https://callstack.github.io/react-native-paper/)
 - [native-base](https://docs.nativebase.io/)
 
-Which one? Well that depends, I like react-native-elements because it doesn't try to do too much, it is simple and lightweight. Native Base is famous for being vast and offering support for web too. 
+Which one? Well that depends, I like react-native-elements because it doesn't try to do too much, it is simple and lightweight. Native Base is famous for being vast and offering support for web too.
 
 There are more UI libraries for React Native, but most serious products will develop their own system design and component library. Use react-native-elements as an inspiration.
 
 
 <h2 id="Navigation">Navigation</h2>
 
-React Navigation started off as the easiest way to do navigation on React Native, mostly because it was implemented fully in JavaScript and to use it you only needed to npm/yarn install. 
+React Navigation started off as the easiest way to do navigation on React Native, mostly because it was implemented fully in JavaScript and to use it you only needed to npm/yarn install.
 
 React Native Navigation, on the contrary, implemented a fully native solution that required linking the native parts. Linking the native parts was not straight forward, thus many preferred React Navigation.
 
-Nevertheless, navigation done fully in JavaScript has and had its drawbacks like performance and non-native look and feel. 
+Nevertheless, navigation done fully in JavaScript has and had its drawbacks like performance and non-native look and feel.
 
 <mark>For a cross-platform solution that includes the Web, react-navigation is the best approach.</mark>
 
@@ -146,7 +146,7 @@ For tvOS see https://github.com/react-native-tvos/react-native-tvos
 
 For a more unified solution that has all 12 platforms see https://www.youi.tv/youi-engine/react-native/
 
-[Renative](https://renative.org/) tries to target all handsets, tablets, and 10ft devices with a single build system. It is still early and it does not seem to have serious financial support, but it has shown some growth. 
+[Renative](https://renative.org/) tries to target all handsets, tablets, and 10ft devices with a single build system. It is still early and it does not seem to have serious financial support, but it has shown some growth.
 
 
 <h2 id="Performance">Performance</h2>
@@ -160,12 +160,12 @@ Watch [Parashuram N talk](https://www.youtube.com/watch?v=UcqRXTriUVI) on React 
 
 **<mark>On Initial Component Screen Loads</mark>**
 
-Step through code and double check you don't have awaits holding the JavaScript thread from updating the main thread. Remember React Native batches events in the JS thread to send it off to the main thread, if your JS thread is awaiting a network reply, you are blocking the bridge from updating the UI/Main thread. 
+Step through code and double check you don't have awaits holding the JavaScript thread from updating the main thread. Remember React Native batches events in the JS thread to send it off to the main thread, if your JS thread is awaiting a network reply, you are blocking the bridge from updating the UI/Main thread.
 
 
 **<mark>While Scrolling Lists</mark>**
 
-First see if you can just use a FlatList with the right optimization props, see [this post](https://reactnative.dev/docs/optimizing-flatlist-configuration/). 
+First see if you can just use a FlatList with the right optimization props, see [this post](https://reactnative.dev/docs/optimizing-flatlist-configuration/).
 
 If that's not enough and you still struggle, checkout the [RecyclerListView](https://github.com/Flipkart/recyclerlistview).
 
@@ -174,13 +174,13 @@ If your company still find it slow, implement a native view where the list is fu
 
 **<mark>When Navigating</mark>**
 
-There are multiple problems you can face here, like slowness with the animation or lack of responsiveness. If it is an animation issue check out the animation point below. 
+There are multiple problems you can face here, like slowness with the animation or lack of responsiveness. If it is an animation issue check out the animation point below.
 
 For unresponsiveness you can check where the navigation is being dispatched plus profile your JS executor to validate what is blocking/delaying its process. For iOS, make sure you use Safari to debug the JS context using the same JS engine (JSCore). For Android you can use react-native-debugger if you don't have Hermes enabled, else see [this post](https://reactnative.dev/docs/next/profile-hermes/).
 
-Be careful with Stack navigators stacking too many screens, this can cause memory issues. Plus your global store could cause updates to screens at the back of the stack. 
+Be careful with Stack navigators stacking too many screens, this can cause memory issues. Plus your global store could cause updates to screens at the back of the stack.
 
-Depending on the problem it might not be optimizable. You can explore options that implement native navigators for slight better performance. 
+Depending on the problem it might not be optimizable. You can explore options that implement native navigators for slight better performance.
 
 **<mark>When Global Store Updates</mark>**
 
@@ -189,26 +189,26 @@ This is also another broad topic. Your state manager of choice has a huge impact
 
 **<mark>During Animations</mark>**
 
-See [Animation](#Animation) section on this. 
+See [Animation](#Animation) section on this.
 
 
 <h2 id="State">State Management</h2>
 
-If you haven't learned about the difference of UI state and Server cache please read [Kent's post](https://epicreact.dev/my-state-management-mistake/). State management is made hard because of this confusion. 
+If you haven't learned about the difference of UI state and Server cache please read [Kent's post](https://epicreact.dev/my-state-management-mistake/). State management is made hard because of this confusion.
 
 
 This is an ever-growing list. See [React State Museum](https://github.com/GantMan/ReactStateMuseum) for a sense.
 
 We can argue that the growth of so many options is caused by the lack of a solution offered by the React Core team.
 
-For a moment everyone thought this would have been solved with React Context API, nevertheless, the React Core team admitted it is [not recommended for states that update frequently](). 
+For a moment everyone thought this would have been solved with React Context API, nevertheless, the React Core team admitted it is [not recommended for states that update frequently]().
 
 
 <mark>What options do I recommend?</mark>
 
-### [Zustand](https://github.com/pmndrs/zustand)
+## [Zustand](https://github.com/pmndrs/zustand)
 
-Objective, lightweight, and performant. Its pattern forces you into a good practice of separating your concerns. 
+Objective, lightweight, and performant. Its pattern forces you into a good practice of separating your concerns.
 
 **Good For**
 * Server Cache (Requires you to write entire invalidation/rehydration/update logic)
@@ -216,12 +216,12 @@ Objective, lightweight, and performant. Its pattern forces you into a good pract
 
 **Bad For**
 
-Nothing really. But, it is likely incompatible with the future suspense API, which is not done. 
+Nothing really. But, it is likely incompatible with the future suspense API, which is not done.
 
 
-### [React-Query](https://github.com/tannerlinsley/react-query)
+## [React-Query](https://github.com/tannerlinsley/react-query)
 
-Server Cache solution. It is full of features to deal with server data. 
+Server Cache solution. It is full of features to deal with server data.
 
 **Good For**
 * Server Cache (Complete with many features)
@@ -230,7 +230,7 @@ Server Cache solution. It is full of features to deal with server data.
 * Global UI State
 
 
-### Recoil JS?
+## Recoil JS?
 
 Recoil is for UI state that can dynamically grow and updates too frequently. I had to leave a note here about Recoil since it is the current hot thing.
 
@@ -246,16 +246,16 @@ https://recoiljs.org/blog/2020/10/30/0.1.1-released/
 
 **Bad For**
 * Server Cache
-* Global State that is non-atomic 
+* Global State that is non-atomic
 
 
 *I am intentionally omitting many famous libraries, the above two libraries Zustand and React Query would solve 100% of my state management problems*
 
 <h2 id="Testing">Testing</h2>
 
-Jest is the go to framework. You can or not use any helpers. 
+Jest is the go to framework. You can or not use any helpers.
 
-Since React Native inherits much of the React ecosystem, many liked using Enzyme, but this is not longer a go to choice. 
+Since React Native inherits much of the React ecosystem, many liked using Enzyme, but this is not longer a go to choice.
 
 From my experience, Jest plus react-test-renderer is all you need for unit and integration testing on React Native. However, a recent rise in popularity of [Kent's react-testing-library](https://testing-library.com/docs/react-testing-library/intro) made room for a [react-native-testing-library](https://github.com/callstack/react-native-testing-library)
 
@@ -288,7 +288,7 @@ Yes! See [post](https://reactnative.dev/docs/fast-refresh/#:~:text=Fast%20Refres
 
 No.
 
-Last official update on fabric 
+Last official update on fabric
 https://github.com/react-native-community/discussions-and-proposals/issues/4#issuecomment-569883489
 
 <mark>Is JSI Ready?</mark>
@@ -296,7 +296,7 @@ https://github.com/react-native-community/discussions-and-proposals/issues/4#iss
 First part is in master
 https://github.com/react-native-community/discussions-and-proposals/issues/261
 
-But migration of UIManager to use JSI has not been released into the public. 
+But migration of UIManager to use JSI has not been released into the public.
 
 <mark>Is TurboModule Ready?</mark>
 
@@ -305,7 +305,7 @@ https://github.com/react-native-community/discussions-and-proposals/issues/40
 
 <mark>Is CodeGen Ready?</mark>
 
-There are examples of it working on master, but no official documentation yet. 
+There are examples of it working on master, but no official documentation yet.
 
 
 <mark>Hermes is coming to iOS</mark>

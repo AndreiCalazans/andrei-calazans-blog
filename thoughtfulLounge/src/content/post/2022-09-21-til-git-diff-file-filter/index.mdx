@@ -4,7 +4,7 @@ description: "Today I learned how to filter files when doing git diff"
 publishDate: "2022-09-21"
 tags: ["TIL","git"]
 ---
-### Today I Learned
+## Today I Learned
 
 Today I learned that when diffing between two branches you can apply file filters to both exclude or include files.
 
@@ -15,9 +15,9 @@ I needed to diff between two release branches and I was only interested in chang
 
 Few things to note:
 
-1) This `:(exclude)` tag serve as a match to exclude files. 
+1) This `:(exclude)` tag serve as a match to exclude files.
 
-2) Git diff actually takes multiple matches so you could do `git diff *.tsx *.js` for instance. 
+2) Git diff actually takes multiple matches so you could do `git diff *.tsx *.js` for instance.
 
 
 I can see how this will be very useful for me when I need to see what changes happened within a folder too.
