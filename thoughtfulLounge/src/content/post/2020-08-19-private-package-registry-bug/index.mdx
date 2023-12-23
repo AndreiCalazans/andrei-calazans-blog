@@ -1,27 +1,27 @@
 ---
 title: "NPM & Yarn Private Package Registry Personal Mistakes"
-description: "While working on a client project, I ran into an issue with their private registry. I kept seeing the unauthorized error when I ran `yarn install`. It was a weird issue especially because I had all of the correct keys. After some investigation I found out I was using the wrong `_auth` value."
+description: "While working on a client project, I ran into an issue with their private registry. I kept seeing the unauthorized error when I ran yarn install. It was a weird issue especially because I had all of the correct keys. After some investigation I found out I was using the wrong `_auth` value."
 publishDate: "2020-08-19"
 tags: ["npm","yarn","private registry"]
 ---
 1. [The Issue](#issue)
-2. [Things I Learned](#learned)  
-2.1. [The Wrong Solution](#wrong_solution)  
-2.2. [The Right Solution](#right_solution)  
+2. [Things I Learned](#learned)
+2.1. [The Wrong Solution](#wrong_solution)
+2.2. [The Right Solution](#right_solution)
 3. [Conclusion](#conclusion)
 4. [Notes](#notes)
 
 
 <h2 id="issue">The Issue 😅</h2>
 
-While working on a client project, I ran into an issue with their private registry. I kept seeing the unauthorized error when I ran `yarn install`. It was a weird issue especially because I had all of the correct keys. After some investigation I found out I was using the wrong `_auth` value. 
+While working on a client project, I ran into an issue with their private registry. I kept seeing the unauthorized error when I ran `yarn install`. It was a weird issue especially because I had all of the correct keys. After some investigation I found out I was using the wrong `_auth` value.
 
 
 <h2 id="learned">Things I Learned</h2>
 
 1) When you run `yarn install` it searches for `.npmrc` and `.yarnrc` from your directory all the way up to your `~`. You can see this happen by running `yarn install --verbose`.
 
-*Logs from `yarn install --verbose`* 
+*Logs from `yarn install --verbose`*
 ```
 yarn install v1.19.1
 verbose 0.18514658 Checking for configuration file "/Users/andrei/youi/sky-native-app/.npmrc".
@@ -101,7 +101,7 @@ what I didn't realize, I was making another mistake previously, which was using 
 
 <h3 id="right_solution">How to provide credentials to NPM private packages</h3>
 
-While working on this, [Jarek](https://www.linkedin.com/in/jaroslawmarek/) pointed out to me that NPM private packages have two ways of receiving credentials, either with `_auth` or with `_password` and `_username` tokens. 
+While working on this, [Jarek](https://www.linkedin.com/in/jaroslawmarek/) pointed out to me that NPM private packages have two ways of receiving credentials, either with `_auth` or with `_password` and `_username` tokens.
 
 The `_auth` value is composed of the your `username` and `API Key` encoded as base64 in the following format: `username:API_Key`.
 
@@ -109,7 +109,7 @@ I made the mistake of copyng the `_password` value and setting it as the `_auth`
 
 <h2 id="conclusion">Conclusion</h2>
 
-Make sure you are scoping these config variables to your registry. You can that by setting as `//${your_company_registry}/:${variable} = ${value}`. And always double check you have the correct credentials format if you use either `_auth` or `_password` plus `_username`. 
+Make sure you are scoping these config variables to your registry. You can that by setting as `//${your_company_registry}/:${variable} = ${value}`. And always double check you have the correct credentials format if you use either `_auth` or `_password` plus `_username`.
 
 
 <h2 id="notes">Notes</h2>
