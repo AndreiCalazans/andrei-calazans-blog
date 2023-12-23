@@ -1,3 +1,9 @@
+---
+title: "When Should You Use Next.js getServerSideProps?"
+description: "This was a recent doubt that I had, and when I researched the answer I noticed that many are making a mistake when it comes to this."
+publishDate: "2021-05-06"
+tags: ["react","next.js"]
+---
 I think many are using Next.js and missing this information from the doc: Your "getServerSideProps" shouldn't be making network requests, it blocks the page from loading entirely which shows a blank page to your users. 
 
 <img style={{ width: '100%' }} src={require('./nextjs_doc.jpg')} />
