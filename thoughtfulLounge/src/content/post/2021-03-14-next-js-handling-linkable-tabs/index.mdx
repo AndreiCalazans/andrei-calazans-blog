@@ -4,8 +4,11 @@ description: "Do you need to have tabs in your Next.js app and these tabs need t
 publishDate: "2021-03-14"
 tags: ["react","next.js"]
 ---
+import showing_off_tabs from './showing_off_tabs_nextjs.mp4';
+import tabs_going_back_nextjs from './tabs_going_back_nextjs.mp4';
+import tabs_not_going_back_nextjs from './tabs_not_going_back_nextjs.mp4';
 
-Do you need to have tabs in your Next.js app and these tabs need to have links to them? 
+Do you need to have tabs in your Next.js app and these tabs need to have links to them?
 
 ## What is the wrong way of doing this?
 
@@ -70,9 +73,9 @@ export default function Home() {
         <Link href="/about">About</Link>
 
         <nav>
-          <Tab href="/?tabOne=true" title="Tab One" isSelected={isTabOneSelected} /> 
-          <Tab href="/?tabTwo=true" title="Tab Two" isSelected={isTabTwoSelected} /> 
-          <Tab href="/?tabThree=true" title="Tab Three" isSelected={isTabThreeSelected} /> 
+          <Tab href="/?tabOne=true" title="Tab One" isSelected={isTabOneSelected} />
+          <Tab href="/?tabTwo=true" title="Tab Two" isSelected={isTabTwoSelected} />
+          <Tab href="/?tabThree=true" title="Tab Three" isSelected={isTabThreeSelected} />
         </nav>
 
         <section>
@@ -99,7 +102,7 @@ Lastly, we check if the current tab is selected by doing `const isTabOneSelected
 Result
 
 <video controls style={{ width: "100%", height: "auto" }}>
-  <source src={require('./showing_off_tabs_nextjs.mp4')} type="video/mp4"/>
+  <source src={showing_off_tabs.src} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
@@ -112,7 +115,7 @@ I noticed some people prefer for every new tab selection for it to not add a new
 
 
 <video controls style={{ width: "100%", height: "auto" }}>
-  <source src={require('./tabs_going_back_nextjs.mp4')} type="video/mp4"/>
+  <source src={tabs_going_back_nextjs.src} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
@@ -126,7 +129,7 @@ Just use the `replace` prop on the `Link` component
 Now changing tabs won't push to the history stack:
 
 <video controls style={{ width: "100%", height: "auto" }}>
-  <source src={require('./tabs_not_going_back_nextjs.mp4')} type="video/mp4"/>
+  <source src={tabs_not_going_back_nextjs.src} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 

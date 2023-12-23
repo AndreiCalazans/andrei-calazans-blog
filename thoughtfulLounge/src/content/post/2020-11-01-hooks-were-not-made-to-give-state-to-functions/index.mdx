@@ -4,11 +4,15 @@ description: "There is a misconception that hooks were created to simply give st
 publishDate: "2020-11-01"
 tags: ["hooks","react"]
 ---
+import todays_react_problem_0 from './todays_react_problem_0.png';
+import react_class_fragmentation from './react_class_fragmentation.jpeg'
+import react_hooks_colocation from './react_hooks_colocation.png';
+
 When I ask someone why were hooks created, I often get the simple answer of "to give functions state". That is not entirely true.
 
 Hooks were made to solve a set of real problems that React had previously to its implementation. The solution to these problems were in fact hooks - **a simpler lightweight primitive to add state or lifecycle to a component without classes**.
 
-But, what were the problems React had? 
+But, what were the problems React had?
 
 When React Hooks were introduced in React Conf 2018, [Sophie Alpert](https://twitter.com/sophiebits) presented three problems the React framework faced:
 
@@ -17,14 +21,14 @@ When React Hooks were introduced in React Conf 2018, [Sophie Alpert](https://twi
 - Confusing Classes
 
 
-<img style={{ width: '100%' }} src={require('./todays_react_problem_0.png')} />
+<img style={{ width: '100%' }} src={todays_react_problem_0.src} />
 
 
 # Reusing Logic
 
 In order to reuse logic, the standard way was to lift up the logic into a wrapper. And with this emerged two patterns, first, Higher-Order-Components and another one called Render Props (some also described it as a Function-As-Child-Component).
 
-There are multiple posts on HOC and Render Props, take your time to go over them if you never heard of them.  
+There are multiple posts on HOC and Render Props, take your time to go over them if you never heard of them.
 
 
 Both patterns had similar problems. The main problem that was used as an argument by Sophie was the resulting "wrapper hell". Both HOC and Render Props added wrappers to your component tree, resulting in this unexpected large tree of components.
@@ -34,19 +38,19 @@ Both patterns had similar problems. The main problem that was used as an argumen
 
 # Giant Components
 
-Classes and lifecycles introduced a lot of boilerplate and fragmentation of your code.  
+Classes and lifecycles introduced a lot of boilerplate and fragmentation of your code.
 
 Take the following screenshot as an example:
 
-<img style={{ width: '100%' }} src={require('./react_class_fragmentation.jpeg')} />
+<img style={{ width: '100%' }} src={react_class_fragmentation.src} />
 
-* The code highlighted in black is boilerplate forced by the usage of Classes. 
+* The code highlighted in black is boilerplate forced by the usage of Classes.
 * The code highlighted in yellow is logic related to resizing.
 * The code highlighted in teal is related to the page title plus user name.
 
 And as you can see by looking at the screenshot the logic ends up fragmented in multiple places. With hooks, it removes the boilerplate and groups the logic in blocks. The new approach makes it easier to understand the component.
 
-<img style={{ width: '100%' }} src={require('./react_hooks_colocation.png')} />
+<img style={{ width: '100%' }} src={react_hooks_colocation.src} />
 
 *These screenshots were shared on Twitter by [Sunil Pai](https://twitter.com/threepointone), although I did not find the original tweet, I did find a reference to it [here](https://twitter.com/housecor/status/1141361071770542082?s=20)*
 
@@ -65,7 +69,7 @@ And as you can see by looking at the screenshot the logic ends up fragmented in 
 
 When to use or not a constructor. Do I need to bind the `this` keyword? Do I not? Do I inline the binding or do I add it in the constructor? Which lifecycle do I use? And so on.
 
-So many questions related to using Class components that I even made two videos about it, [one](https://www.youtube.com/watch?v=tIK8ndsC4SE) and [two](https://www.youtube.com/watch?v=pTREFnFCh5E&t=2s). 
+So many questions related to using Class components that I even made two videos about it, [one](https://www.youtube.com/watch?v=tIK8ndsC4SE) and [two](https://www.youtube.com/watch?v=pTREFnFCh5E&t=2s).
 
 
 <blockquote class="comment">

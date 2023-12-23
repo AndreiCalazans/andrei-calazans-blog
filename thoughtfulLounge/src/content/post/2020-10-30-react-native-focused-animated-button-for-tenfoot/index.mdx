@@ -4,12 +4,13 @@ description: "On 10ft devices visual feedback is required not only for presses b
 publishDate: "2020-10-30"
 tags: ["react-native","10ft","code-snippets","You.i"]
 ---
+import animateItem from './AnimateItem.mp4';
 
-On 10ft devices visual feedback is required not only for presses but also for focus. The following is a simple implementation of such. 
+On 10ft devices visual feedback is required not only for presses but also for focus. The following is a simple implementation of such.
 
 
 <video controls style={{ width: "100%", height: "auto" }}>
-  <source src={require('./AnimateItem.mp4')} type="video/mp4"/>
+  <source src={animateItem.src} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
