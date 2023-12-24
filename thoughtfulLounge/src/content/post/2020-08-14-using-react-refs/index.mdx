@@ -4,8 +4,6 @@ description: "What many forget is how Functional components are not referenceabl
 publishDate: "2020-08-14"
 tags: ["react","refs"]
 ---
-import { ClassExample } from './component';
-
 1. [The Problem](#problem)
 2. [When do you use refs?](#when-to-use-refs)
 3. [Refs With Classes](#with_classes)
@@ -19,7 +17,7 @@ There is an often forgotten problem with the usage of Refs in React - The functi
 
 <h2 id="when-to-use-refs">When to use refs?</h2>
 
-There are cases where you might need to call a method of a component. In a TextInput component, you might have a focus method that focuses and opens up the keyboard. On tv Apps handling the currently focused item on the screen requires heavy usage of ref components. The `useRef` was also created with the intention of being a replacement for class fields where we usually stored non-reactive data that lived as long as the component existed, e.g., a listener.  
+There are cases where you might need to call a method of a component. In a TextInput component, you might have a focus method that focuses and opens up the keyboard. On tv Apps handling the currently focused item on the screen requires heavy usage of ref components. The `useRef` was also created with the intention of being a replacement for class fields where we usually stored non-reactive data that lived as long as the component existed, e.g., a listener.
 
 
 
@@ -65,7 +63,7 @@ const CompB = React.forwardRef((props, ref) => {
 });
 ```
 
-This approach now allows you to reference the functional component then pass the ref down to another referenceable element. However, this still does not fix the issue which is providing a ref to the actual `CompB` component. To solve this later problem we need to use a second api, the `useImperativeHandle`. 
+This approach now allows you to reference the functional component then pass the ref down to another referenceable element. However, this still does not fix the issue which is providing a ref to the actual `CompB` component. To solve this later problem we need to use a second api, the `useImperativeHandle`.
 
 
 ```jsx
@@ -88,4 +86,4 @@ Now when we reference `CompB` by doing `<CompB ref={refToCompB} />` we will get 
 
 <h2 id="conclusion">Conclusion</h2>
 
-It is a bit unfortunate how to improve something we end up making other things worse. Nevertheless, I believe the React Core team is making an unconscious point with the reference API since they do not prioritize it and seem to prefer that we don't have to resort to imperativeness when dealing with Components.  
+It is a bit unfortunate how to improve something we end up making other things worse. Nevertheless, I believe the React Core team is making an unconscious point with the reference API since they do not prioritize it and seem to prefer that we don't have to resort to imperativeness when dealing with Components.
