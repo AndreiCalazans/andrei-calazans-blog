@@ -34,7 +34,7 @@
   "include": [
     "src",
     "*.ts"
-  ],
+, "public/goatcounter.js"  ],
   "exclude": [
     "node_modules",
     "**/node_modules/*",
