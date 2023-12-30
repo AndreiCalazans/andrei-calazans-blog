@@ -45,6 +45,6 @@ export const menuLinks: Array<{ title: string; path: string }> = [
 	},
 	{
 		title: "RSS",
-		path: "/rss",
+		path: "/rss.xml",
 	},
 ];
