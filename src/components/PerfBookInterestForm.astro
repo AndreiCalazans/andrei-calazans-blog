@@ -22,6 +22,8 @@ if (Astro.request.method === "POST") {
 			console.error(error.message);
 		}
 	}
+
+	Astro.redirect(Astro.request.url);
 }
 ---
 
