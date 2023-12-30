@@ -194,7 +194,7 @@ export default defineConfig({
 			exclude: ["@resvg/resvg-js"],
 		},
 		ssr: {
-			noExternal: ["path-to-regexp"],
+			noExternal: ["path-to-regexp", "svgo"],
 		},
 	},
 	output: "hybrid",
