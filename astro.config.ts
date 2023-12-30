@@ -195,6 +195,7 @@ export default defineConfig({
 		},
 		ssr: {
 			noExternal: ["path-to-regexp", "svgo"],
+			external: ["svgo"],
 		},
 	},
 	output: "hybrid",
