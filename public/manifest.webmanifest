@@ -1,7 +1,7 @@
 {
-	"name": "Astro Theme Cactus Demo",
-	"short_name": "Astro_Cactus",
-	"description": "Starter blog site for Astro",
+	"name": "Andrei Calazans's blog",
+	"short_name": "software_w_andrei",
+	"description": "Andrei Calazan's Software Engineering Blog",
 	"icons": [
 		{
 			"src": "/192x192.png",
