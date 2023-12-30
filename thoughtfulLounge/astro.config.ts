@@ -7,7 +7,7 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import rehypeExternalLinks from "rehype-external-links";
 import { remarkReadingTime } from "./src/utils/remark-reading-time";
 
-import netlify from "@astrojs/netlify/functions";
+import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
@@ -183,9 +183,9 @@ export default defineConfig({
 		}),
 		sitemap(),
 	],
-	image: {
-		domains: ["webmention.io"],
-	},
+	// image: {
+	// 	domains: ["webmention.io"],
+	// },
 	// https://docs.astro.build/en/guides/prefetch/
 	prefetch: true,
 	vite: {
