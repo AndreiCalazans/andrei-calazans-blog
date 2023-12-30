@@ -5,6 +5,7 @@ const api =
 	"https://firestore.googleapis.com/v1/projects/personal-site-dae64/databases/(default)/documents/emails";
 
 if (Astro.request.method === "POST") {
+	Astro.redirect(Astro.request.url);
 	try {
 		didSubmit = true;
 		const data = await Astro.request.formData();
@@ -22,8 +23,6 @@ if (Astro.request.method === "POST") {
 			console.error(error.message);
 		}
 	}
-
-	Astro.redirect(Astro.request.url);
 }
 ---
 
