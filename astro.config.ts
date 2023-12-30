@@ -198,7 +198,7 @@ export default defineConfig({
 			external: ["svgo"],
 		},
 	},
-	output: "hybrid",
+	output: "static",
 	adapter: netlify(),
 });
 function rawFonts(ext: Array<string>) {
