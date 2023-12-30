@@ -7,6 +7,8 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import rehypeExternalLinks from "rehype-external-links";
 import { remarkReadingTime } from "./src/utils/remark-reading-time";
 
+import netlify from "@astrojs/netlify/functions";
+
 // https://astro.build/config
 export default defineConfig({
 	site: "https://andrei-calazans.com/",
@@ -156,9 +158,19 @@ export default defineConfig({
 	markdown: {
 		remarkPlugins: [remarkUnwrapImages, remarkReadingTime],
 		rehypePlugins: [
-			[rehypeExternalLinks, { target: "_blank", rel: ["nofollow, noopener, noreferrer"] }],
+			[
+				rehypeExternalLinks,
+				{
+					target: "_blank",
+					rel: ["nofollow, noopener, noreferrer"],
+				},
+			],
 		],
-		remarkRehype: { footnoteLabelProperties: { className: [""] } },
+		remarkRehype: {
+			footnoteLabelProperties: {
+				className: [""],
+			},
+		},
 		shikiConfig: {
 			theme: "dracula",
 			wrap: true,
@@ -182,8 +194,9 @@ export default defineConfig({
 			exclude: ["@resvg/resvg-js"],
 		},
 	},
+	output: "hybrid",
+	adapter: netlify(),
 });
-
 function rawFonts(ext: Array<string>) {
 	return {
 		name: "vite-plugin-raw-fonts",
