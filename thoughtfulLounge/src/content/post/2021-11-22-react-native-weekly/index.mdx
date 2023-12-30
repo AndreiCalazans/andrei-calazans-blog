@@ -4,7 +4,7 @@ description:  "React Native Weekly - W47 2021"
 publishDate: 2021-11-22
 tags:    ["react-native", "react-native-weekly"]
 ---
-Welcome to the 35th edition of React Native Weekly! 
+Welcome to the 35th edition of React Native Weekly!
 
 This is week 47 of 2021: November 15th to 21st.
 
@@ -14,7 +14,7 @@ Phillip Pan phillippan@fb.com added the missing `onScroll` event to the Fabric T
 
 He [first added the missing](https://github.com/facebook/react-native/commit/9822464c991) `onScroll` event to the TextInputEventEmitter [then hooked it up](https://github.com/facebook/react-native/commit/437b06f3974) to the `RCTTextInputComponentView.mm`:
 
-```Objc
+```objective-c
 +- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 +{
 +  if (_eventEmitter) {
@@ -39,9 +39,9 @@ Sota Ogo sota@fb.com [added an option](https://github.com/facebook/react-native/
 ```
 
 
-# Refactor native Android ScrollView animation code into helper 
+# Refactor native Android ScrollView animation code into helper
 
-Refactor done by Xin Chen xch@fb.com, [he organized and extracted the common logic](https://github.com/facebook/react-native/commit/073195991bf) used by the vertical and horizontal scroll views on Android into a helper - `ReactScrollViewHelper`. 
+Refactor done by Xin Chen xch@fb.com, [he organized and extracted the common logic](https://github.com/facebook/react-native/commit/073195991bf) used by the vertical and horizontal scroll views on Android into a helper - `ReactScrollViewHelper`.
 
 This reduces code duplication and makes the helper share impact surface.
 
@@ -62,7 +62,7 @@ While [this change](https://github.com/facebook/react-native/commit/db21584ba01)
 
 # Experiment for running JS on view creation
 
-Jimmy Lai feedthejim@fb.com launched an experiment to see if they can start the JavaScript work earlier instead of waiting for the View.onMeasure call on Android. 
+Jimmy Lai feedthejim@fb.com launched an experiment to see if they can start the JavaScript work earlier instead of waiting for the View.onMeasure call on Android.
 
 [This change](https://github.com/facebook/react-native/commit/2dd33b16df1) starts the JavaScript work on view creation.
 
@@ -70,21 +70,21 @@ If this goes well it could mean a potential start-up improvement on Android.
 
 # Extending Fabric & ViewConfig to support onEnter/onExit/onMove events
 
-This is a series of work done by David Vacca dvacca@fb.com to support these events for React Native VR (Virtual Reality). 
+This is a series of work done by David Vacca dvacca@fb.com to support these events for React Native VR (Virtual Reality).
 
 While it does not include the implementation of the events yet, maybe to come?, it does the work of:
 
-- [updating the ViewConfigs](https://github.com/facebook/react-native/commit/44143b50fdc), 
-- [storing metadata on Android](https://github.com/facebook/react-native/commit/a9ccdcace53) to know if a view is listening to these events, 
-- [updating the Fabric supported events](https://github.com/facebook/react-native/commit/34a5158ec81), 
-- and finally fixing an error where to [avoid View flattening if the view is listening to these events](https://github.com/facebook/react-native/commit/26e30a5ee9e).  
+- [updating the ViewConfigs](https://github.com/facebook/react-native/commit/44143b50fdc),
+- [storing metadata on Android](https://github.com/facebook/react-native/commit/a9ccdcace53) to know if a view is listening to these events,
+- [updating the Fabric supported events](https://github.com/facebook/react-native/commit/34a5158ec81),
+- and finally fixing an error where to [avoid View flattening if the view is listening to these events](https://github.com/facebook/react-native/commit/26e30a5ee9e).
 
 
 **Note about View Flattening**
 
-View Flattening was introduced to improve performance and reduce out-of-memory/stack-overflow errors on Android, with Fabric iOS got it for free since the logic got moved to C++. 
+View Flattening was introduced to improve performance and reduce out-of-memory/stack-overflow errors on Android, with Fabric iOS got it for free since the logic got moved to C++.
 
-It's good see what disables View flattening, for instance setting `collapsable={false}` to a component will force it and its children to not be flattened. 
+It's good see what disables View flattening, for instance setting `collapsable={false}` to a component will force it and its children to not be flattened.
 
 You can see the full list of props/settigns that will disable view flattening [here](https://github.com/facebook/react-native/blob/main/ReactCommon/react/renderer/components/view/ViewShadowNode.cpp#L34-L54)
 
@@ -170,9 +170,9 @@ RCT_EXPORT_METHOD(callNativeMethodToChangeBackgroundColor : (nonnull NSNumber *)
 I think Sota implemented the bridge example alongside to as an example and also to support for the RN-Tester to work if Fabric is disabled.
 
 
-# 1200+ React Native Screens 
+# 1200+ React Native Screens
 
-[Josh tweeted](https://twitter.com/joshuaisgross/status/1461118142248222725) the Facebook app now has 1200+ screens. 
+[Josh tweeted](https://twitter.com/joshuaisgross/status/1461118142248222725) the Facebook app now has 1200+ screens.
 
 
 # Community

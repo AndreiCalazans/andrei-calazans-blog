@@ -18,6 +18,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 };
 ---
 
+ <!--  TODO: fix type issue with coverImage, not using it so ignore for now
 {
 	data.coverImage && (
 		<div class="aspect-h-9 aspect-w-16 mb-6">
@@ -31,6 +32,8 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 		</div>
 	)
 }
+-->
+
 {data.draft ? <span class="text-base text-red-500">(Draft)</span> : null}
 <h1 class="title mb-3 sm:mb-1">
 	{data.title}
