@@ -1,4 +1,4 @@
-import * as fs from "node:fs";
+import fs from "fs";
 import type { WebmentionsFeed, WebmentionsCache, WebmentionsChildren } from "@/types";
 
 const DOMAIN = import.meta.env.SITE;
