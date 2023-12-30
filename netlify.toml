@@ -1,3 +1,3 @@
 [build]
-  command = "yarn build" # specify what command to use to build
-  publish = "build" # name/location of the built folder to publish
+  command = "npm run build" # specify what command to use to build
+  publish = "dist" # name/location of the built folder to publish

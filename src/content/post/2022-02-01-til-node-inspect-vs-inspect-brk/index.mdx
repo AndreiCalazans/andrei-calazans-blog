@@ -1,0 +1,15 @@
+---
+title: "Difference between node --inspect and --inspect-brk"
+description: "Today I learned what the difference between Node.js' --inspect and --inspect-brk is"
+publishDate: "2022-02-01"
+tags: ["TIL","node","debugging"]
+---
+
+## Today I Learned
+
+> The only difference between the two is that --inspect-brk stops the execution at the start of the script and the --inspect does not.
+
+Stopping the execution is specially helpful for Node.js scripts that dont' stay alive.
+
+[source](https://medium.com/trabe/debugging-node-js-applications-part-1-f1cca5084356#:~:text=The%20only%20difference%20between%20the,the%20%2D%2Dinspect%20does%20not.)
+

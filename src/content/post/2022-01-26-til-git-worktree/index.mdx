@@ -1,0 +1,45 @@
+---
+title: "Git worktree"
+description: "Today I learned Git worktree works"
+publishDate: "2022-01-26"
+tags: ["TIL","git"]
+---
+## Today I Learned
+
+[Inspired by David K.'s tweet](https://twitter.com/DavidKPiano/status/1486322809424994310)
+
+## How does git worktree work
+
+By default, when you do `git worktree add <path>` it will create a folder in the path you specified, checkout in a branch with its name as the folder, and any changes you commit in that workspace/branch will sync with your main local repo. So you can delete that worktree folder later or remove it by doing `git worktree remove <path>` and you won't lose your committed changes.
+
+
+## Why is this useful?
+
+- Isolated duplicate local repo. You could for instance have the same app running in two places with different changes.
+- Isolated repo allows you to test different changes without disrupting a possible uncommitted working tree. Sure you can always git stash but that can get out of hand easy.
+
+
+## Main commands to know:
+
+- `git worktree add <path>`
+
+Creates a copy of your main working tree in the path you specified without the gitignored files, so you will need to install dependencies again.
+
+- `git worktree remove <path>`
+
+Removes the working tree in the path. However, any committed changes are always sync back to the main local repo.
+
+- `git worktree add <path> <branch>`
+
+Checkouts as an existing branch. This will create another working tree in the path you specified but this time checked out with the branch you specified.
+
+- `git worktree prune`
+
+Cleans up any stale worktrees.
+
+
+_A tip is to always put your different worktrees outside the main repo for it not to be included in your Git changes._
+
+
+[See full documentation in git-scm site](https://git-scm.com/docs/git-worktree)
+

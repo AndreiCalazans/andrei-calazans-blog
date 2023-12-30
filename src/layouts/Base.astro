@@ -1,0 +1,48 @@
+---
+import type { SiteMeta } from "@/types";
+import BaseHead from "@/components/BaseHead";
+import ThemeProvider from "@/components/ThemeProvider";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import SkipLink from "@/components/SkipLink";
+import { siteConfig } from "@/site-config";
+
+interface Props {
+	meta: SiteMeta;
+}
+
+const {
+	meta: { title, description = siteConfig.description, ogImage, articleDate,
+  slug },
+} = Astro.props;
+
+const pathname = slug;
+---
+
+<html lang={siteConfig.lang}>
+	<head>
+		<BaseHead title={title} description={description} ogImage={ogImage} articleDate={articleDate} />
+	</head>
+	<body>
+		<ThemeProvider />
+		<SkipLink />
+		<Header />
+		<main id="main">
+			<slot />
+		</main>
+		<Footer />
+		<noscript>
+			<img
+				src={`https://stats.andrei-calazans.com/count?p=${pathname}`}
+				alt="Empty image"
+			/>
+		</noscript>
+		<script
+			is:inline
+			data-goatcounter="https://stats.andrei-calazans.com/count"
+			async
+			src="/goatcounter.js"
+		>
+		</script>
+	</body>
+</html>

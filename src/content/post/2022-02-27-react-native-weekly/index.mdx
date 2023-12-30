@@ -1,0 +1,403 @@
+---
+title:  "React Native Weekly Special - Weeks 7, 8, and 9 2022"
+description:  "React Native Weekly Special - Weeks 7, 8, and 9 2022"
+publishDate: 2022-02-27
+tags:    ["react-native", "react-native-weekly"]
+---
+
+This is the **44th edition of the React Native Weekly**, and this edition comes after a two weeks hiatus where I struggled to find the energy to work on the RN weekly - send positive vibes ❤️.
+
+
+This edition covers 7th to 27th of February, a wopping 20 days of commits 😲 - 139 commits by 44 distinct engineers.
+
+In this edition I did not include any community updates due to the size of the post.
+
+## Highlights
+
+- React Native New Architecture Working Group
+- Fix incorrect border color when switching to dark mode [iOS]
+- Fix broken input for Korean alphabet in TextInput [iOS]
+- Fix action sheet callback invoked more than once on iPad
+- Fix Text with adjustFontSizeToFit updating infinitely [Android]
+- Removed find-node.sh script
+- Flag to build Hermes from source on iOS
+- Synchronously render cached images [iOS]
+
+And more...
+
+## Fix TouchableOpacity not reacting to dynamic style.opacity changes
+
+Hetan Thakkar hetanthakkar1@gmail.com posted [the issue](https://github.com/facebook/react-native/issues/32476) and sent [a fix](https://github.com/facebook/react-native/commit/3eddc9abb70). With this fix dynamically changing the opacity style will also trigger the TouchableOpacity's inactive state.
+
+
+## Rename RuntimeScheduler::callImmediates to RuntimeScheduler::callExpiredTasks
+
+The compeling part [of this change](https://github.com/facebook/react-native/commit/d79f6580169) is the comment to visualize the upcoming concurrent mode and how React Native renderer will handle it through the RuntimeScheduler.
+
+```diff
++   * Expired task is a task that should have been already executed. Designed to
++   * be called in the event pipeline after an event is dispatched to React.
++   * React may schedule events with immediate priority which need to be handled
++   * before the next event is sent to React.
+    *
+    * Thread synchronization must be enforced externally.
+    */
+-  void callImmediates(jsi::Runtime &runtime);
++  void callExpiredTasks(jsi::Runtime &runtime);
+```
+
+along side the above change Samuel Susla samuelsusla@fb.com also [enabled RuntimeScheduler::callExpiredTasks on Android](https://github.com/facebook/react-native/commit/731429ebcf7).
+
+
+## Fix incorrect border color when switching to dark mode [iOS]
+
+Danilo Bürger info@danilobuerger.de [fixed an issue](https://github.com/facebook/react-native/commit/9a358187976) that was a side-effect to prior change that started using the system UIColor on iOS instead of the CGColor for the borders, [see this link for the difference](https://stackoverflow.com/questions/20140576/ios-cgcolor-versus-uicolor/20140941).
+
+Danilo noticed how in certain iOS OS versions it did not resolve the correct border color for dark mode, see related [StackOverflow post](https://stackoverflow.com/a/57177411/2525941). This commit resolves the colors with the current trait collection to ensure the right colors are selected.
+
+
+## Update RedBoxDialog to separate content view and dialog
+
+
+Xin Chen xch@fb.com made a strategic change due to VR.
+
+Summary from Xin:
+
+[This diff](https://github.com/facebook/react-native/commit/97ce240a271) separates the content view creation logic from existing `RedBoxDialog` logic. After the change, `RedBoxDialog` is no longer a subclass of `Dialog`, but behaves like a dialog with forwarding pattern to delegate dialog API to internal member. This will keep the APIs consistent with dependent components.
+
+The motivation of the change is to make the content view reusable. This is important in VR surface where we don't have activities and necessary implementations for Dialog to show.
+
+He [later also created a delegate - RedBoxSurfaceDelegate](https://github.com/facebook/react-native/commit/fc7eb91f56e) to abstract the surface logic on how to show RedBox.
+
+## Introduce RawEventEmitter
+
+Joshua Gross joshuagross@fb.com [added the RawEventEmitter interface](https://github.com/facebook/react-native/commit/1f15a640286).
+
+
+## Further support for AnimatedColor
+
+Genki Kondo gkondo@fb.com continued the feature work to fully support AnimatedColor natively on both iOS and Android. The following were added during this period:
+
+- [Support AnimatedColor.setValue for platform colors - Android](https://github.com/facebook/react-native/commit/bb435a2b117)
+- [Support color animation with native driver - iOS](https://github.com/facebook/react-native/commit/49f3f47b1e9)
+- [Allow color styles to be animated using native drivver.](https://github.com/facebook/react-native/commit/201f355479c)
+- [Example of using Animated Color](https://github.com/facebook/react-native/commit/1aec8819585)
+
+Next up Genki mentioned adding iOS support for platform colors.
+
+## Fix DarkMode for DatePickerDialogFragment [Android]
+
+David Vacca dvacca@fb.com [fixed DarkMode on the Calendar DateTimePicker](https://github.com/facebook/react-native/commit/97064ae1fbf).
+
+```diff
+diff --git a/ReactAndroid/src/main/res/shell/values/styles.xml b/ReactAndroid/src/main/res/shell/values/styles.xml
+index b0418ce8525..1db9ac70f79 100644
+--- a/ReactAndroid/src/main/res/shell/values/styles.xml
++++ b/ReactAndroid/src/main/res/shell/values/styles.xml
+@@ -19,11 +19,12 @@
+         <item name="android:datePickerMode">spinner</item>
+     </style>
+
+-    <style name="CalendarDatePickerDialog" parent="Theme.AppCompat.Light.Dialog" tools:targetApi="lollipop">
++    <style name="CalendarDatePickerDialog" parent="android:Theme.Material.Dialog.Alert" tools:targetApi="lollipop">
+         <item name="android:datePickerStyle">@style/CalendarDatePickerStyle</item>
++        <item name="android:windowIsFloating">true</item>
+     </style>
+
+-    <style name="CalendarDatePickerStyle" parent="android:Widget.Material.Light.DatePicker" tools:targetApi="lollipop">
++    <style name="CalendarDatePickerStyle" parent="android:Widget.Material.DatePicker" tools:targetApi="lollipop">
+         <item name="android:datePickerMode">calendar</item>
+     </style>
+```
+
+
+
+## Improved JVM 11 error message
+
+Muhammad Numan muhammadnuman70@gmail.com [improved the JVM error message due](https://github.com/facebook/react-native/commit/4e947ecb2da) to trying to build Gradle with other than JVM 11 and Nicola Corti ncor@fb.com [downgrade the Java source/target compat to JVM 8](https://github.com/facebook/react-native/commit/3d8a7fe14a2) for the invalid JVM version to be handled through a formatted message.
+
+He added a check for the JVM version which outputs the following message:
+
+```
+**************************************************************************************************************
+
+ERROR: requires JDK11 or higher.
+Incompatible major version detected: '8'
+
+**************************************************************************************************************
+```
+
+## Fix bug when converting string casing with on non ASCII languages [Android]
+
+Hamid halaeiv@gmail.com [added a fix](https://github.com/facebook/react-native/commit/5341ad89624) for a very unexpected bug where lowering/upper casing a string in a non ASCII langugage like Turkish causes a bug by returning unexpected symbols, see [joltup/rn-fetch-blob#573](https://github.com/joltup/rn-fetch-blob/issues/573)
+
+The fix is suprisingly to add `Locale.ROOT` as argument to the `toLowerCase` or `toUpperCase` calls.
+
+
+```java
+final String splitBundlesDir = subclassTag.toLowerCase(Locale.ROOT) + "_dev_js_split_bundles";
+```
+
+## Fix broken input for Korean alphabet in TextInput [iOS]
+
+Minsik Kim kmsbernard@gmail.com [tackled](https://github.com/facebook/react-native/commit/1a83dc36ce0) a [long standing issue](https://github.com/facebook/react-native/issues/32503) where updating text in a TextView/TextField with Korean language had unexpected results.
+
+
+## Disable view flattening when the view has event handlers [Android]
+
+Andrei Shikov ashikov@fb.com [added the following change](https://github.com/facebook/react-native/commit/980c52de412), comment from Andrei Shikov:
+
+The views with touch event props are currently flattened by Fabric core, as we don't take event listeners into account when calculating whether the view should be flattened. This results in a confusing situation when components with touch event listeners (e.g. `<View onTouchStart={() => {}} /> `) or ones using `PanResponder` are either ignored (iOS) or cause a crash (Android).
+
+
+## Bridgeless Mode Warnings
+
+Paige Sun paigesun@fb.com added a few error logs to warn of unexpected use of ReactInstanceManager or any deprecated methods in Bridgeless mode.
+
+Deprecated methods/modules in bridgeless mode include ReactInstanceManager and all UIManager methods.
+
+
+## Fix RCTLogError and RCTLogWarn to display RedBox or LogBox in Bridgeless
+
+Paige Sun paigesun@fb.com [fixed an issue](https://github.com/facebook/react-native/commit/74f5697fdcf) with the native RCTLogError and RCTLogWarn to display RedBox or LogBox in Bridgeless mode for feature parity between Bridge and Bridgeless.
+
+
+## Added ability to access properties with symbol keys through JSI
+
+[Commit](https://github.com/facebook/react-native/commit/9010bfe457b) by Neil Dhar neildhar@fb.com.
+
+
+
+## Fix crash for some OS/OEM when WebView is not supported [Android]
+
+Kunal Farmah kunal.farmah@airtel.com [fixed an issue](https://github.com/facebook/react-native/commit/8c573d93365) where the error catch was not working due to inconsistent crash class name between OS/OEMs on Android. Instead Kunal resorted to parsing the error message for the right keywords - seems brittle, Android I guess.
+
+Kunal explained how to reproduce this crash today:
+
+Launch any app that has a webview.
+Go to settings->apps->Android System Webview -> disable.
+Resume/Restart the app.
+
+In this fix:
+Open a webview and notice that the app will not crash.
+
+In current version:
+App crashes on startup as the exception escapes the catch block.
+Even if it survives startup (did on Realme X), it will crash once you try to open a webview.
+
+
+## Fixed accessibility announcement for disable state on press Text
+
+[Fix](https://github.com/facebook/react-native/commit/7b2d8178b15) by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com
+
+
+
+## Fix ReactHorizontalScrollView contentOffset
+
+Genki Kondo gkondo@fb.com brought [the same fix](https://github.com/facebook/react-native/commit/be260b9f479a3b55ee43d2959d2c49fd3c1eb4ac) for ReactScrollView to ReactHorizontalScrollView.
+
+According to Genki:
+
+> When setting ScrollView's contentOffset, if the ScrollView hasn't been laid out yet when ReactHorizontalScrollViewManager.setContentOffset is called, then scroll position is never set properly. This is because the actual scroll offset (0, 0) was being passed into setPendingContentOffsets, instead of the desired scroll offset. Thus, when ReactHorizontalScrollView.onLayout gets called, ReactHorizontalScrollView.scrollTo gets called with (0, 0).
+
+
+## Refactor Fabric Perf Logger
+
+David Vacca dvacca@fb.com refactored the Fabric commit statistics [to simplify](https://github.com/facebook/react-native/commit/8dddff5547d) and [allow it to be consumed outside Fabric](https://github.com/facebook/react-native/commit/78e03b6fb7d) to be integrated by a developer tools in the future.
+
+
+For those curious, here is the list of evet names caputured by this performance logger:
+
+```diff
++    return name == FABRIC_COMMIT_START
++        || name == FABRIC_COMMIT_END
++        || name == FABRIC_FINISH_TRANSACTION_START
++        || name == FABRIC_FINISH_TRANSACTION_END
++        || name == FABRIC_DIFF_START
++        || name == FABRIC_DIFF_END
++        || name == FABRIC_LAYOUT_START
++        || name == FABRIC_LAYOUT_END
++        || name == FABRIC_BATCH_EXECUTION_START
++        || name == FABRIC_BATCH_EXECUTION_END
++        || name == FABRIC_UPDATE_UI_MAIN_THREAD_START
++        || name == FABRIC_UPDATE_UI_MAIN_THREAD_END;
+```
+
+## Fix action sheet callback invoked more than once on iPad
+
+[Fix](https://github.com/facebook/react-native/commit/8935d6e697d) by Janic Duplessis janicduplessis@gmail.com
+
+According to Janic:
+
+> iOS will sometimes invoke the UIAlertAction handler for the cancel button more than once on iPad. This can be reproduced relatively easily by having a button that opens an action sheet and spam tapping outside the action sheet while it is opening. Since native module callbacks can only be invoked once this causes the app to crash here https://github.com/facebook/react-native/blob/main/ReactCommon/react/nativemodule/core/platform/ios/RCTTurboModule.mm#L206.
+
+
+
+## @react-native-community/viewpager is no longer supported
+
+maaxg maxgps5@hotmail.com updated the reference to [react-native-community/viewpager](https://www.npmjs.com/package/react-native-community/viewpager) which is no longer supported, the recommendation it's to use [react-native-pager-view](https://github.com/callstack/react-native-pager-view) instead.
+
+
+## Support for setting up a Gradle Enterprise instance via external script
+
+Nicola Corti ncor@fb.com [added support](https://github.com/facebook/react-native/commit/f11dcfaea14) to allow for setting up a Gradle Enterprise instance via an external script.
+
+From Nicola:
+
+> This diff allows to setup a Gradle Enterprise instance either locally or on CI via an external Gradle script.
+> I've create a `.sample` script that users can copy to start setting up their GE instance, should they have one.
+> Moreover, it applies the `com.gradle.enterprise` Gradle plugin by default. This has the positive side effect of not invalidating build cache for the included build if you happen to pass the `--scan` flag in OSS (as the classpath isn't changed).
+
+
+
+## Fixed Switch component not disabling clicks
+
+fabriziobertoglio1987 fabrizio.bertoglio@gmail.com [fixed a state issue](https://github.com/facebook/react-native/commit/b2e625a5172) where the Switch component did not disable clicks when setting either disabled to true or accessibilityState?.disabled to true.
+
+
+## Unblock CI by disabling `test_ios_unit_hermes`
+
+Nicola Corti ncor@fb.com had to disable the `test_ios_unit_hermes` CI test because the commit [that extended JSI to support accessing properties with symbol keys](https://github.com/facebook/react-native/commit/9010bfe457b) broke iOS hermes due to an ABI incompatibility.
+
+According to Nicola: We can re-enable them as soon as Hermes 0.12.0 is released.
+
+
+
+## Set build.gradle resolution to not mix React native imports
+
+Nicola Corti ncor@fb.com set a resolution strategy for com.facebook.react:react-native when on New Architecture to not mix
+imports of React Native from source vs prebuilts.
+
+According to Nicola:
+
+With this resolution strategy, we'll make sure all the import of `com.facebook.react:react-native:+`
+will be resolved to the correct dependency.
+
+
+```diff
+diff --git a/template/android/app/build.gradle b/template/android/app/build.gradle
+index 506dca12111..bb24740f14a 100644
+--- a/template/android/app/build.gradle
++++ b/template/android/app/build.gradle
++if (isNewArchitectureEnabled()) {
++    // If new architecture is enabled, we let you build RN from source
++    // Otherwise we fallback to a prebuilt .aar bundled in the NPM package.
++    // This will be applied to all the imported transtitive dependency.
++    configurations.all {
++        resolutionStrategy.dependencySubstitution {
++            substitute(module("com.facebook.react:react-native"))
++                    .using(project(":ReactAndroid")).because("On New Architecture we're building React Native from source")
++        }
++    }
++}
++
+```
+
+_Diff was cut for shortness, see commit for full diff_
+
+
+
+## Fix Text with adjustFontSizeToFit updating infinitely [Android]
+
+Alfonso Curbelo alfonso.curbelo@coinbase.com [fixed an issue](https://github.com/facebook/react-native/commit/c1db41f0609) where a text component that has the property adjustsFontSizeToFit updated the text layout infinitely on Android.
+
+
+## Deprecate `reactRoot` in favor of `root` and `reactNativeDir` [Gradle] [Android]
+
+[Commit](https://github.com/facebook/react-native/commit/8bc324fd343) by Nicola Corti ncor@fb.com, worth reviewing this commit if you have a Monorepo and use `reactRoot`.
+
+From Nicola:
+
+The `reactRoot` property was confusing as we were using it for both the root of the project
+and the react-native NPM Package root. I'm deprecating it and splitting it in two.
+
+I've added several warning in the codebase to tell the people how to migrate away from it.
+Moreover this is specifying default values that are more user-friendly. Users won't have to
+configure anything unless they are in a monorepo.
+
+
+## Introduce ReactNativeFeatureFlags
+
+David Vacca dvacca@fb.com [introduced ReactNativeFeatureFlags](https://github.com/facebook/react-native/commit/33aba774564) file to control FeatureFlags in React Native, currently it only controls `isLayoutAnimationEnabled`.
+
+
+
+## Removed find-node.sh script
+
+Riccardo Cipolleschi cipolleschi@fb.com [removed the `find-node.sh` script](https://github.com/facebook/react-native/commit/802b3f778b4) because it introduced complexity to the system.
+
+Warning - if you relied on `find-node.sh` to set your Node version using some Node Package Manager this will likely break your flow.
+
+
+
+## Enable Kotlin build in OSS
+
+[Commit](https://github.com/facebook/react-native/commit/b1a779392d4) by Andrei Shikov ashikov@fb.com. Could this mean we will start seeing some native modules in Kotlin? Maybe.
+
+
+
+## Use mapbuffer for ReactViewGroup [Android]
+
+Another changy by Andrei Shikov ashikov@fb.com, Andrei explains well his changes in his commit message:
+
+> Provides an alternative way of diffing props on Android side. Instead of passing dynamic JSON values from JS, the new approach diff C++ props and serializes difference into a `MapBuffer`. Current implementation does this only for `RCTView` component to test performance, correctness and memory impact (as MapBuffers are supposed to be more compact and performant).
+
+> This way of passing props allows for additional alignment between platforms, as C++ props are now source of truth for the view state, similar to iOS. At the same time, changing serialization method requires reimplementing `ViewManager` codegen (done manually for now) to account for `MapBuffer`s.
+
+With the above change, Andrei Shikov also [optimized the `rawProps` variable](https://github.com/facebook/react-native/commit/1953f6f02e9) to only initialize when not using `MapBuffer` potentially decreasing memory footprint.
+
+
+
+## Add flag to enable building Hermes from source on iOS
+
+[Commit](https://github.com/facebook/react-native/commit/3c958a838d7) by Héctor Ramos hramos@fb.com.
+
+With this change, you can run `BUILD_HERMES_SOURCE=1 pod install` to build Hermes from source on iOS.
+
+
+## Fix Switch causing RetryableMountingLayerException
+
+[Fix](https://github.com/facebook/react-native/commit/8d50bf11335) by jonathanmos jonathanmo@wix.com
+
+Summary:
+
+> Added a null check to native.value in Switch to fix regression from RN 66 -> stuck operation in mViewCommandOperations list in Android Release on initial layout of a screen with Switch component. If approved, please incorporate this fix into an RN 66 release.
+
+
+## Implement ReadableNative*::mapException without dynamic_cast
+
+Adapted from Pieter De Baets pieterdb@fb.com commit message, [Pieter changed](https://github.com/facebook/react-native/commit/42719e3bb7f) fbjni's mapException interface to use `std::exception_ptr`, this enables the use of `std::rethrow_exception` and `catch` statements to check for specific exception types, rather than using dynamic_casts and having an explicit dependency on RTTI.
+
+Note that avoiding RTTI provides significant binary size gains.
+
+## Synchronously render cached images [iOS]
+
+Mo Wang mowang@fb.com noticed how React Native asynchronously loaded even cached images resulting in the image rendering a frame later. With [this patch](https://github.com/facebook/react-native/commit/189c2c89584) this no longer happens and the image renders synchronously.
+
+
+## Dependency bumps
+
+- [Bump android Appcompat to 1.4.1](https://github.com/facebook/react-native/commit/6b61995647c)
+- [Remove `@babel/plugin-transform-object-assign` from preprocessor](https://github.com/facebook/react-native/commit/89c3aac6e18)
+- [Bump direct Metro dependencies to 0.68.0](https://github.com/facebook/react-native/commit/f89a0b765c0)
+- [Remove Prettier from packages/eslint-config-react-native-community since it is already a peer dependency](https://github.com/facebook/react-native/commit/2db1bca9522).
+- [Bump AGP to 7.1.1](https://github.com/facebook/react-native/commit/200488e87cf)
+- [Bump CLI version to 7.0.3](https://github.com/facebook/react-native/commit/df2e934a697)
+
+
+## React Native New Architecture Working Group
+
+Similar to the [React 18 working group](https://github.com/reactwg/react-18/discussions) that was created to discuss the roll out of React 18 with the community, the React Native Core team created a [new architecture working group](https://github.com/reactwg/react-native-new-architecture).
+
+## Partners
+
+- [TypeScript Weekly](https://www.typescript-weekly.com/): The best TypeScript links every week, right in your inbox.
+- [This Week In React](https://www.getrevue.co/profile/thisweekinreact): the best of React & React Native news. Sebastien filters the noise, and you save time!
+- [ES.next News](http://esnextnews.com): learn about the latest in JavaScript and cross-platform tools.
+- [Tailwind Weekly](https://tailwindweekly.com): all things Tailwind CSS, new issue every Saturday.
+
+
+## Done
+
+If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+

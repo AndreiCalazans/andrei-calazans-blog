@@ -1,0 +1,262 @@
+---
+title: "Personal Comments On Leland's Prediction"
+description: "Leland made a prediction about the popularity of React & React Native, and usage of strictly typed languages back in 2017. How did it pan out?"
+publishDate: "2021-04-24"
+tags: ["react","react-native","typescript"]
+---
+import leland_panel from './leland_panel.png';
+import prior_state_of_js_front_end from  './prior_state_of_js_front_end.png';
+import front_end_framwork_usage from './front_end_framwork_usage.png';
+import ui_frameworks from './ui_frameworks.png';
+import mobile_js_framework_usage from './mobile_js_framework_usage.png';
+import rendered_to_js from './rendered_to_js.png';
+import state_of_js_js_flavours from  './state_of_js_js_flavours.png';
+
+On April 12, 2017, Leland Richardson who then worked at Airbnb in its mobile
+development efforts using React Native tweeted the following:
+
+<div style={{ borderLeft: "4px solid gray", paddingLeft: 20 }}>
+Leland Richardson @intelligibabble Apr 12, 2017
+
+Prediction:
+
+2y from now: react and react native will still be popular.
+
+4y from now, we'll be using "react" except in a strong typed lang
+
+[Tweet](https://twitter.com/intelligibabble/status/852343893152550914)
+</div>
+
+While predictions can carry optimism, most did agree with two of the
+three elements of this prediction back in 2017.
+
+The controversial prediction was using React in a strongly typed language.
+
+
+# The 2021 React Summit Panel
+
+I had an amazing opportunity to discuss the above prediction in a [panel](https://www.youtube.com/watch?v=TsAJfiuVvu8) brought
+you by [G2i](https://g2i.co) at the React Summit 2021.
+
+At the panel, we discussed a few important points, however, I felt that much
+more could have been said of which time simply did not allow us to. Thus, I am writing
+this piece to bring you more information.
+
+
+<img alt="React Summit 2021 Panel" style={{ width: '100%' }}
+src={leland_panel.src} />
+
+# What 2017 Looked Like
+
+To understand Leland Richardson's view I think it is important for me to
+explain what was happening in 2017.
+
+React was the most popular web framework with Angular as a runner up. It had
+recently became the most popular by numbers if you look back at the 2017 State
+of JavaScript survey.
+
+<img alt="2017 State of JS Front End" style={{ width: '100%' }}
+src={prior_state_of_js_front_end.src} />
+
+[2017 State Of JavaScript Front End Graph](https://2017.stateofjs.com/2017/front-end/results)
+
+
+React Native was about two years old on version 0.4X and had plenty of bugs on
+its core, specially on Android. While Flutter had been released, it was in beta
+and unreliable to use for production - no one was even mentioning it as an
+alternative to cross-platform from React Native. The JavaScript cross-platform competitors to React
+Native were NativeScript, Ionic, and Cordova (PhoneGap).
+
+And TypeScript was not as popular as it is today, specially with the React
+crowd, "pre-2017ish" TypeScript was used more with Angular projects. For React,
+[Flow](https://flow.org)'s default support made it easier to opt into Flow instead if
+you wanted static types. Further, [ReasonML](https://reasonml.github.io) had recently been announced and had
+a lot of hype from early adopters.
+
+
+# React's Popularity
+
+The first prediction mentioned how React would still be popular in 2019. This was
+certainly the most likely event to happen since React had in 2017 recently
+taken the throne.
+
+Interesting enough, right around 2019 Svelte does get more attention.
+Nevertheless, despite some advocating for its compiler advantages and
+great developer experience, Svelte has not dethroned React.
+
+However, at the end of 2018 something does happen which could change the course
+of React. React Hooks are released.
+
+Openning for me to promote another blogpost I have 😅: [why were hooks created?](/posts/2020-11-01/hooks-were-not-made-to-give-state-to-functions)
+
+The advent of hooks takes React into a new direction that could potentially
+damage its popularity.
+
+While this has not happened, we can see some being vocal about their
+discontentment with React Hooks on [Twitter](https://twitter.com/HenrikJoreteg/status/1379871612879597568) and [tech article](https://medium.com/swlh/the-ugly-side-of-hooks-584f0f8136b6)s. They seem to highlight the following cons:
+
+- Overly complex.
+- Hard to scale since you lose the mental model, clarity, and traceability of
+    lifecycle methods.
+- Higher coupling of business logic with React.
+- Too magical.
+
+At the end, React hooks created stateful and effectful functional components,
+which bothered the FP purist crowd, but satisfied the pragmatist crowd because
+it was simply less code and more practical to use.
+
+But, no matter what, it seems there will always be a "against it" crowd. Before
+React hooks, class components and JSX were the main targets. I guess it only
+becomes a problem for the framework when you have more on the "against it"
+crowd.
+
+<img alt="Front End Framework 2020"  style={{ width: '100%' }}
+src={front_end_framwork_usage.src} />
+
+[2020 State of JavaScript - Front End Framework Usage](https://2020.stateofjs.com/en-US/technologies/front-end-frameworks/#front_end_frameworks_experience_ranking)
+
+And despite us being at a React conference, when we polled the event about
+other frameworks we saw how they continue ubiquitious.
+
+<img alt="State of JS UI Frameworks" style={{ width: '100%' }}
+src={ui_frameworks.src} />
+
+# React Native's Popularity
+
+React Native on the other hand, did not in 2019 have an absolute reign.
+
+Leland worked at Airbnb while its mobile division used React Native, and
+concidentially or not to Leland's prediction [Airbnb actually sunsets React Native usage in 2018](https://medium.com/airbnb-engineering/sunsetting-react-native-1868ba28e30a).
+
+Further, in December 4th, 2018 Flutter announces its 1.0 version making everyone
+question if React Native is the best approach to cross-platform. This is
+followed by a few interesting companies annoucing they will use Flutter, most
+remarkably
+[Alibaba](https://alibabatech.medium.com/utilizing-flutter-best-practice-from-alibaba-236a53aa32c8) and [Nubank (Brazilian Fintech worth billions)](https://medium.com/building-nubank/https-medium-com-freire-why-nubank-chose-flutter-61b80b568772).
+
+
+While, React Native never truly got a grip on the mobile development world, it
+has always been second to native approaches when it comes to popularity, we
+could say it has achieved strong popularity in the JavaScript world as a way
+to use React to build mobile apps. And I honestly believe that is the main
+reason why React Native is popular in JS - because of the ability to use React's
+mental model to build apps with JavaScript.
+
+So we can say:  "yea sure", React Native has maintained its popularity in the JavaScript
+community. But, not as confident as we say with React for web.
+
+
+<img alt="2020 State of JS Mobile Framework Usage" style={{ width: '100%' }}
+src={mobile_js_framework_usage.src} />
+
+[2020 State of JavaScript - Mobile JavaScript Framework Usage](https://2020.stateofjs.com/en-US/technologies/mobile-desktop/)
+
+# Strongly Typed Languages
+
+The last prediction was about the usage of React in a strongly typed language.
+
+First, we need to understand what "strongly typed language" actually means, and
+unfortunately even the definition we get from Wikipedia is not very clear:
+
+<div style={{ borderLeft: "4px solid gray", paddingLeft: 20 }}>
+In computer programming, one of the many ways that programming languages are colloquially classified is whether the language's type system makes it strongly typed or weakly typed (loosely typed). However, there is no precise technical definition of what the terms mean and different authors disagree about the implied meaning of the terms and the relative rankings of the "strength" of the type systems of mainstream programming languages.
+
+https://en.wikipedia.org/wiki/Strong_and_weak_typing
+</div>
+
+
+But, in the Twitter thread which Leland makes his prediction he does share
+which languages he has in mind: [ReasonML](https://twitter.com/intelligibabble/status/852344795443765248?s=20) with [Kotlin, Swift, and F# as possible
+contenders.](https://twitter.com/intelligibabble/status/852345148046426112?s=20)
+
+Others in the same thread mentioned Elm, however, Elm has its own UI framework so
+it does not apply to this prediction. (And Elm has not gained mass adoption
+despite Richard Feldman's efforts 😅)
+
+
+But, what has happened?
+
+**TypeScript has gotten mass adoption.**
+
+<img alt="Crowd poll on compiled to JavaScript picks" style={{ width: '100%' }}
+src={rendered_to_js.src} />
+
+94% of the developers watching React Summit 2021 said they use TypeScript with
+React.
+
+And we can see the remarkable growth from 39% to 78% usage of TypeScript in the
+JavaScript community recorded by the State of JavaScript survey.
+
+<img alt="2020 State of JS Flavours" style={{ width: '100%' }}
+src={state_of_js_js_flavours.src} />
+
+[2020 State of JavaScript - JavaScript Flavours Usage](https://2020.stateofjs.com/en-US/technologies/front-end-frameworks/#front_end_frameworks_experience_ranking)
+
+
+**But, is TypeScript a strongly typed language?**
+
+First, since the definition of strongly typed is up for interpretation it becomes hard
+to straight up answer yes or no. The following thus is a personal take.
+
+For me it is **not**.
+
+TypeScript intentionally makes design decisons that results in an unsound type system.
+
+
+<div style={{ borderLeft: "4px solid gray", paddingLeft: 20 }}>
+
+TypeScript [gave up type soundness](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals#non-goals) from its conception [by design](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22By+Design%22), so one can never be 100% sure that the types you write will type check as expected.
+
+[Quote from Javier Chavarri's blog on Language Debt](https://www.javierchavarri.com/language-debt/)
+</div>
+
+
+
+Ryan Cavanaugh, Engineering Lead for TypeScript, openly says you should look
+for an alternative if you want a sound type system.
+
+<div style={{ borderLeft: "4px solid gray", paddingLeft: 20 }}>
+
+Ryan Cavanaugh @SeaRyanC Jan 24, 2019
+
+Why not just pick up Reason, PureScript, Rust, or any other number of other sound languages that can target JS? Trying to bolt on a truly sound type system onto JS syntax/semantics cannot be done ergonomically
+
+[Ryan's Tweet](https://twitter.com/SeaRyanC/status/1088594722296229888)
+</div>
+
+
+When [Orta talked about why TypeScript is popular](http://orta.io/notes/js/why-typescript) he mentions the caveat that
+TypeScript only aims to "feel correct in a lot of case" opposed to "being
+correct".
+
+
+# What Will 2025 Look Like?
+
+I think React will still be widely used. We are likely to see another UI
+framework gain ground with a similar mental model of components. I do think
+there is an interesting shift from runtime frameworks to compiler frameworks
+like Svelte.
+
+For React Native, it is losing ground to Flutter because it has no intention of
+becoming a complete SDK for cross-platform development, plus in my personal
+opinion Facebook's strategy of having an internal non-opened "Facebook-First-Approach" to developing React Native is not ideal for the external users. Of course, we do see large enterprises using React Native, nevertheless, these companies have the budget and ability to easily move away from React Native if they decide.
+
+However, I don't think there is a strong alternative to React Native for
+JavaScript developers at the moment. The main reason is to drive mass adoption this
+technology must be backed by a big tech (FAANG) which none exist right now for
+JavaScript cross-platform and the alternatives not backed by big tech are simply ignored by the masses. It is unfortunate since I believe React Native is a
+local maxima of what could be achieved in this space.
+
+Strongly typed languages won't go anywhere. I much prefer working with a
+strictly typed language like OCaml, but it is a niche in which the advocates for it will continue to exist, but at least in the near future it will not become mainstream.
+
+
+# G2i's Blogpost
+
+Tejas also posted a blogpost about Leland's prediction prior to our panel which you can find it [here](https://www.g2i.co/blog/the-leland-prediction-4-years-later).
+
+# Thank You!
+
+This was a large post, but I totally enjoyed writing it and I hope you enjoyed
+reading it. Thank you.
+

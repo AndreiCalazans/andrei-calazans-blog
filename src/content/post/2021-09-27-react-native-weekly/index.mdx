@@ -1,0 +1,169 @@
+---
+title:  "React Native Weekly - W39 2021"
+description:  "React Native Weekly - W39 2021"
+publishDate: 2021-09-27
+tags:    ["react-native", "react-native-weekly"]
+---
+
+Welcome to the 27th edition of React Native Weekly!
+
+This is week 39 of 2021: September 20th to 26th.
+
+
+# Don’t hard-code CocoaPods’s sandbox path
+
+This [commit](https://github.com/facebook/react-native/commit/ef5ff3e0554) by Jakob Krigovsky jakob@krigovsky.com, now allows you to call `pod install --project-directory=ios` from the root of the project, or anywhere you specify the project directory to be. Previously, this would fail.
+
+
+# Add cancelButtonTintColor props to ActionSheetIOS
+
+Muhammad Numan muhammadnuman70@gmail.com updated the ActionSheetIOS on this [commit](https://github.com/facebook/react-native/commit/01856633a1d)
+
+I was surprised to see changes to the ActionSheetIOS make it to the core since Expo started maintaining [a separate version](https://github.com/expo/react-native-action-sheet) of it since the Lean Core initiative. I recommend you use Expo's version of it instead.
+
+
+| <img width="200" height="" src="https://user-images.githubusercontent.com/36044436/128414537-c4454786-a5cf-49d2-8225-1ff26c9c5058.png"  /> | <img width="200" height="" src="https://user-images.githubusercontent.com/36044436/128414549-74a21509-711e-48e0-baf1-3718beae1598.png"  /> | <img width="200" height="" src="https://user-images.githubusercontent.com/36044436/128414559-4bee9d1a-ac9f-4cd2-b158-5c4c441158ec.png"  /> |
+
+
+# Updates to Android's Build System
+
+For the past three weeks or so, Nicola Corti ncor@fb.com has been doing a lot of work around Android's build system. He made several improvements by refactoring, breaking things up into invidual tasks, and more.
+
+The stuff he did last week:
+- [Removed extra missing script from package.json](https://github.com/facebook/react-native/commit/9cf4bb73c0d4ab5ab548db2cbc8f9e6e14e6d50d)
+- [Setup a package inside `react-native-gradle-plugin`.](https://github.com/facebook/react-native/commit/3a411319134ac39d217d1d7b37d515026dd822b5)
+- [Fix GenerateCodegenArtifactsTask calling two generators with Java enabled](https://github.com/facebook/react-native/commit/5b8da02296b9c4fa56e7b2af13d5d74be86a70ce)
+- [Move `PathUtilsTest.kt` to the correct package](https://github.com/facebook/react-native/commit/c3e294f2a80f71c00deb02cdd56b0b41f182b499)
+- [Add unit tests for GenerateCodegenSchemaTask](https://github.com/facebook/react-native/commit/861acce530e8bc970cfdf1f6a6010dfc26043279)
+- [Add unit tests for BuildCodegenCLITask](https://github.com/facebook/react-native/commit/0d9b32769c11e7025ddec67933d6081dbb131f09)
+- [Merge `CodegenPlugin` with `ReactAppPlugin`](https://github.com/facebook/react-native/commit/929cb56f223ab9d4281d6a76c466006c3e00ef02)
+- [Test the Android template on CircleCI](https://github.com/facebook/react-native/commit/12b0e024e1521cb378d619e84f6f64832af38d5a)
+- [Export `GenerateCodegenArtifactTask` to its own task.](https://github.com/facebook/react-native/commit/d314d1f2654bdb2c7d0306daa994e08a5dd13298)
+- [Remove `mavenLocal()`](https://github.com/facebook/react-native/commit/b4ac21152b7cbc2b0c0c8fbdb64bba29f149f643)
+- [Export `GenerateCodegenSchemaTask` to its own task.](https://github.com/facebook/react-native/commit/7df5f57fa70b36320c3b2a5032a8140591edb118)
+
+Next time I have a Gradlew build issue I might just ping him 😅
+
+
+#  Ensure elevated views are behind sticky header in FlatList [Android] [Fix]
+
+[This commit](https://github.com/facebook/react-native/commit/4090195122c) uses `enableZ` trick to ensure that renderer doesn't try to reorder the views based on elevation.
+
+
+# Circle CI: Package a release on every commit
+
+Héctor Ramos hramos@fb.com [extended the Circle CI](https://github.com/facebook/react-native/commit/c0b46f3487a) config to include a per-commit release build that does not get published to NPM.
+
+
+# Introduce RCTComputeScreenScale
+
+Phillip Pan phillippan@fb.com [exposed](https://github.com/facebook/react-native/commit/99f706e5df4) the [UIScreen mainScreen].scale for Apple devices as a temporary solution to dealing with different screen sizes.
+
+
+# How to disable Fabric on RNTester
+
+[Commit](https://github.com/facebook/react-native/commit/499274b99d8)
+
+```
+diff --git a/packages/rn-tester/README.md b/packages/rn-tester/README.md
+index 8b0ea4becc9..087f0cf3587 100644
+--- a/packages/rn-tester/README.md
++++ b/packages/rn-tester/README.md
+@@ -12,6 +12,12 @@ Before running the app, make sure you ran:
+
+ ## Running on iOS
+
++If you are testing non-fabric component, modify [the fabric_enabled flag in RNTester's Podfile](https://github.com/facebook/react-native/blob/main/packages/rn-tester/Podfile#L21).
++
++```ruby
++fabric_enabled = false
++```
++
+ ```
+
+# ScrollView automaticallyAdjustKeyboardInsets prop iOS
+
+[Commit](https://github.com/facebook/react-native/commit/6e903b07fa8) by our infamous Marc Rousavy marcrousavy@hotmail.com
+
+The following is taken from the commit summary written by Marc Rousavy marcrousavy@hotmail.com.
+
+The `automaticallyAdjustKeyboardInsets` prop automatically animates `contentInset`, `scrollIndicatorInsets` and `contentOffset` (scroll Y) to avoid the Keyboard. (respecting absolute position on screen and safe-areas)
+
+He also included a fix for the `contentInset` not respected when animating new items with `autoScrollToTopThreshold`.
+
+<table>
+<tr>
+
+<th>Before</th>
+<th>After</th>
+</tr>
+<tr>
+
+<td>
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/15199031/115708680-9700aa80-a370-11eb-8016-e75d81a92cd7.MP4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+</td>
+
+<td>
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/15199031/115708699-9b2cc800-a370-11eb-976f-c4010cd96d55.MP4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+</td>
+</tr>
+</table>
+
+
+
+
+Why not just use `<KeyboardAvoidingView>`?
+
+<table>
+<tr>
+<th>with KeyboardAvoidingView</th>
+<th>with automaticallyAdjustKeyboardInsets</th>
+</tr>
+<tr>
+<td>
+
+
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/15199031/115708749-abdd3e00-a370-11eb-8e09-a27ffaef12b8.MP4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+</td>
+
+<td>
+
+<video controls style={{ width: "100%", height: "auto" }}>
+  <source src="https://user-images.githubusercontent.com/15199031/115708777-b3044c00-a370-11eb-9b7a-e040ccb3ef8c.MP4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+</td>
+</tr>
+</table>
+
+Also notice how the `<KeyboardAvoidingView>` does not match the animation curve of the Keyboard
+
+
+# Community
+
+- Colorwaver App that uses Reanimated + VisionCamera to parse an image and return a color pallete built by Marc is available on the App Store ([Tweet](https://twitter.com/mrousavy/status/1440991993501523968))
+- React Native Price Ticker with web support by [Fernando Rojo](https://twitter.com/FernandoTheRojo) [link](https://snack.expo.dev/@beatgig/reanimated-price-ticker)
+- JSI Explained by Oscar Wilde [Tweet](https://twitter.com/ospfranco/status/1441407660725841920?s=20)
+- Pong game using React Native Skia integration ([Tweet](https://twitter.com/chrfalch/status/1440571334262546433?s=20))
+- [Interesting Spacer Component API by Giuseppe](https://twitter.com/giuseppegurgone/status/1441511270021091328?s=20)
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+

@@ -1,0 +1,231 @@
+---
+title:  "React Native Weekly - W35 2021"
+description:  "React Native Weekly - W35 2021"
+publishDate: 2021-08-30
+tags:    ["react-native", "react-native-weekly"]
+---
+
+Welcome to the 24th edition of React Native Weekly! 
+
+Week 35 - this is everything that happened between the 23rd and 29th of August 2021.
+
+# Improvements of the TextInput's selection Prop
+
+[A parser and a primitive were added](https://github.com/facebook/react-native/commit/8434177722f) in C++. [The selection prop is applied when component is mounted for iOS](https://github.com/facebook/react-native/commit/9187e207524).
+
+
+# Fix Gradle pacakgeTask and asserts dir for Android libraries
+
+Change by Leon Kiefer leon.k97@gmx.de.
+
+This is an issue that started at 0.63. When building an android library the package task has a different name, which was not handled correctly in the react.gradle file. The fix uses the existing `packageTask` variable which is correctly set for applications and libraries. 
+
+[This commit](https://github.com/facebook/react-native/commit/88f0676ae49) fixes issues like: https://github.com/facebook/react-native/issues/29577 and https://github.com/react-native-community/upgrade-support/issues/93
+
+
+# Add codegen.js wrapper around generate-specs.sh
+
+Héctor Ramos hramos@fb.com [wrapped the Shell script with a Node.js program](https://github.com/facebook/react-native/commit/cfb6c3cd0a7), I guess to make it more user friendly.
+
+Usage:
+`node ./codegen.js --srcs ./js --modules_library_name FBReactNativeSpec`
+
+
+# Add support for the UIAccessibilityTraitsTabBar
+
+Now you can set AccessibilityRole to 'tabbar'. [Change](https://github.com/facebook/react-native/commit/11f8d9c7cd4).
+
+# Add window to jest setup
+
+Timo Mämecke timomeh@users.noreply.github.com in this [commit](https://github.com/facebook/react-native/commit/bc1c533833b) fixes an issue with tests where some libraries checked if window is undefined to determine if the code is running on a server:
+
+```js
+const isServer = typeof window === 'undefined'
+```
+
+
+# Remove usages of `dynamic_casts` that are used inside assertions
+
+[This is an interesting change](https://github.com/facebook/react-native/commit/a6768bfd701) because in it we learn that the React Native Core team wants to remove the RTTI flags. As it can also been seen in this other [commit](https://github.com/facebook/react-native/commit/7dc22116b07):  "Remove RTTI from LayoutAnimations".
+
+> This diff is part of a bigger effort to remove the RTTI flags.
+
+To do so they need to remove occurrences of `dynamic_cast` and other functions that rely on runtime type informations.
+
+In C++, RTTI's have a bad rep for having bad performance, increasing bundle size to include the type informations, and for indicating a bad architecture.
+
+
+# Fixed dynamic behavior of Text adjustsFontSizeToFit={true} [Android]
+
+A fix by Valentin Shergin valentin.shergin@coinbase.com. He explains the `adjustsFontSizeToFit` was implemented in a way that expected the Yoga to call `onMeasure` on every text size change, which doesn't happen.  
+
+Since he believe the issue is fixed in Fabric, and the proper fix would be too invasive, [he included a workaround](https://github.com/facebook/react-native/commit/59021521e7a) to mark the node as dirty to force remeasuring by Yoga. 
+
+
+# onKeyPress event not fired with numeric keys [Android]
+
+[Diff](https://github.com/facebook/react-native/commit/ee3e71f5361) by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com
+
+The TextInput onKeyPress event is not fired when pressing numeric keys on Android.
+
+The method sendKeyEvent will dispatchKeyEvent only for:
+- ENTER_KEY_VALUE
+- KEYCODE_DEL (delete key)
+
+| **BEFORE** | **AFTER** |
+|:-------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/24992535/83673015-7ce2a000-a5d7-11ea-9c1d-32a5f5605687.gif" width="300" height="" /> | <img src="https://user-images.githubusercontent.com/24992535/83673017-7f44fa00-a5d7-11ea-8d93-edf1f61f7023.gif"  width="300" height="" /> |
+
+
+# Add 12 BLUETOOTH_ADVERTISE to Permissions [Android] 
+
+The latest Android 12 Beta build titled BLUETOOTH_ADVERTISE as a `dangerous` permissions requiring approval for them.
+
+[Diff](https://github.com/facebook/react-native/commit/2bcc6fac384) by Connor Tumbleson connor@sourcetoad.com
+
+
+
+# Added Fabric appwide feature flag
+
+[This diff](https://github.com/facebook/react-native/commit/8c4912a42f0), adds a new ReactFeatureFlag to enable or disable Fabric appwide.
+
+# Compare strings by value instead of reference
+
+[This change](https://github.com/facebook/react-native/commit/25c5d194ad3), while subtle, explains an interesting on going change to a new linker the core team is rolling out.
+
+Summary by Vincent Lee leevince@fb.com:
+LLD, our new iOS linker, is an ongoing effort to migrate our old outdated ld64 linker. As part of our effort to rollout LLD to all apps, we are making sure LLD reaches parity with ld64.
+
+Due to Identical Code Folding (ICF), LLD and ld64 handles strings differently. LLD treats each string as a separate object in memory even if the values of the strings are the same. ld64 happens to aggregate these values across files. This behavior creates a subtle difference on our codebase when we start comparing by value or by reference.
+
+`char * ` fields from `RawPropsKey.h` are using `==` which compares by its address. Here, we cast the buffer to a string to make the comparison, while avoiding the cast if one happens to be null.
+
+How the cast is done in C++:
+
+`+  return std::string(lhs) == std::string(rhs);`
+
+
+# Remove DatePickerAndroid from React Native
+
+Part of the lean core initiative. [Removal](https://github.com/facebook/react-native/commit/7a770526c62)
+
+# Show RedBox for C++ errors
+
+Sota Ogo sota@fb.com [hooked up the cxx error](https://github.com/facebook/react-native/commit/d6c879edbad) to the redbox, previously they were only being logged and with Fabric more errors will come from C++.
+
+
+
+# Remove unsupported values for android_hyphenationFrequency [Android]
+
+[Diff](https://github.com/facebook/react-native/commit/a0d30b848a0) by Genki Kondo gkondo@fb.com
+
+```diff
+diff --git a/Libraries/Text/TextProps.js b/Libraries/Text/TextProps.js
+index b2a39e58df7..3942a5998cd 100644
+--- a/Libraries/Text/TextProps.js
++++ b/Libraries/Text/TextProps.js
+@@ -66,13 +66,7 @@ export type TextProps = $ReadOnly<{|
+    * Set hyphenation strategy on Android.
+    *
+    */
+-  android_hyphenationFrequency?: ?(
+-    | 'normal'
+-    | 'none'
+-    | 'full'
+-    | 'high'
+-    | 'balanced'
+-  ),
++  android_hyphenationFrequency?: ?('normal' | 'none' | 'full'),
+   children?: ?Node,
+ 
+   /**
+```
+
+
+
+# Fix `alignItems: baseline` for Text elements [Android]
+
+[This](https://github.com/facebook/react-native/commit/1acf3346145) fixes https://github.com/facebook/react-native/issues/20666 and https://github.com/facebook/react-native/issues/21918.
+
+Notes from Valentin Shergin valentin.shergin@coinbase.com:
+
+This is pretty much the same as 51b3529f6c2ca354800c0cf6ecb8eb3115eaa36e but implemented for Android.
+Now Text exposes the actual base-line offset value that allows Yoga to position it properly when `alignItems: baseline` is requested.
+
+Before:
+<img width="487" alt="Screen Shot 2021-05-22 at 7 03 18 PM" src="https://user-images.githubusercontent.com/22032/119277516-d62b5100-bbe5-11eb-9141-3abe56e1a476.png"/>
+
+After:
+<img width="487" alt="Screen Shot 2021-05-22 at 7 01 51 PM" src="https://user-images.githubusercontent.com/22032/119277518-d75c7e00-bbe5-11eb-9139-4c6b5fcd9157.png"/>
+
+
+
+# Optimize font handling on iOS (#31764)
+
+[A commit](https://github.com/facebook/react-native/commit/4ac42d88ef6) by Adlai Holler adlai@google.com. Certainly interesting to see a Google employee making a contribution to React Native ☺️. Adlai is someone who has contributed to Flutter as well.
+
+Summary by Adlai:
+
+Few issues I saw when profiling RNTester:
+- Repeatedly calling `-lowercaseString` during `weightOfFont` causes a TON of extra memory traffic, for no reason.
+- `NSCache` is thread-safe, so no need for a mutex.
+- Using `stringWithFormat:` for the cache key is slow. Use `NSValue` to store the data directly instead.
+- Calling `-fontDescriptor` in `isItalicFont` and `isCondensedFont` is overly expensive and unnecessary.
+- `+fontNamesForFamilyName:` is insanely expensive. Wrap it in a cache.
+
+Unscientific test on RNTester iPhone 11 Pro, memory & time. Before:
+<img width="300" alt="Screen Shot 2021-06-23 at 7 40 06 AM" src="https://user-images.githubusercontent.com/2466893/123092882-f4f55100-d3f8-11eb-906f-d25086049a18.png"/>
+<img width="300" alt="Screen Shot 2021-06-23 at 7 41 30 AM" src="https://user-images.githubusercontent.com/2466893/123092886-f6267e00-d3f8-11eb-89f6-cfd2cae9f7b6.png"/>
+
+After:
+<img width="300" alt="Screen Shot 2021-06-23 at 9 02 54 AM" src="https://user-images.githubusercontent.com/2466893/123101899-7d2c2400-d402-11eb-97f8-2ee97ee69ec4.png"/>
+<img width="300" alt="Screen Shot 2021-06-23 at 8 59 44 AM" src="https://user-images.githubusercontent.com/2466893/123101892-7bfaf700-d402-11eb-9a10-def46b37b87f.png"/>
+
+
+
+# Make JSI a dynamic library
+
+[Commit](https://github.com/facebook/react-native/commit/1bc885b8b85)
+
+Summary by Neil Dhar neildhar@fb.com:
+Ship libjsi as a standalone dynamic library. This prevents problems
+with exception handling caused by duplicate typeinfo across multiple
+shared libs, and reduces bundle size by removing duplicate copies of
+JSI.
+
+
+# Fabric updates
+
+There were multiple PRs that continues to implement feature parity between the legacy modules and the new Fabric modules, examples were:
+
+- [53c6494615f](https://github.com/facebook/react-native/commit/53c6494615f) Remount children in scrollView if layout changes  
+- [ca60be88825](https://github.com/facebook/react-native/commit/ca60be88825) Add android_hyphenationStrategy to ParagraphAttributes  
+- [3b2d5419899](https://github.com/facebook/react-native/commit/3b2d5419899) Set textBreakStrategy default to be HighQuality
+- [ca60be88825](https://github.com/facebook/react-native/commit/ca60be88825) Add android_hyphenationStrategy to ParagraphAttributes
+- and more
+
+
+# React Native Many Platform Post
+
+In this [blogpost by the Core Team](https://reactnative.dev/blog/2021/08/26/many-platform-vision) they highlighted their work towards bringing React Native to many platforms.
+
+The best part of this is how React Native benefits from working happening on each front, an example was how "View Flattening" implemented only for Android at first was later shipped for iOS improving performance there as well. 
+
+
+# Realtime Photo Color Palette Generator
+
+[Marc](https://twitter.com/mrousavy) opened source a realtime photo color palette generator he built with React Native.
+
+See the [tweet](https://twitter.com/mrousavy/status/1431639580508311553). Marc is on 🔥
+
+# react-native-shared-element updates
+
+[Hein Rutjes tweeted](https://twitter.com/IjzerenHein/status/1429825373269790720?s=20) how react-native-shared-element has received much needed updates and now supports React Navigation v6.
+
+
+# That Is It!
+
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+

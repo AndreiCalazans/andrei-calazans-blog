@@ -1,0 +1,154 @@
+---
+title:  "React Native Weekly - W19 2021"
+description:  "React Native Weekly - W19 2021"
+publishDate: 2021-05-09
+tags:    ["react-native", "react-native-weekly"]
+---
+
+Welcome to the eighth edition of React Native Weekly. This is week 19 of 2021.
+
+Reach out to me via Twitter if you have any feedback, and don't forget to subscribe!
+
+# How To Override CMD+R In Newer IOS Simulators
+
+How to override cmd+r in the newer iOS simulators: [Tweet](https://twitter.com/jonstuebe/status/1390384513927184385?s=20)
+
+If you don't want change the recording shortcut, you can always type `R` in the Metro CLI to make it reload.
+
+# Shopify's Webinar
+
+Shopify's investment in React Native is absolute. They are doing a webinar on how they write Performant React Native apps: [Tweet](https://twitter.com/ShopifyEng/status/1390357971662737408?s=20)
+
+I'll try to make it and summarize what I learn from them.
+
+# Software Mansion's Webinar
+
+Sofware Mansion is also hosting a webinar, for those who don't know Software Mansion is a massive contributor to the React Native ecosystem being the ones behind Reanimated.
+
+
+[Link to tweet about their webinar](https://twitter.com/swmansion/status/1389610772087644162?s=20)
+
+The topic is Native for React developers, I believe this is a nice topic for those who want to get into React Native from Web.
+
+
+# React Native Vision Camera V2 Release
+
+[Marc Rousavy](https://github.com/mrousavy) is a prolific contributor to the React Native ecosystem, he is in the forefront of what is possible to achieve with JSI, Turbo Modules, and Fabric. He has published a few libraries exploring the usage of JSI like [react-native-threading](), [react-native-mmkv](https://github.com/mrousavy/react-native-mmkv) (key-value storage), and [react-native-vision-camera](https://github.com/cuvent/react-native-vision-camera).
+
+He recently released [react-native-vision-camera](https://github.com/cuvent/react-native-vision-camera) v2.
+
+In summary it is blazing fast:
+
+<div style={{ borderLeft: "4px solid gray", paddingLeft: 20 }}>
+
+A fully native app written in Objective-C can do this in 68ms
+
+A #ReactNative app using VisionCamera Frame Processors (JavaScript) can do this in 69ms!
+
+There is a single millisecond difference for the bonus of using JS for AI!
+
+[Tweet](https://twitter.com/mrousavy/status/1390258629169852419?s=20)
+
+</div>
+
+
+# Rescript React Native Release 
+
+For the fans of sound types, no not TypeScript since is isn't sound 😅. ReScript React Native is here after its long transition from Reason React Native.
+
+[Tweet](https://twitter.com/MoOx/status/1389585232102367233?s=20)
+
+#  Add explicit type casts to fix compilation errors on Windows. (#31363)
+
+[Commit](https://github.com/facebook/react-native/commit/6d04a46f74) 
+
+It is positive to see how the impact surface of React Native core now expands to Microsoft. A recent change to `MapBuffer` broke compilation on Windows. 
+
+React Native certainly needs an automated end-to-end test verification that validates how all of its stakeholders are using React Native. 
+
+
+# Migrating To Functional Components
+
+Part of an effor to modernize React Native's components. They updated ItemWithSeparator in VirtualizedSectionList, Switch Component, and ScrollViewStickyHeader to be functional.
+
+[ItemWithSeparator Commit](https://github.com/facebook/react-native/commit/2e0e3f7ddb) 
+
+[Switch Component Commit](https://github.com/facebook/react-native/commit/ab66741c8c) 
+
+[ScrollViewStickyHeader](https://github.com/facebook/react-native/commit/438a4cf59b)
+
+
+# Accessibility Updates
+
+- [Add support for Toggle Button accessibilityRole](https://github.com/facebook/react-native/commit/da899c0cc4)
+- [Fix Image not annoucing accessibilityState disabled](https://github.com/facebook/react-native/commit/333b46c4b0)
+
+
+# Introduce RCTBundleManager
+
+Part of the Fabric rearchitecture effort, where there will be a "bridgeless" mode. `RCTBundleManager` [introduces](https://github.com/facebook/react-native/commit/4a1bafe591) a normalized way to read/write to the bundleURL even in bridgeless mode. Before this, native modules accessed the bridge directly, which will be `nil` in bridgeless mode. 
+
+After this stack lands, every NativeModule will be able to synthesize an RCTBundleManager, like so:
+```
+synthesize bundleManager = _bundleManager;
+```
+
+Interface Header
+
+```
++typedef void (^RCTBridgelessBundleURLSetter)(NSURL *bundleURL);
++typedef NSURL * (^RCTBridgelessBundleURLGetter)();
++
++/**
++ * A class that allows NativeModules/TurboModules to read/write the bundleURL, with or without the bridge.
++ */
++@interface RCTBundleManager : NSObject
++- (void)setBridge:(RCTBridge *)bridge;
++- (void)setBridgelessBundleURLGetter:(RCTBridgelessBundleURLGetter)getter
++                           andSetter:(RCTBridgelessBundleURLSetter)setter;
++@property NSURL *bundleURL;
++@end
++
+```
+
+As a follow up to the above change, a few native modules have been migrated to use the `RCTBundleManager`.
+
+```
+f2157a0558 Migrate RCTDevSettings to RCTBundleManager
+eb0a918577 Migrate RCTSourceCode to RCTBundleManager
+1f105e6f16 Migrate RedBox to RCTBundleManager
+adaa1c98f6 Migrate RCTDevLoadingView to RCTBundleManager
+4198c2bcb6 Migrate RCTDevMenu over to RCTBundleManager
+```
+
+
+
+# [External Collaboration] fix: codegen - project paths with spaces (#31141)
+
+Craig Martin cmart1220@gmail.com fixed a codegen script issue that incorrectly split root project paths that contained spaces.
+
+[Commit](https://github.com/facebook/react-native/commit/b2e2f43ec3) 
+
+
+
+# [External Collaboration] Add onPressIn & onPressOut props to Text (#31288)
+
+Adrien HARNAY adrien@harnay.me added `onPressIn` and `onPressOut` props to the `Text` component to help implement custom highlighting logic (e.g. when clicking on a Text segment). Since TouchableOpacity can't be nested in Text having custom lineHeights without bugs in some occasions, this modification helps to replicate its behavior.
+
+[Commit](https://github.com/facebook/react-native/commit/1d924549ca) 
+
+
+
+# Resolve Memory Leak In Promises [iOS]
+
+On iOS when using promises with Turbo Modules on iOS, previously they weren't destroying the weak reference to the resolver and rejector callbacks. With block guard they properly destroy it.   
+
+[Commit](https://github.com/facebook/react-native/commit/10a9a4ed89) 
+
+
+
+# That Is It!
+
+That's it for this week. If you want to see more checkout previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+

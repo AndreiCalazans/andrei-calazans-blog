@@ -1,0 +1,19 @@
+---
+title: "Why :443 is postfixed in https request domains?"
+description: "Today I learned why the :443 postfix on https domains are used"
+publishDate: "2022-12-06"
+tags: ["TIL","https"]
+---
+
+While investigating a request issue I noticed the URL had ":443" postfixed to the domain as "https://example.com:443/somepath".
+
+why would a domain be postfixed with ":443"
+
+A domain that is postfixed with ":443" is using the HTTPS protocol on port 443. HTTPS (Hypertext Transfer Protocol Secure) is a secure version of HTTP, the protocol used for communicating between web servers and clients. HTTPS encrypts the data transmitted between the server and the client, which helps to protect sensitive information (such as passwords and credit card numbers) from being intercepted by third parties.
+
+Port 443 is the default port for HTTPS traffic. When you see a domain postfixed with ":443", it means that the domain is using HTTPS on port 443 to communicate with the server. For example, if you see a URL that looks like "https://example.com:443", this means that the domain "example.com" is using HTTPS on port 443.
+
+In most cases, you don't need to include the port number (:443) in the URL when accessing a website over HTTPS. The web browser will automatically use port 443 for HTTPS traffic, so you can simply use the URL "https://example.com" to access the website. However, in some cases, you may need to specify the port number in the URL if the server is using a different port for HTTPS traffic.
+
+In summary, a domain that is postfixed with ":443" is using HTTPS on port 443 to communicate securely with the server. This is a common and recommended practice for protecting sensitive data transmitted over the internet.
+

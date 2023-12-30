@@ -1,0 +1,24 @@
+---
+title: "The currentColor keyword in CSS"
+description: "Today I learned what the currentColor keyword does in CSS"
+publishDate: "2021-11-20"
+tags: ["TIL","CSS"]
+---
+# Today I Learned
+
+[Tweet](https://twitter.com/Andrei_Calazans/status/1465604143012323328?s=20)
+
+TIL in @JoshWComeau's CSS for JS course: CSS has a keyword called `currentColor` that represents the value of the color property.
+
+```css
+.box {
+  color: hotpink;
+  border: 1px solid currentColor;
+  box-shadow: 2px 2px 2px currentColor;
+}
+```
+
+`currentColor` above equals hotpink. 
+
+[MDN currentColor keyword documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword)
+

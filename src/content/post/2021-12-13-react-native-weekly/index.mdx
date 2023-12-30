@@ -1,0 +1,90 @@
+---
+title:  "React Native Weekly - W50 2021"
+description:  "React Native Weekly - W50 2021"
+publishDate: 2021-12-13
+tags:    ["react-native", "react-native-weekly"]
+---
+
+Welcome to the 38th edition of React Native Weekly! 
+
+This is week 50 2021: December 6th to 12th. 
+
+
+# Fling animation Make fling animator customizable
+
+Xin Chen xch@fb.com continued his work on improving and fixing edge cases with the Fling animation in the scroll views. This is related to last week's work where he fixed some edges cases with the scroll fling animation that came up in VR.
+
+
+[66243271a7a](https://github.com/facebook/react-native/commit/66243271a7a) Refactor predictFinalScrollPosition method to the helper class  
+[1c1945569fd](https://github.com/facebook/react-native/commit/1c1945569fd) Fix mis-use of the post animated value when predict fling distance  
+[ead7b979445](https://github.com/facebook/react-native/commit/ead7b979445) Fix fling and snap in recycler viewgroup where children views not fill up all the scrollable space  
+[fe6277a30d3](https://github.com/facebook/react-native/commit/fe6277a30d3) Support override predict final scroll position with custom fling animator  
+
+# Custom name for codegen components
+
+Sota Ogo sota@fb.com [extended the codegen script to support custom names](https://github.com/facebook/react-native/commit/ba70ca4c584) which is useful for when the target name and component name are different.
+
+
+# Relanded ScrollView `automaticallyAdjustKeyboardInsets`
+
+Marc Rousavy marcrousavy@hotmail.com had introduced `automaticallyAdjustKeyboardInsets` and made some fixes to the content inset, however it got reverted because it broke something internally in Facebook and finally this week it was re-introduced. See the PR [full description](https://github.com/facebook/react-native/pull/31402).
+
+
+
+# Fixed find-node.sh to respect .nvmrc
+
+[With this fix](https://github.com/facebook/react-native/commit/35bcf934b18), when you build with Xcode you can expect it to correctly pick up the Node version set in .nvmrc of your project, previously it was using the default environment node version..
+
+
+
+
+# Introduce TextInput.onKeyPressSync
+
+This is an experimental API. [Commit](https://github.com/facebook/react-native/commit/f5f6fd70f2e)
+
+Note from Samuel Susla samuelsusla@fb.com:
+
+> Introduce a way to execute `onKeyPress` synchronously. This feature is experimental and will be changed in the future. It is not decided if marking native events as "sync" is going to be path forward with synchronous access.
+
+
+# Fire `AnimatedValue.stopAnimation` callback with correct native value
+
+The Animated value's `stopAnimation` takes a callback that returns the current value of the animation. Turns out this might not always be in sync with the actual native value according to Eric Rozell ericroz@fb.com. [This commit](https://github.com/facebook/react-native/commit/8ba771c3ddc) fixes this issue.
+
+```javascript
+  const anim = new Animated.Value(0);
+  Animated.timing(anim, {
+    duration: 1000,
+    useNativeDriver: true,
+  }).start();
+
+  const tag = anim.__getNativeTag();
+
+  let currentValue = 0;
+  anim.stopAnimation(value => (currentValue = value));
+```
+
+# 📚 The New Architecture Playbook 
+
+The React Native Website should be getting new documentation about the new architecture soon. [See the PR here](https://github.com/facebook/react-native-website/pull/2879).
+
+
+# Community
+
+- Expo SDK 44 will contain Reanimated v2.3 [tweet](https://twitter.com/tsapeta/status/1469057434018889739?s=20)
+- [Jamon's notes on his interview](https://twitter.com/jamonholmgren/status/1469351621591064582?s=20) with Kevin Gozali (RN Core)
+- [Catalin's posted another cool video doing an animation with Moti](https://twitter.com/mironcatalin/status/1468126706238173186?s=20)
+- [Callstack is releasing the talks from React Native Europe](https://twitter.com/react_native_eu/status/1469249278275112961) in their Youtube channel.
+- [1 hr tutorial creating a Tesla charger diary with Supabase and React Native](https://twitter.com/supabase/status/1468071382340849667?s=20)
+
+# Done
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+# Partners
+
+- [TypeScript Weekly](https://www.typescript-weekly.com/): The best TypeScript links every week, right in your inbox.
+- [This Week In React](https://www.getrevue.co/profile/thisweekinreact): the best of React & React Native news. Sebastien filters the noise, and you save time!
+- [ES.next News](http://esnextnews.com): learn about the latest in JavaScript and cross-platform tools.
+- [Tailwind Weekly](https://tailwindweekly.com): all things Tailwind CSS, new issue every Saturday.
+

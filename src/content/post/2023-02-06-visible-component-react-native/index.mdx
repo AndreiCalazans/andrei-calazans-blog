@@ -1,0 +1,47 @@
+---
+title: "How do you toggle a component's visibility without losing its UI space?"
+description: "Simple implementation of a Visible component that enables you to toggle the visibility of any component."
+publishDate: "2023-02-06"
+tags: ["react-native","react"]
+---
+
+How do you toggle a component's visibility without losing its UI space?
+
+You can use opacity with pointerEvents prop:
+
+```typescript
+import { View, StyleSheet } from 'react-native';
+import { ReactNode } from 'react';
+
+type VisibleProps = { isVisible: boolean; children: ReactNode };
+
+const styles = StyleSheet.create({
+  opacityNone: { opacity: 0 },
+  opacityOne: { opacity: 1 },
+});
+
+export function Visible({ isVisible, children }: VisibleProps) {
+  return (
+    <View
+      style={isVisible ? styles.opacityOne : styles.opacityNone}
+      // Using pointerEvents  in style does work.
+      pointerEvents={isVisible ? 'auto' : 'none'}
+      aria-hidden={!isVisible}
+    >
+      {children}
+    </View>
+  );
+}
+```
+
+Why do this?
+
+When you do the infamous `isVisible && <MyComp />` you remove the component
+from the UI leaving an empty hole, this causes layout to shift. The above trick
+does not cause layout shift.
+
+Why use pointerEvents?
+
+This disables touches to children components. Useful when you need to toggle
+visibility of a button.
+

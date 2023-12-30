@@ -1,0 +1,51 @@
+---
+title: "Code Comprehension Takes The Largerst Amount Of Time"
+description: "Code comprehension represents the largest amount of time spent with a codebase"
+publishDate: "2021-02-08"
+tags: ["engineering"]
+---
+
+## 58% Is Spent On Comprehension
+
+According to [this article](https://blog.feenk.com/developers-spend-most-of-their-time-figuri-7aj1ocjhe765vvlln8qqbuhto/), we spend most of our time in a codebase trying to understand it.
+
+<blockquote>
+<p>This paper is quite interesting in that it describes in great details how the figures are obtained. And it says that Comprehension took on average ~58%</p>
+<cite><a noopener noreferrer target="_blank" href="https://blog.feenk.com/developers-spend-most-of-their-time-figuri-7aj1ocjhe765vvlln8qqbuhto/">blog.feenk.com</a> (Accessed Monday, February 1, 2021)</cite>   
+</blockquote>
+
+<p style={{ marginTop: 20 }}>It isn't the only evidence for so, see the following comment:</p>
+
+<blockquote>
+<p>Roughly, it takes 2x more time to write a patch if you are unfamiliar with the project, but it takes 10x more time to figure out where you should change the code.</p>
+<cite><a noopener noreferrer target="_blank" href="https://matklad.github.io//2021/02/06/ARCHITECTURE.md.html">matklad.github.io</a> (Accessed Sunday, February 7, 2021)</cite>   
+
+</blockquote>
+
+
+## An Unsolved Problem?
+
+Our IDEs are mostly text based with some autocomplete and jump to definitions, but it certainly feels that we could increase code comprehension if we explore giving more contextual guidance to the code. 
+
+
+There are some companies exploring how to increase code comprehension:
+
+- SourceTrail https://www.sourcetrail.com
+- Maybe MakePad? https://github.com/makepad/makepad
+- Jupiter note book https://jupyter.org
+- Sketch for ReasonML and OCaml https://sketch.sh
+- Replay.io https://replay.io See it in action in this loom video https://www.loom.com/share/fd48dab3e0444686a74234364faf6645
+
+
+I'm yet to see a universal IDE based on AST instead of text based. It might not be impossible to achieve specially with the standardization of the Language Server Protocol.
+
+## Vetting
+
+For me this impacts how I interview someone. I am more inclined now to also check how you can interpreted/parse code you have not written. In my personal experience this is for sure fundamental to a developer - the ability of reading code. 
+
+## What Can We Do For Now?
+
+You can write less, simpler, and explicit code. Specially since our tools for code comprehension have not significantly evolved since the creation of computer.
+
+You can also read my take on <a href="/posts/2021-02-06/explicit-vs-implicit">Explicit vs Implicit here</a>, it is directly related to this topic.
+

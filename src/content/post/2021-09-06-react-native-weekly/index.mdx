@@ -1,0 +1,216 @@
+---
+title:  "React Native Weekly - W36 2021"
+description:  "React Native Weekly - W36 2021"
+publishDate: 2021-09-06
+tags:    ["react-native", "react-native-weekly"]
+---
+
+Welcome to the 25th edition of React Native Weekly! 
+
+Week 36 is everything that happened between the August 30th and 5th of September.
+
+
+# Pass nativeTimestamp into PressabilityPerformanceEvent
+
+[Commit](https://github.com/facebook/react-native/commit/cbe0e6bf27c)
+
+Pass nativeTimestamp into PressabilityPerformanceEvent as a way to uniquely identify events.
+
+```diff
+ export type PressabilityPerformanceEvent = $ReadOnly<{|
+   signal: TouchSignal,
++  nativeTimestamp: number,
+   touchDelayMs: number,
+ |}>;
+```
+ 
+ 
+The `PressabilityPerformanceEventEmitterSingleton` is a an emitter that emits events for all your Pressable components. You can also use its underlying Pressability class to make a View element fully pressable see the `usePressability` hook.
+
+
+# Add arguments to codegen script
+
+Héctor Ramos hramos@fb.com in this [diff](https://github.com/facebook/react-native/commit/2e8893fb5be) adds a few parameters to make the codegen script more configurable, read the summary by him:
+
+Summary:
+The codegen script now takes parameters for any necessary configuration. Now, there are three *required* parameters: JS_SRCS_DIR, LIBRARY_NAME, and OUTPUT_DIR.
+By default, all modules and components output will be copied to the OUTPUT_DIR under a single LIBRARY_NAME.
+
+If a fourth argument is provided, this COMPONENT_LIBRARY_NAME will be used for the component library name.
+If a fifth argument is provided, this COMPONENT_OUTPUT_DIR will be used as the output directory for the component library.
+
+
+
+
+# Enable codegen in RNTester's NativeModuleExample
+
+Héctor Ramos hramos@fb.com [included another change](https://github.com/facebook/react-native/commit/6651d8c3468), this time to the RNTester app code generating the `NativeModuleExample` with codegen.
+
+```diff
+
++  # Enable codegen for this library
++  use_react_native_codegen!(s, {
++    :react_native_path => "../../..",
++    :js_srcs_dir => "./",
++    :output_dir => "./"
++  })
++end
+```
+
+It generates these files when you `pod install`:
+
+```
+ScreenshotManagerSpec/
+  - ComponentDescriptors.h
+  - EventEmitters.h
+  - Props.h
+  - RCTComponentViewHelpers.h
+  - ScreenshotManagerSpec.h
+  - ShadowNodes.h
+  - EventEmitters.cpp
+  - Props.cpp
+  - ShadowNodes.cpp
+  - ScreenshotManagerSpec-generated.mm
+``
+And once you build the app it will populate them.
+
+
+The `ScreenshotManagerSpec-generated.mm` is the main bridging file. I guess at this moment `codegen` is only generating for iOS.
+
+Codegen generates the bridging code based on the JSI.
+
+```objective-c
+#import "ScreenshotManagerSpec.h"
+
+namespace facebook {
+  namespace react {
+    
+    static facebook::jsi::Value __hostFunction_NativeScreenshotManagerSpecJSI_takeSnapshot(facebook::jsi::Runtime& rt, TurboModule &turboModule, const facebook::jsi::Value* args, size_t count) {
+      return static_cast<ObjCTurboModule&>(turboModule).invokeObjCMethod(rt, PromiseKind, "takeSnapshot", @selector(takeSnapshot:resolve:reject:), args, count);
+    }
+
+    NativeScreenshotManagerSpecJSI::NativeScreenshotManagerSpecJSI(const ObjCTurboModule::InitParams &params)
+      : ObjCTurboModule(params) {
+        
+        methodMap_["takeSnapshot"] = MethodMetadata {1, __hostFunction_NativeScreenshotManagerSpecJSI_takeSnapshot};
+        
+    }
+  } // namespace react
+} // namespace facebook
+
+```
+
+
+# Add Xcode 12.5 + M1 machines CocoaPods post_install workaround
+
+If you are having issues with building with Xcode 12.5 on a M1 machine, see this [commit](https://github.com/facebook/react-native/commit/ac4ddec542f) by Kevin Gozali fkg@fb.com, he adds a workaround to the RNTester that you can copy.
+
+They also had to [switch the order of the search libraries](https://github.com/facebook/react-native/commit/329b026f3a4).
+
+# Add Linking examples in rn-tester (#30547)
+ 
+[See how to use the Linking module](https://github.com/facebook/react-native/commit/b26f2772624)
+
+# Fix non selectable Text in FlatList [Android]
+
+[Fix](https://github.com/facebook/react-native/commit/c360b1d92b6) by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com
+
+Summary by fabriziobertoglio1987 fabrizio.bertoglio@gmail.com:
+
+Text is not selectable inside a FlatList on Android. The solution is to invalidate the ReactTextView after a change of the selectable prop. If the view is visible, onDraw(android.graphics.Canvas) will be called at some point in the future and make the Text selectable.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/24992535/82672536-c2e74d80-9c40-11ea-8fd8-156bfacfac8a.gif" width="200" height="" />
+</p>
+
+
+# Android tooling version bumps
+
+[b1120c6a651](https://github.com/facebook/react-native/commit/b1120c6a651) Bump Gradle to 7.1.1 (#32138)
+[6a2b6c2f3ef](https://github.com/facebook/react-native/commit/6a2b6c2f3ef) Bump Kotlin to 1.4.32 (#32137)
+[8e66f0b35b5](https://github.com/facebook/react-native/commit/8e66f0b35b5) Bump Hermes pod to 0.9.0
+[66bd1e9c2c5](https://github.com/facebook/react-native/commit/66bd1e9c2c5) Bump Hermes npm to 0.9.0
+
+
+# Fix keyboardDismissMode="on-drag" [Android]
+
+[Fix](https://github.com/facebook/react-native/commit/7edf9274cf6) by Janic Duplessis janicduplessis@gmail.com
+
+Summary:
+
+The current logic using `_isTouching` does not work because `_handleTouchCancel` is always called before scroll events begin. This means `_isTouching` is always false. To fix it I moved the logic to `_handleScrollBeginDrag` which is only called once when scroll drag beings. This accomplishes the expected behavior and is better than keeping it in onScroll where it would be called for each scroll event.
+
+
+# Allow RCTRootView users to require NativeModules without the bridge
+
+[Change](https://github.com/facebook/react-native/commit/bfead74e69f) by Ramanpreet Nara ramanpreet@fb.com:
+
+Summary
+RCTRootVeiw exports the bridge. One reason why is to allow users of RCTRootView users to access NativeModules.
+
+- RCTBridge now exports the RCTModuleRegistry
+- RCTRootView now exports the RCTModuleRegistry exported by the bridge
+- Users of RCTRootView use the RCTModuleRegistry exported by RCTRootView to access NativeModules
+
+```diff 
++/**
++ * An object that allows one to require NativeModules/TurboModules.
++ * RCTModuleRegistry is implemented in bridgeless mode and bridge mode.
++ * Used by RCTRootView.
++ */
++@property (nonatomic, strong, readonly) RCTModuleRegistry *moduleRegistry;
++
+```
+
+# React Native Europe
+
+React Native EU happened last week brought you by [Callstack.io](https://callstack.com).
+
+You can watch [day 1 here](https://www.youtube.com/watch?v=Kt--iBUQcww&list=WL&index=14&t=13397s) and [day 2 here](https://www.youtube.com/watch?v=Kt--iBUQcww&list=WL&index=14&t=13397s).
+
+I had the chance to watch three talks, these were some of my notes:
+
+
+**Marc's talk on JSI**
+
+Marc is in the bleeding edge of what JSI and Reanimated's worklet patterns can enable you to do with React Native's Fabric architecture. He goes over using CameraVision with JSI and the `useFrameRate` hook; What JSI is; How you can create JSI values; How you can create a JSI HostObject; Tips for dealing with TypeArray; HOw react-native-mmkv is implemented; and how VisionCamera is implemented. This talk is an avalanche of information.
+
+
+**Joshua, React Native Core member, talks about his experience with the Fabric Renderer Rewrite** 
+
+Joshua mentions how Facebook migrated 1000+ surfaces to Fabric since 2018, which was supposed to be 6 months endeavor took them 2 years. 
+
+He also goes over the benefits of the renderer unification in C++, which allows for all the platforms to benefits for improvements done in that layer - he gave an example of Android's ScrollView and layoutAnimation engine implementation now having feature parity with iOS due to this.
+
+Lastly, he told us his experience with migrating some of the surfaces within the Facebook app to Fabric - most notably the issues he had with the previous renderer being hyper-optimized for performance preferring performance over accuracy. 
+
+
+**Satya's talk about React Navigation v6**
+
+Satya goes over the history of navigation solutions for React Native then explains the reasoning behind the radical change to a dynamic API for React Navigation v5. V6 polishes what v5 proposed and includes quality-of-life improvements by providing: a reusable library called `react-navigation/elements`; a `Stack.Group` component to group configs for a group of screen and avoid nested navigators that is anti-performant; and lastly by making the Stack Navigator default to a Native counterpart instead of the JS implementation starting with V6. 
+
+
+
+# react-native-mmkv 1.3.0
+
+[Tweet](https://twitter.com/mrousavy/status/1434175106478182405?s=20)
+
+
+# iOS 15 and Android 12 gotchas post
+
+[Official post by React Native Core](https://reactnative.dev/blog/2021/09/01/preparing-your-app-for-iOS-15-and-android-12)
+
+# Donate to react-navigation-shared-transition
+
+[Hein Rutjes](https://github.com/IjzerenHein) is open to sponsors and donations to implement the react-navigation-shared-transitions using JSI and native bindings - this will enable shared transitions directly with the native counterpart elements which is will be butter smooth. If your company or yourself would like to donate check his comment [here](https://github.com/IjzerenHein/react-navigation-shared-element/issues/186#issuecomment-910130076)
+
+# Bottom Sheet v4 
+
+[Tweet](https://twitter.com/Gorhom/status/1432362830553096194?s=20)
+
+# That Is It!
+
+
+That's it for this week. If you want to see more checkout the previous week's posts [here](/tags/react-native). Subscribe to get notified when new posts are out = )
+
+

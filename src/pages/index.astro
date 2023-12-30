@@ -1,0 +1,44 @@
+---
+import PageLayout from "@/layouts/Base";
+import PostPreview from "@/components/blog/PostPreview";
+import SocialList from "@/components/SocialList";
+import { getAllPosts, sortMDByDate } from "@/utils";
+
+const MAX_POSTS = 10;
+const allPosts = await getAllPosts();
+const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
+---
+
+<PageLayout meta={{ title: "Home", slug: "/" }}>
+	<section>
+		<h1 class="title mb-6">Hello World!</h1>
+		<p class="mb-4">
+			Hi, I'm Andrei Calazans. I build software for a living. You will often see me talking about
+			building mobile apps and the technology stacks I use. Reach out to me if you want to talk
+			about anything related to software.
+		</p>
+		<SocialList />
+	</section>
+	<section aria-label="Blog post list" class="mt-16">
+		<h2 class="title mb-4 text-xl">Posts</h2>
+		<ul class="space-y-4 sm:space-y-2">
+			{
+				allPostsByDate.map((p) => (
+					<li class="flex flex-col gap-x-2 sm:flex-row">
+						<PostPreview post={p} />
+					</li>
+				))
+			}
+		</ul>
+    <div class="flex justify-end">
+      <a
+        href="/posts"
+        class="px-4 py-4 sm:py-0 sm:hover:underline mt-4"
+        aria-current="page"
+        data-astro-prefetch
+      >
+        See all
+      </a>
+    </div>
+	</section>
+</PageLayout>

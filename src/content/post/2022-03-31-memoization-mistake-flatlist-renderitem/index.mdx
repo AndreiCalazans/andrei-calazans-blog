@@ -1,0 +1,74 @@
+---
+title: "How do you cache FlatList.renderItem? Is the below FlatList.renderItem properly cached?"
+description: "Let's take a look at caching FlatList's renderItem when it needs to pass down an ID to the on press of the list's item."
+publishDate: "2022-03-31"
+tags: ["react-native"]
+---
+
+You might be asking yourself: how do I properly memoize FlatList's renderItem when its onPress needs to know the ID of the item? 
+
+Let's see below.
+
+Is the below FlatList.renderItem properly cached?
+
+```typescript
+  const renderItem = useCallback(
+    ({ item: { node } }) => {
+      const slug = node.slug;
+      const handlePress = () => {
+        push('SignedOutAssetScreen', { assetSlug: slug });
+      };
+
+      return <MarketCell onPress={handlePress} key={node.uuid} asset={node} />;
+    },
+    [push],
+  );
+```
+
+Given that MarketCell is a memoized functional component - `const MarketCell = memo((props) => ...);` 
+
+Will MarketCell have re-renders or memo cache invalidations given its props?
+
+
+You would think the answer is no since it is wrapped by a useCallback and the dependency push never changes, however, a careful look shows that the answer is:
+
+**The answer is yes**
+
+Why? 
+
+Because `handlePress` is unstable. A function defined inside the renderItem's useCallback will be recreated everytime renderItem is called. 
+
+This recreation causes memo's cache to be invalidated. 
+
+How do we solve this problem?
+
+Good thing you asked. XD 
+
+
+To answer the question I want to argue that <mark>it is a good practice to avoid defining unmemoized inlined functions when your useCallback needs to return a component</mark> that consumes that callback.
+
+So for our case we can wrap the MarketCell component in another component so we can make sure to use a useCallback for the onPress callback:
+
+```typescript
+
+const Item = memo(
+  ({ asset }: { asset: MarketCellProps['asset'] & { slug: string } }) => {
+    const slug = asset.slug;
+    const { push } = useStackNavigation();
+    const handlePress = useCallback(() => {
+      push('SignedOutAssetScreen', { assetSlug: slug });
+    }, [slug, push]);
+
+    return <MarketCell onPress={handlePress} asset={asset} />;
+  },
+);
+```
+
+changing the renderItem to:
+
+```typescript
+  const renderItem = useCallback(({ item: { node } }) => {
+    return <Item key={node.uuid} asset={node} />;
+  }, []);
+
+```

@@ -1,0 +1,80 @@
+---
+title: "The State Of GPT by Andrej"
+description: "Summary and notes of Andrej Karpathy's The State of GPT keynote at Microsoft Build"
+publishDate: "2023-06-26"
+tags: ["llms","chat-gtp"]
+---
+
+This [talk at Microsoft Build](https://www.youtube.com/watch?v=bZQun8Y4L2A) by
+[Andrej Karpathy](https://twitter.com/karpathy) is a great introduction into
+Large Language Models (Llms). It clarified multiple doubts about the different
+available models plus how fine tuning happened. 
+
+I suggest you watch the entire talk given how impactful this technology is. But
+here are a few notes and thoughts I got from the talk.
+
+_This is not a summary_.
+
+## "Base models are not assistants"
+
+At 10:37 Andrej mentions how "Base models are not assistants". I found this
+particularly interesting to understand when you compare other models with
+ChatGTP 4. 
+
+Andrej explains that at the base level, LLMs are good at text completion and not
+assisting. The assistance abilities we see in ChatGTP 4 comes from all the later
+fine tuning that happens. Thus if you compare a raw base model like Llamma with
+ChatGTP you feel disappointed. 
+
+
+## Assistant training pipeline
+
+The process goes from: Pretraining -> Supervised Finetuning (SFT) -> Reward
+Modeling (RM) ->
+Reinforcement Learning (RL).
+
+Each step generates a model. Pretraining is the only step without human input,
+there is research and methods of removing humans from these other steps.
+
+
+## Base models are still useful in some cases 
+
+I found it insightful to learn from Andrej that Base models produce more diverse
+outputs making it better for scenarios where you want less predictability and
+more creativity. 
+
+You could pair a base model with some prompt engineering (more on this at the
+bottom) to get desired outcomes.
+
+
+## Explanation of prompt engineering jargon
+
+Since LLms are its core don't reason and are just text completion engines you
+can add context and leave a blank space for them to complete it for you. The
+following jargon is all about the styles of these context.
+
+- Zero shot: Introduces the context and leave a blank for the Llm.
+- Few shot: Introduces the context and a one or more completed examples before
+  introducing the blank space the Llm to complete.
+
+
+## Narrow down what context to leverage
+
+By default Llms will use their entire memory to complete you prompt, but when
+you define a character or trait for them as context they will narrow down the
+memory to use resulting in better assistance. 
+
+## Constrained Prompting
+
+Similarly to the above, since Lllms are completion engines you can constrained
+them to produce desired outcome. Like request them to only produce JSON or only
+fill out certan blank spaces in your document. 
+
+> LLms don't know what they don't know.
+
+
+## Improve Llms Reasoning Throught ReAct
+
+With the help of a strategy the forces the Llms to think, act, and observe its
+results you can achieve better completions.
+
