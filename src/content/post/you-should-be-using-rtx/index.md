@@ -21,6 +21,6 @@ This screenshot alone has a few strong reasons why you should be using rtx:
 
 Now if you like me, working with React Native and needing to manage runtime dependencies for Java, Node, Python, and Ruby. rtx is exactly what we want.
 
-And it seems like more is to come since Jesff Dickey ([@jdxcode](https://twitter.com/jdxcode)) announced support for [task runners in rtx as well](https://github.com/jdx/rtx/discussions/1264).
+And that's not it, the author of rtx, Jeff Dickey ([@jdxcode](https://twitter.com/jdxcode)), wrote about [10 other features](https://jdx.dev/posts/2023-04-08-10-rtx-features/) we missed which includes [task runners](https://github.com/jdx/rtx/discussions/1264) and _direnv_ like functionality to load and unload env variables per directory.
 
-Oh did I also mention it's written is Rust? so it is Blazingly Fast 😍
+Oh did I also mention it's written in Rust? so it is Blazingly Fast 😍
