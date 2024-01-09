@@ -23,15 +23,15 @@ _ps: I don't even know what to say about copyright. This entire thing was
 simply [spit out by ChatGPT](https://chat.openai.com/share/a837a1b8-e867-4ce7-a6a0-05f6a942b001) and my job in this was simply validating everything
 it said and trying out its code samples_
 
+## Initial Prompt
+
 You are specialized Rust engineer with tons of experience. You will tutor me on how to write great software with Rust. You will teach me all the basics to the advanced topics. You will be direct to the point and write cleaer examples for your explanations. Every code example you write will be accompanied for another example for me to complete so I can get the point.
 
 Let's start by you first giving me a list of topics to cover, from the very basics to the most advanced
 
-**Me:**
+---
 
 Certainly! Here's the roadmap for learning Rust, formatted in Markdown:
-
----
 
 ## Rust Learning Roadmap
 
