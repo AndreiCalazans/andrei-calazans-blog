@@ -41,7 +41,7 @@ Now we have the number of assets times 335: n assets * 335, initially we show 10
 that quickly becomes 3350 object references in whatever GraphQL client you are
 using.
 
-This is because GraphQL creates an object reprensentation which
+This is because GraphQL creates an object representation which
 typically includes a `__id` and a `__typename` as follows:
 
 
