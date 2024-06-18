@@ -15,7 +15,7 @@ specially when you handle the gestures in that same thread with [React Native Ge
 Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/).
 
 The problem is Reanimated introduces a new concept of ["Worklets"](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/glossary#worklet) and [Shared
-Values](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/glossary#shared-value). Developers don't alway know if a value should be a Shared Value or not.
+Values](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/glossary#shared-value). Developers don't always know if a value should be a Shared Value or not.
 Thus some decide to just use a Shared Value everywhere. This article covers the
 consequences of this approach when you need to read the Shared Value from the
 JavaScript thread.
