@@ -121,3 +121,9 @@ useAnimatedReaction(
 	},
 );
 ```
+
+## Giving It Back To Open Source
+
+If you are curious, [I've submitted a PR](https://github.com/PedroBern/react-native-collapsible-tab-view/pull/423) back to
+react-native-collapsible-tab-view trying to improve this blocking behavior.
+Hopefully it won't cause any regressions and be accepted.
