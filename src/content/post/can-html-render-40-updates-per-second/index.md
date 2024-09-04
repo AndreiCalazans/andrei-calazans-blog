@@ -1,7 +1,7 @@
 ---
 title: "Can HTML Render 40 Updates Per Second"
 description: "Can Virtual DOM and Vanilla JS handle 40 updates per second from SSE?"
-publishDate: "2024-08-19"
+publishDate: "2024-08-30"
 tags: ["html", "javascript"]
 ---
 
