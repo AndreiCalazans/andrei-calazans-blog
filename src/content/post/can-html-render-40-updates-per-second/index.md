@@ -16,40 +16,45 @@ WebSockets and Server-Sent Events (SSE).
 
 ## Vanilla JS plus WebSockets
 
-
-![image1][./image1.gif]
+![40 updates per second with pure Vanilla JS](./image1.gif)
 
 5 seconds window doing 40 updates per second via websocket client spent 370 milliseconds rendering (loading \+ scripting \+ rendering \+ painting \+ system) and 5090 milliseconds in idle mode.
 
-![image2][./image2.png]
+![40 updates per second with pure Vanilla JS with 20x slowdown](./image2.png)
+
 Now with 20x CPU slowdown. It can lag but still doing 40x updates per second.
 
 ## Vanilla JS plus SSE
 
-![][./image3.png]
+![](./image3.png)
+
 WebSocket implementation took on average 30ms from *Event.emit* to Paint via innerHTML. There were some hiccups with clearing times out with WebSockets that we didn't observe with SSE.
 
-![][./image4.gif]
+![](./image4.gif)
 SSE implementation also has similar 24.47ms time from *onmessage* to Paint via innerHTML.
 
 We also tested what would be the number of updates were we would start seeing significant lags and we arrived at 58 prices updates per second (interval of every 17ms). This is with 20x CPU slowdown:
 
-![][./image5.gif]
+![Vinalla JS 58 updates on 20x CPU slowdown](./image5.gif)
+
 58 prices updates per second at 20x CPU slowdown.
 
 ## React
 
-![][./image6.png]
+![React halting when throttled at 20x CPU with 40 updates](./image6.png)
+
 React comes to a halt when throttled to 20x CPU with 40 updates per second, it just freezes.
 
-![][./image7.png]
+![React halting at 40 updates per second](./image7.png)
+
 React comes to a halt at 40 updates per second, at 10 updates per second it takes \~45ms to receive the message and fully paint, at 20x CPU slowdown.
 
 We then tried with Inferno.js and we had the same problem as React.
 
 Then we tried with Solid.js
 
-![][./image8.gif]
+![React with 20x CPU throttling](./image8.gif)
+
 It was able to handle 20x CPU throttling but with tons of hiccups and a massive 171ms update span from message to receive to paint.
 
 ## Conclusion
