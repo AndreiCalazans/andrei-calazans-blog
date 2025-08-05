@@ -43,14 +43,16 @@ I suggest you check the following proccesses in the trace:
 
 - main thread: You can see how long it took to initialize the app plus all the
   Choreagrapher calls to dispatch rendering tasks.
-- mtq_js: This is the JavaScript thread, where the JavaScript code
-  runs. You can check how long it takes to execute the initial JavaScript code
-  and any delays in processing.
-- mqt_native_modu: This is the native module thread, where the native
-  modules are executed. You can check how long it takes to execute the initial
-  native modules and any delays in processing.
 - create_react_co: This is a thread used to initialize the React Native context.
-  You can see how long it is taking to process React Native packages.
+  Essentially the app won't run until this is done, so if it is taking long to
+  start. Also native packages intialized at app start will be visible here, so
+  if you have a native module with very slow initialization you can catch it.
+- mtq_js: This is the JavaScript thread, I usually check how it took to start
+  and if there are any long running blocking tasks here that I should
+  investigate further.
+- mqt_native_modu: this is the React Native modules thread where the native
+  modules run. This will indicate to you any async native modules that are
+  taking very long to run.
 - createView: This event captures how many createView calls were made which can
   show you how early the first view triggered from React Native was called plus
   how many views were made.
