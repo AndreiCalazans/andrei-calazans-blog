@@ -30,10 +30,8 @@ Perfetto is a tool for tracing and profiling Android apps. It can capture
 detailed performance data, including app start times, CPU usage, memory
 allocation, and more. This makes it an excellent choice for analyzing app start.
 
-However, it's abudance of features makes it actually hard to know how to get
+However, it's abundance of features makes it actually hard to know how to get
 started.
-
-For that reason here is a script that can help you get started.
 
 
 ## What Can You Check In Perfetto?
@@ -79,7 +77,14 @@ You can then build your app in release mode. This is important because you want
 to capture a real user experience, not a debug one.
 
 
-Once done. Copy the following script to a file called `capture_systrace.sh`
+To make this easier I wrote the following script to facilitate starting the
+trace and pulling the file from the device. This does the following:
+
+1. The script stores the Perfetto configuration.
+2. Then it starts the Perfetto trace by calling  `adb shell perfetto`
+3. Then it pulls the trace file from the device using `adb pull <file_path>`.
+
+To use the script copy the following script to a file called `capture_systrace.sh`
 locally.
 
 ```shellscript
