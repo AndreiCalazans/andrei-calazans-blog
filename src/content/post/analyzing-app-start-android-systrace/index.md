@@ -22,7 +22,7 @@ Native Android app is as fast as a native app since it is a native app. Given
 that nothing should stop you from building a fast app. I usually tell folks that
 if we can measure we can improve it.
 
-So how do you check measure app start performance in a React Native Android app?
+So how do you measure app start performance in a React Native Android app?
 
 ## Using Perfetto
 
@@ -44,11 +44,10 @@ I suggest you check the following proccesses in the trace:
 - main thread: You can see how long it took to initialize the app plus all the
   Choreagrapher calls to dispatch rendering tasks.
 - create_react_co: This is a thread used to initialize the React Native context.
-  Essentially the app won't run until this is done, so if it is taking long to
-  start. Also native packages intialized at app start will be visible here, so
-  if you have a native module with very slow initialization you can catch it.
-- mtq_js: This is the JavaScript thread, I usually check how it took to start
-  and if there are any long running blocking tasks here that I should
+  Essentially the app won't run until this is done. Also native packages intialized at app start will be visible here, so
+  if you have a slow initializing native module you can see it here.
+- mtq_js: This is the JavaScript thread, I usually check how long it took to start
+  and if there are any blocking tasks here that I should
   investigate further.
 - mqt_native_modu: this is the React Native modules thread where the native
   modules run. This will indicate to you any async native modules that are
@@ -270,3 +269,5 @@ Open the trace in the [Perfetto UI](https://ui.perfetto.dev/) to analyze it:
 ![A perfetto trace of a React Native Android app](./screenshot-perfetto-in-action.png "A perfetto trace of a React Native Android app")
 
 
+Finally, see this cool [trace analysis by Andrei
+Shikov](https://bsky.app/profile/shikasd.bsky.social/post/3lbbcfbv34s2p) done on the Bluesky app.
