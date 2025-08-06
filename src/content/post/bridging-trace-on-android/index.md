@@ -1,7 +1,8 @@
 ---
 title: "Bridging Trace API on Android"
 description: "This covers how you can get Trace calls from both the native and the JS thread"
-publishDate: "2025-08-06"
+publishDate: "2025-08-07"
+updatedDate: "2025-08-07T00:00:01.000Z"
 tags: ["android", "react-native", "performance", "systrace", "trace"]
 ---
 
@@ -41,7 +42,8 @@ analysis.
 
 ## Trace Native Module
 
-_nit not using TurboModule on purpose for simplicity_
+_nit not using TurboModule on purpose for simplicity, [here is a post with this
+module converted to TurboModule](/posts/migrating-native-module-to-turbo-module-android)_
 
 In android/app/src/main/java/com/myrnapp/TracingModule.kt:
 
