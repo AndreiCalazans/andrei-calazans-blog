@@ -18,8 +18,11 @@ consideration for app startup performance.
 
 
 By default React
-Native Android app is as fast as a native app since it is a native app. Given
-that nothing should stop you from building a fast app. I usually tell folks that
+Native Android app is as fast as a native app since it is a native app.
+
+![Stock React Native on Android takes ~600ms to load on low end device](./stock-rn-app-startup-android.png "Stock React Native on Android takes ~500ms to load")
+
+Given that nothing should stop you from building a fast app. I usually tell folks that
 if we can measure we can improve it.
 
 So how do you measure app start performance in a React Native Android app?
@@ -46,13 +49,13 @@ I suggest you check the following proccesses in the trace:
 - create_react_co: This is a thread used to initialize the React Native context.
   Essentially the app won't run until this is done. Also native packages intialized at app start will be visible here, so
   if you have a slow initializing native module you can see it here.
-- mtq_js: This is the JavaScript thread, I usually check how long it took to start
+- mtq_js or mqt_v_js (new arch): This is the JavaScript thread, I usually check how long it took to start
   and if there are any blocking tasks here that I should
   investigate further.
-- mqt_native_modu: this is the React Native modules thread where the native
+- mqt_native_modu or mqt_v_native (new arch): this is the React Native modules thread where the native
   modules run. This will indicate to you any async native modules that are
   taking very long to run.
-- createView: This event captures how many createView calls were made which can
+- createView (old arch, new arch use RenderThread's DrawFrames): This event captures how many createView calls were made which can
   show you how early the first view triggered from React Native was called plus
   how many views were made.
 
