@@ -40,6 +40,10 @@ export const menuLinks: Array<{ title: string; path: string }> = [
 		path: "/posts/",
 	},
 	{
+		title: "Utils",
+		path: "/utils/",
+	},
+	{
 		title: "Tags",
 		path: "/tags",
 	},

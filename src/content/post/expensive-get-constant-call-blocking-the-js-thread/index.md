@@ -10,11 +10,9 @@ harmless right?
 
 ```typescript
 const { JailMonkey } = NativeModules;
-
 ```
 
 > Well turns out no.
-
 
 ## Performance Is A Feature Not Given.
 
@@ -28,7 +26,6 @@ left and catch it early during development but this is topic for another post.
 
 On [previous posts](/posts/analyzing-app-start-android-systrace) I covered how you can use Perfetto Systrace on Android. This
 tool helps you visualize where some of the performance issues are coming from.
-
 
 ## A Blocking getConstant Call
 
@@ -50,7 +47,6 @@ narrowed down the places to look and quickly found the culprit code:
 
 ```typescript
 const { JailMonkey } = NativeModules;
-
 ```
 
 ## But Why is Jail Monkey Blocking?
@@ -68,11 +64,8 @@ the only synchronous JS blocking call that existed was actually the getConstant
 call for when you initialize your module since that is how you set the methods
 and variables available in the module in the JS thread.
 
-
-
 1. [RootedCheck getConstant call](https://github.com/GantMan/jail-monkey/blob/3ca2b4e5d7d18e031210b8d101a8915612d26312/android/src/main/java/com/gantix/JailMonkey/JailMonkeyModule.java#L72)
 2. [RootedCheck constructor](https://github.com/GantMan/jail-monkey/blob/3ca2b4e5d7d18e031210b8d101a8915612d26312/android/src/main/java/com/gantix/JailMonkey/Rooted/RootedCheck.java#L52-L65)
-
 
 Well, turns out this root check costs about 300ms on a typical Android device
 and fully blocks the JS thread contributing to a higher cold start.
@@ -181,4 +174,3 @@ index 2af5681a6910b1af4fd09718acae7f89ec46fd36..d8e114221cdc23e2934b2a106fe354d7
    hookDetected: () => JailMonkey.hookDetected || false,
    canMockLocation: () => JailMonkey.canMockLocation || false,
 ```
-

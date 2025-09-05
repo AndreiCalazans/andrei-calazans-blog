@@ -32,13 +32,11 @@ Use Trace for:
 - Tracking execution of specific blocks during startup
 - Debugging jank or slow operations
 
-
 The Trace API is not bridged by default in React Native. The internal [React
 Native Systrace](https://github.com/facebook/react-native/blob/457190cc4b3a113d70431cbc06021d049c940180/packages/react-native/Libraries/Performance/Systrace.js#L125-L134) API is only available in DEV and isn't properly setup for open source.
 
 So we are left with having to bridge this ourselves for our Android trace
 analysis.
-
 
 ## Trace Native Module
 
@@ -105,24 +103,22 @@ override fun getPackages(): List<ReactPackage> =
     }
 ```
 
-
 JS/TS usage:
 
 ```typescript
-
 function beginTraceSection(title: string) {
-  if (Platform.OS === 'android') {
-    NativeModules.TracingModule.beginSection(title);
-  }
+	if (Platform.OS === "android") {
+		NativeModules.TracingModule.beginSection(title);
+	}
 }
 
 function endTraceSection() {
-  if (Platform.OS === 'android') {
-    NativeModules.TracingModule.endSection();
-  }
+	if (Platform.OS === "android") {
+		NativeModules.TracingModule.endSection();
+	}
 }
 
-beginTraceSection('render-app-tsx');
+beginTraceSection("render-app-tsx");
 /* in some View's onLayout you can do:
 
 <View
@@ -131,11 +127,8 @@ beginTraceSection('render-app-tsx');
   }}
 
 */
-
 ```
 
 Done, now you can correlate your trace calls with the rest of the traces.
 
 ![Trace logs in Perfetto](./seeing-trace-calls.png "Trace logs in Perfetto")
-
-

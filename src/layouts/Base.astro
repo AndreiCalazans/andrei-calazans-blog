@@ -12,8 +12,7 @@ interface Props {
 }
 
 const {
-	meta: { title, description = siteConfig.description, ogImage, articleDate,
-  slug },
+	meta: { title, description = siteConfig.description, ogImage, articleDate, slug },
 } = Astro.props;
 
 const pathname = slug;
@@ -32,17 +31,13 @@ const pathname = slug;
 		</main>
 		<Footer />
 		<noscript>
-			<img
-				src={`https://stats.andrei-calazans.com/count?p=${pathname}`}
-				alt="Empty image"
-			/>
+			<img src={`https://stats.andrei-calazans.com/count?p=${pathname}`} alt="Empty image" />
 		</noscript>
 		<script
 			is:inline
 			data-goatcounter="https://stats.andrei-calazans.com/count"
 			async
 			src="/goatcounter.js"
-		>
-		</script>
+		></script>
 	</body>
 </html>

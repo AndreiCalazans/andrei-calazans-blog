@@ -13,8 +13,8 @@ Well, there is a feature flag for that
 called `enableFabricLogs` but how can I set that flag without having to build
 React Native from source?
 
-
 ## How To
+
 In your MainApplication.kt
 
 ```kotlin
@@ -31,6 +31,5 @@ ReactNativeFeatureFlags.override(object : ReactNativeFeatureFlagsDefaults() {
 ```
 
 You can view all the default features flags on [Android here](https://github.com/facebook/react-native/blob/c50f3e5f668887bfb0c7080155c066a4fdcc092c/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/internal/featureflags/ReactNativeFeatureFlagsDefaults.kt#L22).
-
 
 What about iOS? I don't care about iOS, it's never as broken as Android ; )

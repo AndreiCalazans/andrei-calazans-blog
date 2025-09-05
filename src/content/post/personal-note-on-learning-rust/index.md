@@ -21,7 +21,6 @@ On another note, scaling often is more related to being able to hire people with
 
 I am grateful for spending some time learning Rust further, if I ever get a change to be paid to write software in Rust I'm pretty sure I would enjoy it.
 
-
 ## Helpful Links
 
 Are you interested in learning Rust? Here a few links to look into:
@@ -33,5 +32,3 @@ Are you interested in learning Rust? Here a few links to look into:
   must watch](https://www.youtube.com/watch?v=BbIEuNscn_E&t)
 - [For a very long content but with intermediate to advanced level I can't
   recommend this playlist by Jon Gengset enough](https://www.youtube.com/playlist?list=PLqbS7AVVErFiWDOAVrPt7aYmnuuOLYvOa)
-
-

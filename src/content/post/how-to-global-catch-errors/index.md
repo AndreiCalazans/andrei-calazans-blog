@@ -21,16 +21,17 @@ Native (this works for pure React as well).
 
 ## How to listen to uncaught/unhandled errors in React Native
 
-
 If an error is thrown in a callback as follows:
+
 ```jsx
-<Button title="Press me" onPress={() => {
-    console.log('Button pressed')
-    throw new Error('Error from user: Button pressed')
-  }}
+<Button
+	title="Press me"
+	onPress={() => {
+		console.log("Button pressed");
+		throw new Error("Error from user: Button pressed");
+	}}
 />
 ```
-
 
 We can catch it via the setGlobalHandler:
 
@@ -41,6 +42,7 @@ globalThis.ErrorUtils.setGlobalHandler(function (thrownValue: unknown, isFatal: 
 	}
 });
 ```
+
 Since `thrownValue` can be anything be careful and check its type.
 
 ![Logged caught error](./logged-caught-error.png)

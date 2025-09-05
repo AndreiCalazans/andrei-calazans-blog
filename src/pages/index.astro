@@ -30,15 +30,15 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 				))
 			}
 		</ul>
-    <div class="flex justify-end">
-      <a
-        href="/posts"
-        class="px-4 py-4 sm:py-0 sm:hover:underline mt-4"
-        aria-current="page"
-        data-astro-prefetch
-      >
-        See all
-      </a>
-    </div>
+		<div class="flex justify-end">
+			<a
+				href="/posts"
+				class="mt-4 px-4 py-4 sm:py-0 sm:hover:underline"
+				aria-current="page"
+				data-astro-prefetch
+			>
+				See all
+			</a>
+		</div>
 	</section>
 </PageLayout>

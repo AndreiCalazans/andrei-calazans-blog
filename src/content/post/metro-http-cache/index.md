@@ -89,7 +89,7 @@ router.put("/:key", (req, res) => {
 			console.log("put?", key);
 			// Read compressed data
 			const compressedData = Buffer.concat(chunks);
-            // Decompresses data
+			// Decompresses data
 			const data = zlib.gunzipSync(compressedData);
 			fs.writeFileSync(`./cache/${key}`, data);
 			res.send({ status: "ok" });

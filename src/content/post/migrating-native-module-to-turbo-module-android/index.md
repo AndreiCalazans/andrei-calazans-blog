@@ -49,9 +49,9 @@ class TracingPackage : ReactPackage {
 And used like this from JavaScript:
 
 ```typescript
-import { NativeModules } from 'react-native';
+import { NativeModules } from "react-native";
 
-NativeModules.TracingModule.beginSection('MySection');
+NativeModules.TracingModule.beginSection("MySection");
 ```
 
 ## 🧬 After: Turbo Module
@@ -128,7 +128,6 @@ export interface Spec extends TurboModule {
 export default TurboModuleRegistry.getEnforcing<Spec>('TracingModule');
 ```
 
-
 This gives TypeScript type safety and integrates with the TurboModule codegen system.
 
 ## ✅ 4. Add codegenConfig to package.json
@@ -144,11 +143,10 @@ This gives TypeScript type safety and integrates with the TurboModule codegen sy
 }
 
 ```
+
 This tells the Metro bundler and codegen how to build the binding between your JS spec and native module.
 
-
 ## ✅ 5. Run Codegen
-
 
 To generate the necessary artifacts for the TurboModule, run the following
 command in the android folder:
@@ -157,22 +155,19 @@ command in the android folder:
 ./gradlew generateCodegenArtifactsFromSchema
 ```
 
-
 ## ✅ 6. Update JS Usage
 
 Instead of accessing the module via NativeModules, you now import the strongly-typed TurboModule:
 
 ```typescript
-import TracingModule from './specs/NativeTracingModule';
+import TracingModule from "./specs/NativeTracingModule";
 
-TracingModule.beginSection('MySection');
+TracingModule.beginSection("MySection");
 ```
 
 ## ⚠️ Gotchas
 
 - Make sure the module name in the spec matches getName() exactly.
 - This currently an Android only module.
-
-
 
 I'll soon review how we can trace similarly on iOS.

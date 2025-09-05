@@ -1,0 +1,44 @@
+---
+title: "LLMs Need a Working Memory"
+description: "LLMs need a way to synthesize information. Bigger context does not yield better results."
+publishDate: "2025-04-25"
+---
+
+Note, I hate calling LLMs AI.
+
+Have you paired with a LLM on a problem that required multiple back and forths
+and finally ended up in a dead end where the LLMs just starts returning back
+giberrish?
+
+> Well I have.
+
+## LLMs Inability
+
+LLMs need a way to synthesize information. Bigger context does not yield better
+results.
+
+How do we solve big complex problems? we seem to keep shallow bits of
+information and we construct an innacurate mental model of the problem. We then pattern match
+to decide where to dig deep based on our memory.
+
+As we progress through the problem we intuitively recall something else that
+makes sense to apply to the problem based on what seems like signals to our
+brain. Information A triggers a signal to our brain to recall information C,
+then like a miracle we find the solution.
+
+LLMs lack this ability. They need the full picture. Once something is in their
+context they will reread it to make the next conclusion. Next question you ask
+causes the LLM to review everything that has been done so far.
+
+Then finally it gets lost. While LLMs context windows increase,
+the larger context does not come with an improved context picker to improve its
+answer.
+
+## Possible Solution
+
+LLMs need a working memory. A stack it pushes signals. These are bits of
+information, like semantic search which will link it
+to a tree of other related information.
+
+This working memory will allow it to hold innacurate mental models of problems
+but choose where to dig deeper like the human brain.

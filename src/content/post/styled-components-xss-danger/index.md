@@ -5,7 +5,6 @@ publishDate: "2025-01-20"
 tags: ["javascript", "react", "styled-components"]
 ---
 
-
 ## Avoiding XSS Vulnerabilities in [styled-components](https://styled-components.com/)
 
 I recently learned at work with a coworker of how one can easily introduce XSS
@@ -18,8 +17,8 @@ Consider the following styled-components example:
 
 ```javascript
 const Container = styled.div`
-  position: ${(p) => (p.isFixed ? 'fixed' : 'relative')}; // this is safe
-  top: ${(p) => p.offsetTop}px;
+	position: ${(p) => (p.isFixed ? "fixed" : "relative")}; // this is safe
+	top: ${(p) => p.offsetTop}px;
 `;
 ```
 
@@ -48,8 +47,9 @@ This would render the following unsafe CSS:
 
 ```css
 .Container {
-  position: relative;
-  top: 10px; background-image: url("http://evil.com/steal-data");
+	position: relative;
+	top: 10px;
+	background-image: url("http://evil.com/steal-data");
 }
 ```
 
@@ -68,17 +68,16 @@ To prevent this kind of vulnerability:
 
 2. **Avoid Direct CSS Injection**: Refrain from using variables directly in styled components if they come from untrusted sources.
 
-
 3. **Limit Interpolations to Flags**: Only use interpolations for boolean flags or predefined values, not for arbitrary CSS properties.
 
 ```javascript
 const predefinedAcceptedOffset = {
-  0: 0,
-  1: 10,
-  2: 20,
+	0: 0,
+	1: 10,
+	2: 20,
 };
 const Container = styled.div`
-  position: ${(p) => (p.isFixed ? 'fixed' : 'relative')}; // this is safe
-  top: ${(p) => predefinedAcceptedOffset[p.offset]}px;
+	position: ${(p) => (p.isFixed ? "fixed" : "relative")}; // this is safe
+	top: ${(p) => predefinedAcceptedOffset[p.offset]}px;
 `;
 ```

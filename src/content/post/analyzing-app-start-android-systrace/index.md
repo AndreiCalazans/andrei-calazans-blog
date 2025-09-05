@@ -9,13 +9,12 @@ If you have built a big enough React Native app you will eventually find
 yourself asking why is your app slow to start on Android.
 
 > Haters will likely say
-that it's React Native's fault.
+> that it's React Native's fault.
 
 I disagree. I think this is actually caused by
 the type of Software Engineer working on React Native Apps. They rarely have a
 mobile first background which often causes features to be introduced without
 consideration for app startup performance.
-
 
 By default React
 Native Android app is as fast as a native app since it is a native app.
@@ -36,11 +35,9 @@ allocation, and more. This makes it an excellent choice for analyzing app start.
 However, it's abundance of features makes it actually hard to know how to get
 started.
 
-
 ## What Can You Check In Perfetto?
 
 Before showing how to do it, let me just highlight what you can get from this.
-
 
 I suggest you check the following proccesses in the trace:
 
@@ -80,12 +77,11 @@ profileable attribute to your AndroidManifest.xml file:
 You can then build your app in release mode. This is important because you want
 to capture a real user experience, not a debug one.
 
-
 To make this easier I wrote the following script to facilitate starting the
 trace and pulling the file from the device. This does the following:
 
 1. The script stores the Perfetto configuration.
-2. Then it starts the Perfetto trace by calling  `adb shell perfetto`
+2. Then it starts the Perfetto trace by calling `adb shell perfetto`
 3. Then it pulls the trace file from the device using `adb pull <file_path>`.
 
 To use the script copy the following script to a file called `capture_systrace.sh`
@@ -237,7 +233,6 @@ echo "Trace saved to $OUTPUT_FILE"
 
 ```
 
-
 The help output explains how to use.
 
 ```shellscript
@@ -266,11 +261,9 @@ Tips:
 3. You can change the scripts duration_ms to capture longer or smaller trace if
    needed.
 
-
 Open the trace in the [Perfetto UI](https://ui.perfetto.dev/) to analyze it:
 
 ![A perfetto trace of a React Native Android app](./screenshot-perfetto-in-action.png "A perfetto trace of a React Native Android app")
-
 
 Finally, see this cool [trace analysis by Andrei
 Shikov](https://bsky.app/profile/shikasd.bsky.social/post/3lbbcfbv34s2p) done on the Bluesky app.

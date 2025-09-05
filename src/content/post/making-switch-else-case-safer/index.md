@@ -43,7 +43,7 @@ you want to make the switch-case strict or not.
  * }
  */
 export function assertNever(x: never): never {
-  throw new Error(`Unexpected object: ${x}`);
+	throw new Error(`Unexpected object: ${x}`);
 }
 ```
 
@@ -67,17 +67,16 @@ switch (transferType) {
 Even when you are returning something, you can return assertNever to ensure there is always a valid return.
 
 ```jsx
-
 return useMemo(() => {
-    switch (execution) {
-      case 'allowTaker':
-        return formatMessage(messages.executionTrayOptionAllowTaker);
-      case 'postOnly':
-        return formatMessage(messages.executionTrayOptionPostOnly);
-      default:
-        return assertNever(execution);
-    }
-  }, [execution, formatMessage]);
+	switch (execution) {
+		case "allowTaker":
+			return formatMessage(messages.executionTrayOptionAllowTaker);
+		case "postOnly":
+			return formatMessage(messages.executionTrayOptionPostOnly);
+		default:
+			return assertNever(execution);
+	}
+}, [execution, formatMessage]);
 ```
 
 This also allows you to explicitly opt out by returning undefined instead.
@@ -85,18 +84,15 @@ Particularly nice to keep the return type consistent and not imply undefined.
 
 ```jsx
 switch (tradeType) {
-      case 'Buy':
-      case 'Sell':
-        return Analytics.track('convert_tapped_source_asset', params);
-      case 'ConvertTo':
-        return Analytics.track('convert_tapped_target_asset', params);
-      default:
-        return undefined;
-    }
+	case "Buy":
+	case "Sell":
+		return Analytics.track("convert_tapped_source_asset", params);
+	case "ConvertTo":
+		return Analytics.track("convert_tapped_target_asset", params);
+	default:
+		return undefined;
+}
 ```
 
 Use this paired with the [default-case](https://eslint.org/docs/latest/rules/default-case) lint rule to enforce everyone to
 always handle a default case intentionally.
-
-
-

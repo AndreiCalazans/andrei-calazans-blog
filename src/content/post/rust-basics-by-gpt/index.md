@@ -38,64 +38,64 @@ Certainly! Here's the roadmap for learning Rust, formatted in Markdown:
 **Basics**
 
 1. **Setup and Installation**
-    - Learn how to install Rust and set up your development environment.
+   - Learn how to install Rust and set up your development environment.
 2. **Hello World**
-    - Your first Rust program.
+   - Your first Rust program.
 3. **Basic Syntax**
-    - Understanding Rust's syntax and keywords.
+   - Understanding Rust's syntax and keywords.
 4. **Variables and Mutability**
-    - Learn about variable declaration, mutability, and constants.
+   - Learn about variable declaration, mutability, and constants.
 5. **Data Types**
-    - Explore basic data types like integers, floats, booleans, and characters.
+   - Explore basic data types like integers, floats, booleans, and characters.
 6. **Functions**
-    - How to define and use functions.
+   - How to define and use functions.
 7. **Control Flow**
-    - If, else, and loop constructs.
+   - If, else, and loop constructs.
 
 **Intermediate**
 
 1. **Ownership and Borrowing**
-    - Core concepts of Rust's memory safety.
+   - Core concepts of Rust's memory safety.
 2. **Structs**
-    - Define and use structures.
+   - Define and use structures.
 3. **Enums**
-    - Enumeration types and pattern matching.
+   - Enumeration types and pattern matching.
 4. **Error Handling**
-    - Using `Result` and `Option` types.
+   - Using `Result` and `Option` types.
 5. **Collections**
-    - Working with vectors, strings, and hash maps.
+   - Working with vectors, strings, and hash maps.
 6. **Modules and Crates**
-    - Understand Rust's modularity and package management.
+   - Understand Rust's modularity and package management.
 
 **Advanced**
 
 1. **Advanced Features**
-    - Traits, lifetimes, and closures.
+   - Traits, lifetimes, and closures.
 2. **Concurrency**
-    - Threads, `async`, and `await`.
+   - Threads, `async`, and `await`.
 3. **Unsafe Rust**
-    - Understanding unsafe operations.
+   - Understanding unsafe operations.
 4. **Advanced Type System**
-    - Generics, trait bounds, and type aliases.
+   - Generics, trait bounds, and type aliases.
 5. **Macros**
-    - Writing and using macros.
+   - Writing and using macros.
 6. **Integration with Other Languages**
-    - FFI with C/C++.
+   - FFI with C/C++.
 7. **Testing**
-    - Unit tests, integration tests, and documentation tests.
+   - Unit tests, integration tests, and documentation tests.
 
 **Expert Level**
 
 1. **Advanced Concurrency Patterns**
-    - Dive deeper into advanced concurrency models.
+   - Dive deeper into advanced concurrency models.
 2. **Performance Optimization**
-    - Profiling and optimizing Rust code.
+   - Profiling and optimizing Rust code.
 3. **Embedded Programming**
-    - Rust in embedded systems.
+   - Rust in embedded systems.
 4. **WebAssembly**
-    - Compiling Rust to WebAssembly.
+   - Compiling Rust to WebAssembly.
 5. **Domain-Specific Applications**
-    - Using Rust in network programming, web development, etc.
+   - Using Rust in network programming, web development, etc.
 
 **Project-Based Learning**
 
@@ -542,7 +542,7 @@ Ownership is a set of rules enforced at compile time that governs how memory is 
 
 ### 1. **Rules of Ownership**
 
-- Each value in Rust has a variable that’s called its *owner*.
+- Each value in Rust has a variable that’s called its _owner_.
 - There can only be one owner at a time.
 - When the owner goes out of scope, the value is dropped.
 
@@ -562,7 +562,7 @@ Create a function that takes a string and prints it, then try to use the string 
 
 ### 2. **Transferring Ownership**
 
-- Ownership can be transferred from one variable to another, often termed as *moving*.
+- Ownership can be transferred from one variable to another, often termed as _moving_.
 
 **Example: Ownership Transfer**
 
@@ -661,7 +661,6 @@ fn main() {
 Here, the `#[derive(Debug)]` line automatically implements the `Debug` trait for the `Color` struct. You can then use `{:?}` in the `println!` macro to print an instance of `Color` in a format suitable for debugging. This is a very common pattern in Rust for quickly implementing standard traits for custom types.
 
 > **Why `{:?}` instead of `{}`?**
->
 
 In Rust, the `{:?}` placeholder in the `println!` macro is used for formatting values using the `Debug` trait, while `{}` is used for the `Display` trait. The key difference between these two traits is in their intended use:
 
@@ -917,118 +916,124 @@ By using `&`, Rust ensures that the data remains safe and unmodified unless expl
 
 Comprehensive review of the topics we've covered:
 
-1. **Hello World & Basic Syntax**
-    - *Question*: How do you write a "Hello, world!" program in Rust, and what is the purpose of the `fn` keyword?
-    - *Answer*:
-    The `fn` keyword is used to define a new function. `main` is the entry point of a Rust program.
+1.  **Hello World & Basic Syntax**
+
+    - _Question_: How do you write a "Hello, world!" program in Rust, and what is the purpose of the `fn` keyword?
+    - _Answer_:
+      The `fn` keyword is used to define a new function. `main` is the entry point of a Rust program.
+
+          ```rust
+          fn main() {
+              println!("Hello, world!");
+          }
+
+          ```
+
+2.  **Variables and Mutability**
+    - _Question_: In Rust, what is the difference between mutable and immutable variables? Provide an example of declaring each.
+    - _Answer_:
+      - Immutable variables cannot be changed once declared. Example: `let x = 5;`
+      - Mutable variables can be changed. Example: `let mut y = 5;`
+3.  **Data Types**
+    - _Question_: What are the four primary scalar types in Rust? Create a small code snippet that demonstrates the declaration of each type.
+    - _Answer_:
+      - Integer: `let int_num: i32 = 10;`
+      - Floating-point: `let float_num: f64 = 10.0;`
+      - Boolean: `let is_true: bool = true;`
+      - Character: `let char_val: char = 'A';`
+4.  **Strings**
+    - _Question_: How do you create a `String` from a string literal, and what is the difference between `String` and `&str` in Rust?
+    - _Answer_:
+      - Create a `String`: `let s = String::from("hello");`
+      - `String` is a growable, heap-allocated data structure whereas `&str` is an immutable reference to a string slice.
+5.  **Functions**
+
+    - _Question_: Write a simple function in Rust that takes two integers as parameters and returns their sum. How is a function's return value specified in Rust?
+    - _Answer_:
+      The function's return type is specified after the arrow `>`.
+
+          ```rust
+          fn add(a: i32, b: i32) -> i32 {
+              a + b
+          }
+
+          ```
+
+6.  **Ownership and Borrowing**
+    - _Question_: Explain the concept of ownership in Rust. What happens when you try to use a variable after transferring its ownership?
+    - _Answer_:
+      - Ownership is a Rust feature where each value has a single owner. When the owner goes out of scope, the value is dropped. If you transfer ownership of a variable and then try to use the original variable, you'll get a compile-time error.
+7.  **Structs**
+
+    - _Question_: Define a Rust struct named `Car` that has fields for `make`, `model`, and `year`. How would you create an instance of this struct?
+    - _Answer_:
+
+      ```rust
+      struct Car {
+          make: String,
+          model: String,
+          year: u32,
+      }
+
+      let my_car = Car {
+          make: String::from("Toyota"),
+          model: String::from("Corolla"),
+          year: 2020,
+      };
+
+      ```
+
+8.  **Enums and Pattern Matching**
+
+    - _Question_: Create an enum named `TrafficLight` with variants for `Red`, `Yellow`, and `Green`. Write a `match` expression that prints a message for each variant.
+    - _Answer_:
+
+      ```rust
+      enum TrafficLight {
+          Red,
+          Yellow,
+          Green,
+      }
+
+      let light = TrafficLight::Red;
+      match light {
+          TrafficLight::Red => println!("Stop"),
+          TrafficLight::Yellow => println!("Caution"),
+          TrafficLight::Green => println!("Go"),
+      }
+
+      ```
+
+9.  **Error Handling**
+
+    - _Question_: What is the difference between the `Result` and `Option` enums in Rust? Provide an example of a function returning a `Result`.
+    - _Answer_:
+
+      - `Result` is used for recoverable errors and contains `Ok` or `Err` variants.
+      - `Option` is used when a value could be either `Some` or `None`.
+      - Example:
 
         ```rust
-        fn main() {
-            println!("Hello, world!");
-        }
-
-        ```
-
-2. **Variables and Mutability**
-    - *Question*: In Rust, what is the difference between mutable and immutable variables? Provide an example of declaring each.
-    - *Answer*:
-        - Immutable variables cannot be changed once declared. Example: `let x = 5;`
-        - Mutable variables can be changed. Example: `let mut y = 5;`
-3. **Data Types**
-    - *Question*: What are the four primary scalar types in Rust? Create a small code snippet that demonstrates the declaration of each type.
-    - *Answer*:
-        - Integer: `let int_num: i32 = 10;`
-        - Floating-point: `let float_num: f64 = 10.0;`
-        - Boolean: `let is_true: bool = true;`
-        - Character: `let char_val: char = 'A';`
-4. **Strings**
-    - *Question*: How do you create a `String` from a string literal, and what is the difference between `String` and `&str` in Rust?
-    - *Answer*:
-        - Create a `String`: `let s = String::from("hello");`
-        - `String` is a growable, heap-allocated data structure whereas `&str` is an immutable reference to a string slice.
-5. **Functions**
-    - *Question*: Write a simple function in Rust that takes two integers as parameters and returns their sum. How is a function's return value specified in Rust?
-    - *Answer*:
-    The function's return type is specified after the arrow `>`.
-
-        ```rust
-        fn add(a: i32, b: i32) -> i32 {
-            a + b
-        }
-
-        ```
-
-6. **Ownership and Borrowing**
-    - *Question*: Explain the concept of ownership in Rust. What happens when you try to use a variable after transferring its ownership?
-    - *Answer*:
-        - Ownership is a Rust feature where each value has a single owner. When the owner goes out of scope, the value is dropped. If you transfer ownership of a variable and then try to use the original variable, you'll get a compile-time error.
-7. **Structs**
-    - *Question*: Define a Rust struct named `Car` that has fields for `make`, `model`, and `year`. How would you create an instance of this struct?
-    - *Answer*:
-
-        ```rust
-        struct Car {
-            make: String,
-            model: String,
-            year: u32,
-        }
-
-        let my_car = Car {
-            make: String::from("Toyota"),
-            model: String::from("Corolla"),
-            year: 2020,
-        };
-
-        ```
-
-8. **Enums and Pattern Matching**
-    - *Question*: Create an enum named `TrafficLight` with variants for `Red`, `Yellow`, and `Green`. Write a `match` expression that prints a message for each variant.
-    - *Answer*:
-
-        ```rust
-        enum TrafficLight {
-            Red,
-            Yellow,
-            Green,
-        }
-
-        let light = TrafficLight::Red;
-        match light {
-            TrafficLight::Red => println!("Stop"),
-            TrafficLight::Yellow => println!("Caution"),
-            TrafficLight::Green => println!("Go"),
-        }
-
-        ```
-
-9. **Error Handling**
-    - *Question*: What is the difference between the `Result` and `Option` enums in Rust? Provide an example of a function returning a `Result`.
-    - *Answer*:
-        - `Result` is used for recoverable errors and contains `Ok` or `Err` variants.
-        - `Option` is used when a value could be either `Some` or `None`.
-        - Example:
-
-            ```rust
-            fn divide(numerator: f64, denominator: f64) -> Result<f64, &'static str> {
-                if denominator == 0.0 {
-                    Err("Cannot divide by zero")
-                } else {
-                    Ok(numerator / denominator)
-                }
+        fn divide(numerator: f64, denominator: f64) -> Result<f64, &'static str> {
+            if denominator == 0.0 {
+                Err("Cannot divide by zero")
+            } else {
+                Ok(numerator / denominator)
             }
+        }
 
-            ```
+        ```
 
 10. **Collections**
-    - *Question*: Create a `Vec<i32>` and demonstrate how to add elements to it. How do you access the third element of this vector?
-    - *Answer*:
 
-        ```rust
-        let mut vec = Vec::new();
-        vec.push(1);
-        vec
-        ```
+    - _Question_: Create a `Vec<i32>` and demonstrate how to add elements to it. How do you access the third element of this vector?
+    - _Answer_:
 
+      ```rust
+      let mut vec = Vec::new();
+      vec.push(1);
+      vec
+      ```
 
     The next topic on our Rust journey is **Modules and Crates**.
 
@@ -1040,18 +1045,17 @@ Comprehensive review of the topics we've covered:
 
     - A crate is a package of Rust code. It's the largest unit of compilation in Rust.
     - There are two types of crates:
-        - **Binary Crates**: Executables.
-        - **Library Crates**: Libraries of code intended to be shared by multiple projects.
+      - **Binary Crates**: Executables.
+      - **Library Crates**: Libraries of code intended to be shared by multiple projects.
 
     **Example: Creating a Crate**
 
     - Create a new crate using Cargo, Rust's package manager:
 
-        ```bash
-        cargo new my_crate
+      ```bash
+      cargo new my_crate
 
-        ```
-
+      ```
 
     **Your Exercise: Create a New Crate**
 
@@ -1205,13 +1209,13 @@ Comprehensive review of the topics we've covered:
     ### How Lifetimes Work
 
     1. **Implicit and Explicit Lifetimes**
-        - Most of the time, Rust infers lifetimes without requiring explicit annotation.
-        - When lifetimes are ambiguous or complex, Rust requires you to annotate them explicitly to determine how long references should be valid.
+       - Most of the time, Rust infers lifetimes without requiring explicit annotation.
+       - When lifetimes are ambiguous or complex, Rust requires you to annotate them explicitly to determine how long references should be valid.
     2. **Lifetime Syntax**
-        - Lifetimes are annotated with an apostrophe (`'`) followed by a lowercase name (like `'a`, `'b`).
-        - A lifetime annotation doesn’t change how long any of the references live. It describes the relationships of the lifespans of multiple references to each other.
+       - Lifetimes are annotated with an apostrophe (`'`) followed by a lowercase name (like `'a`, `'b`).
+       - A lifetime annotation doesn’t change how long any of the references live. It describes the relationships of the lifespans of multiple references to each other.
     3. **Lifetime in Function Signatures**
-        - When a function has references as parameters or return values, lifetimes help ensure that the data referenced by those references won't go out of scope before the function is done with them.
+       - When a function has references as parameters or return values, lifetimes help ensure that the data referenced by those references won't go out of scope before the function is done with them.
 
     **Example Explained**
 
@@ -1306,8 +1310,8 @@ Comprehensive review of the topics we've covered:
 
     - `.join()` returns a `Result` type. The `Result` type is an enum in Rust that represents either a success (`Ok`) or a failure (`Err`).
     - `.unwrap()` is a method that can be called on a `Result` type. It does two things:
-        - If the `Result` is an `Ok`, `.unwrap()` will return the value inside the `Ok`.
-        - If the `Result` is an `Err`, `.unwrap()` will cause the program to panic and exit. In the context of threads, an `Err` usually means the child thread has panicked.
+      - If the `Result` is an `Ok`, `.unwrap()` will return the value inside the `Ok`.
+      - If the `Result` is an `Err`, `.unwrap()` will cause the program to panic and exit. In the context of threads, an `Err` usually means the child thread has panicked.
     - Using `.unwrap()` is a way to assert that you expect this operation (waiting for the thread to finish) to succeed and not to encounter any errors. If an error does occur, the program will panic, providing an immediate signal that something went wrong.
 
     **Example Usage**
@@ -1533,7 +1537,7 @@ Comprehensive review of the topics we've covered:
 
     Run the program using `cargo run`. This will execute the async task to fetch data from the specified URL.
 
-    *Async programming with network requests can involve more detailed error handling and response parsing, depending on your specific requirements.*
+    _Async programming with network requests can involve more detailed error handling and response parsing, depending on your specific requirements._
 
     **Your Exercise: Write Async Code**
 
@@ -1650,12 +1654,11 @@ Comprehensive review of the topics we've covered:
     - Create a new crate with `cargo new my_macro --lib`
     - In the new crate, change the crate type to a procedural macro crate in `Cargo.toml`:
 
-        ```toml
-        [lib]
-        proc-macro = true
+      ```toml
+      [lib]
+      proc-macro = true
 
-        ```
-
+      ```
 
     ### 2. **Add Dependencies**
 
@@ -1762,21 +1765,21 @@ Comprehensive review of the topics we've covered:
     1. **Link the C Library**: Specify the C library in your `Cargo.toml`.
     2. **Declare the External Function in Rust**:
 
-        ```rust
-        extern "C" {
-            fn add(x: i32, y: i32) -> i32;
-        }
+       ```rust
+       extern "C" {
+           fn add(x: i32, y: i32) -> i32;
+       }
 
-        fn main() {
-            unsafe {
-                println!("The sum is: {}", add(2, 3));
-            }
-        }
+       fn main() {
+           unsafe {
+               println!("The sum is: {}", add(2, 3));
+           }
+       }
 
-        ```
+       ```
 
-        - Use `extern "C"` to declare the external function.
-        - Wrap calls to external functions in `unsafe` blocks, as Rust can't guarantee the safety of foreign code.
+       - Use `extern "C"` to declare the external function.
+       - Wrap calls to external functions in `unsafe` blocks, as Rust can't guarantee the safety of foreign code.
 
     ### 2. **Calling Rust Functions from C**
 
@@ -1817,77 +1820,79 @@ Comprehensive review of the topics we've covered:
 
     1. **Add a `build.rs` Build Script:**
 
-        You've added a `build.rs` file in your Rust project. This build script uses the `cc` crate to compile the C code and link it into your Rust project. The script looks like this:
+       You've added a `build.rs` file in your Rust project. This build script uses the `cc` crate to compile the C code and link it into your Rust project. The script looks like this:
 
-        ```rust
-        fn main() {
-            cc::Build::new().file("vendor/sum.c").compile("sum");
-        }
+       ```rust
+       fn main() {
+           cc::Build::new().file("vendor/sum.c").compile("sum");
+       }
 
-        ```
+       ```
 
-        - `cc::Build::new()`: Creates a new instance of the `cc` build configuration.
-        - `.file("vendor/sum.c")`: Specifies the path to your C source file.
-        - `.compile("sum")`: Compiles the C file and links it into your Rust project under the name `sum`.
+       - `cc::Build::new()`: Creates a new instance of the `cc` build configuration.
+       - `.file("vendor/sum.c")`: Specifies the path to your C source file.
+       - `.compile("sum")`: Compiles the C file and links it into your Rust project under the name `sum`.
+
     2. **Update `Cargo.toml`:**
 
-        In your `Cargo.toml`, you've made the following additions:
+       In your `Cargo.toml`, you've made the following additions:
 
-        - Included the `build.rs` script to ensure it is executed when your project is built:
+       - Included the `build.rs` script to ensure it is executed when your project is built:
 
-            ```toml
-            build = "build.rs"
+         ```toml
+         build = "build.rs"
 
-            ```
+         ```
 
-        - Added the `cc` crate as a build dependency, which provides the functionality to compile C code:
+       - Added the `cc` crate as a build dependency, which provides the functionality to compile C code:
 
-            ```toml
-            [build-dependencies]
-            cc = "1.0"
+         ```toml
+         [build-dependencies]
+         cc = "1.0"
 
-            ```
+         ```
 
     3. **Add the C Library in `vendor/sum.c`:**
 
-        You've created a C file `sum.c` in the `vendor` directory. This file contains the implementation of the `sum` function:
+       You've created a C file `sum.c` in the `vendor` directory. This file contains the implementation of the `sum` function:
 
-        ```c
-        #include <stdint.h>
+       ```c
+       #include <stdint.h>
 
-        // Public function to sum two integers
-        int32_t sum(int32_t a, int32_t b) {
-            return a + b;
-        }
+       // Public function to sum two integers
+       int32_t sum(int32_t a, int32_t b) {
+           return a + b;
+       }
 
-        ```
+       ```
 
-        - This function takes two `int32_t` integers, sums them, and returns the result.
+       - This function takes two `int32_t` integers, sums them, and returns the result.
+
     4. **Declare the FFI in Rust:**
 
-        In your Rust code, you've declared a module to interface with the C function:
+       In your Rust code, you've declared a module to interface with the C function:
 
-        ```rust
-        use core::ffi::c_int;
+       ```rust
+       use core::ffi::c_int;
 
-        extern "C" {
-            fn sum(a: c_int, b: c_int) -> c_int;
-        }
+       extern "C" {
+           fn sum(a: c_int, b: c_int) -> c_int;
+       }
 
-        pub fn ffi_c_example() {
-            println!("------ Running the FFI with C example ------");
-            unsafe {
-                let result = sum(5, 10);
-                println!("The sum is: {}", result);
-            }
-        }
+       pub fn ffi_c_example() {
+           println!("------ Running the FFI with C example ------");
+           unsafe {
+               let result = sum(5, 10);
+               println!("The sum is: {}", result);
+           }
+       }
 
-        ```
+       ```
 
-        - `use core::ffi::c_int;`: Using `c_int` from the core FFI module to ensure type compatibility with the C function.
-        - `extern "C"` block: Declares the external C function `sum` with the appropriate function signature.
-        - `unsafe`: The call to the external C function is wrapped in an `unsafe` block because FFI calls are inherently unsafe in Rust.
-        - `ffi_c_example`: This function demonstrates calling the `sum` function and printing the result.
+       - `use core::ffi::c_int;`: Using `c_int` from the core FFI module to ensure type compatibility with the C function.
+       - `extern "C"` block: Declares the external C function `sum` with the appropriate function signature.
+       - `unsafe`: The call to the external C function is wrapped in an `unsafe` block because FFI calls are inherently unsafe in Rust.
+       - `ffi_c_example`: This function demonstrates calling the `sum` function and printing the result.
 
     By following these steps, you've successfully set up a Rust project to call a function written in C via FFI. This process involves setting up a build script to compile the C code, linking it to the Rust project, and then declaring and using the C function in Rust code.
 
@@ -1981,6 +1986,3 @@ Comprehensive review of the topics we've covered:
     ### Summary
 
     Testing in Rust is an integral part of the development process, providing a robust way to ensure code quality and reliability. Rust's built-in testing tools make it straightforward to write and run tests, helping to build confidence in the code you write.
-
-
-
