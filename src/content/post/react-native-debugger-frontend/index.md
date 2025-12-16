@@ -12,6 +12,12 @@ has left you envied.
 Well wait no longer, I found out a way to use latest DevTools without needing to
 upgrade React Native.
 
+## Disclaimer
+
+This is a hack and not how the internal React Native DevTools is supposed to be
+used. Use it at your own risk and don't expect anything from the RN Core team.
+[We have been warned that this might break.](#is-it-stable-update)
+
 ## Forcing Resolution
 
 Ever since version 0.73 the React Native Core team split out the logic related
