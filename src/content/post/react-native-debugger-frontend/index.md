@@ -48,3 +48,11 @@ Using custom debugger frontend path from process.env.REACT_NATIVE_DEBUGGER_FRONT
 ```
 
 That's it. Enjoy the more stable React Native DevTools!
+
+## Is It Stable? (UPDATE)
+
+No, [we have been warned by Alex Hunt](https://x.com/huntie/status/2000865780540248299) that this is likely to break between React
+Native versions that received updates to the internal C++ backend code that
+integrates/implements the Chrome Debugger Protocol. They might eventually add a
+version constraint check.
+
