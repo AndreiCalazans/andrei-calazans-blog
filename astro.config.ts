@@ -13,6 +13,18 @@ import netlify from "@astrojs/netlify";
 export default defineConfig({
 	site: "https://andrei-calazans.com/",
 	redirects: {
+		"/utils": "/posts/",
+		"/utils/": "/posts/",
+		"/utils/2025-07-31-state-of-software-dev": "/posts/2025-07-31-state-of-software-dev/",
+		"/utils/2025-07-31-state-of-software-dev/": "/posts/2025-07-31-state-of-software-dev/",
+		"/utils/2025-ios-simulators-are-at-fault": "/posts/2025-ios-simulators-are-at-fault/",
+		"/utils/2025-ios-simulators-are-at-fault/": "/posts/2025-ios-simulators-are-at-fault/",
+		"/utils/2025-09-05-future-of-rn": "/posts/2025-09-05-future-of-rn/",
+		"/utils/2025-09-05-future-of-rn/": "/posts/2025-09-05-future-of-rn/",
+		"/utils/2025-llms-need-working-memory": "/posts/2025-llms-need-working-memory/",
+		"/utils/2025-llms-need-working-memory/": "/posts/2025-llms-need-working-memory/",
+		"/utils/2025-09-09-git-merge-no-commits": "/posts/2025-09-09-git-merge-no-commits/",
+		"/utils/2025-09-09-git-merge-no-commits/": "/posts/2025-09-09-git-merge-no-commits/",
 		"/old-page": "/new-page",
 		"/posts/2021-05-12/open-source-apps": "/posts/2021-05-12-open-source-apps",
 		"/posts/2017-08-25/relay-is-just-getting-better":
