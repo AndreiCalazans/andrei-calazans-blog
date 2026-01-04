@@ -1,6 +1,6 @@
 ---
 title: "git merge andrei/cmr-v6 --no-commit --no-ff saves the day"
-description: ""
+description: "Using git merge --no-commit --no-ff to stage selective changes across branches"
 publishDate: "2025-09-09"
 ---
 
@@ -23,4 +23,3 @@ doing "git merge <any_branch> --no-commit --no-ff".
 Bam! pronto. Now I can git restore and git add whatever I want from branch B
 into branch A which was exactly what I needed. Plus given that I rely on
 fugitive.vim this makes it all breeze.
-
