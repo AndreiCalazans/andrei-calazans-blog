@@ -255,6 +255,10 @@ boots either way)._
   higher than the headline medians. The shape, not the absolute, is the point.
 - **One device, one UI.** Samsung Galaxy A16 (Android 14), Hermes, New Architecture (bridgeless +
   Fabric), Expo SDK 56 / RN 0.85. A trivial UI — heavier screens would change the FPS story.
+- **Expo Router does a lot more for the cost.** It is not just navigation: you also get deep linking,
+  lazy loading, split bundling, file-based routing, and web support out of the box. The numbers above
+  measure startup cost on a trivial app — they are not a verdict on whether those features are worth
+  it for your project.
 
 <footer class="post-footnote">
 Generated from <code>perf-results/</code> in the <a href="https://github.com/AndreiCalazans/StateOfReactNativeNavigation/tree/main">research repo</a>: source-mapped Hermes profiles (<code>*-hermes.json</code>), Perfetto traces (<code>_native/*.perfetto-trace</code>, open at <a href="https://ui.perfetto.dev">ui.perfetto.dev</a>), and Flashlight measures (<code>*.json</code>). Reproduce with <code>scripts/measure.sh</code> and regenerate the table with <code>scripts/compare.py</code>.
