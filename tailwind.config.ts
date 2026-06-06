@@ -61,8 +61,15 @@ export default {
 							fontWeight: "700",
 						},
 						code: {
-							border: "1px dotted #666",
-							borderRadius: "2px",
+							border: "none",
+							borderRadius: "5px",
+							fontWeight: "500",
+						},
+						"code::before": {
+							content: '""',
+						},
+						"code::after": {
+							content: '""',
 						},
 						blockquote: {
 							borderLeftWidth: "0",
@@ -126,7 +133,9 @@ export default {
 					},
 				},
 				".title": {
-					"@apply text-2xl font-semibold text-accent-2": {},
+					"@apply text-3xl font-bold text-accent-2": {},
+					letterSpacing: "-0.02em",
+					lineHeight: "1.15",
 				},
 			});
 		}),

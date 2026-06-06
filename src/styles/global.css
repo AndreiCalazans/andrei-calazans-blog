@@ -12,6 +12,11 @@
 		--theme-accent: 351deg 66% 48%;
 		--theme-accent-2: 0deg 0% 7%;
 		--theme-quote: 351deg 66% 48%;
+
+		--font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+			Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+		--font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+			monospace;
 	}
 
 	:root.dark {
@@ -31,4 +36,207 @@
 	html body {
 		@apply mx-auto flex min-h-screen max-w-3xl flex-col bg-bgColor px-8 pt-16 font-mono text-sm font-normal text-textColor antialiased;
 	}
+}
+
+/*
+ * Content typography for blog/content pages.
+ * Kept unlayered (outside @layer) so these rules win over Tailwind
+ * Typography's `:where()` base styles and the `prose-sm` size modifier.
+ *
+ * Design: editorial pairing — a readable sans-serif for prose body,
+ * monospace kept for headings, code, and data tables (the site's identity).
+ */
+.prose {
+	font-family: var(--font-sans);
+	font-size: 1.05rem;
+	line-height: 1.78;
+	color: hsl(var(--theme-text));
+	-webkit-font-smoothing: antialiased;
+}
+
+/* --- Heading scale (monospace) --- */
+.prose :is(h1, h2, h3, h4, h5, h6) {
+	font-family: var(--font-mono);
+	font-weight: 700;
+	color: hsl(var(--theme-accent-2));
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	text-wrap: balance;
+	scroll-margin-top: 6rem;
+}
+.prose h1 {
+	font-size: 2rem;
+	margin-top: 2.75rem;
+	margin-bottom: 0.85rem;
+}
+.prose h2 {
+	font-size: 1.5rem;
+	margin-top: 3.25rem;
+	margin-bottom: 1rem;
+	padding-top: 1.4rem;
+	border-top: 1px solid hsl(var(--theme-text) / 0.1);
+}
+.prose h3 {
+	font-size: 1.2rem;
+	margin-top: 2.25rem;
+	margin-bottom: 0.5rem;
+}
+.prose h4 {
+	font-size: 1.02rem;
+	margin-top: 1.6rem;
+	margin-bottom: 0.4rem;
+	color: hsl(var(--theme-text));
+}
+
+/* Soften the cactus '#' anchor marker so it reads as a quiet hint */
+.prose :is(h1, h2, h3, h4, h5, h6)::before {
+	color: hsl(var(--theme-text) / 0.22) !important;
+	font-weight: 400 !important;
+}
+
+/* --- Body text & lists --- */
+.prose p {
+	margin-block: 1.15rem;
+	text-wrap: pretty;
+}
+.prose :is(ul, ol) {
+	margin-block: 1.15rem;
+	padding-left: 1.5rem;
+}
+.prose li {
+	margin-block: 0.4rem;
+	padding-left: 0.2rem;
+}
+.prose li::marker {
+	color: hsl(var(--theme-text) / 0.45);
+}
+.prose :is(em, i) {
+	color: hsl(var(--theme-text) / 0.92);
+}
+
+/* --- Links --- */
+.prose a {
+	font-weight: 500;
+	text-underline-offset: 3px;
+}
+
+/* --- Inline code (not code blocks): monospace pill --- */
+.prose :not(pre) > code {
+	font-family: var(--font-mono);
+	background: hsl(var(--theme-text) / 0.055);
+	border: 1px solid hsl(var(--theme-text) / 0.09);
+	border-radius: 6px;
+	padding: 0.1em 0.4em;
+	font-size: 0.84em;
+	font-weight: 500;
+	color: hsl(var(--theme-text));
+}
+.prose code::before,
+.prose code::after {
+	content: "" !important;
+}
+
+/* --- Code blocks --- */
+.prose pre {
+	font-family: var(--font-mono);
+	border-radius: 12px;
+	padding: 1.1rem 1.25rem;
+	font-size: 0.82rem;
+	line-height: 1.6;
+	border: 1px solid hsl(var(--theme-text) / 0.1);
+	box-shadow: 0 1px 2px hsl(0deg 0% 0% / 0.04);
+}
+
+/* --- Blockquote rendered as a callout --- */
+.prose blockquote {
+	border-left: 3px solid hsl(var(--theme-accent));
+	background: hsl(var(--theme-accent) / 0.055);
+	border-radius: 0 10px 10px 0;
+	padding: 0.9rem 1.2rem;
+	margin-block: 1.75rem;
+	font-style: normal;
+	color: hsl(var(--theme-text));
+}
+.prose blockquote p {
+	margin-block: 0.4rem;
+}
+.prose blockquote p:first-of-type::before,
+.prose blockquote p:last-of-type::after {
+	content: "" !important;
+}
+
+/* --- Tables: monospace + tabular figures for clean data alignment --- */
+.prose table {
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	line-height: 1.5;
+	font-variant-numeric: tabular-nums;
+}
+.prose thead th {
+	border-bottom: 2px solid hsl(var(--theme-text) / 0.22);
+	padding: 0.55rem 0.75rem;
+	font-weight: 700;
+	vertical-align: bottom;
+}
+.prose tbody td {
+	padding: 0.55rem 0.75rem;
+}
+.prose tbody tr {
+	border-bottom: 1px solid hsl(var(--theme-text) / 0.07);
+}
+.prose tbody tr:last-child {
+	border-bottom: 0;
+}
+.prose tbody tr:hover {
+	background: hsl(var(--theme-text) / 0.025);
+}
+
+/* --- Horizontal rule --- */
+.prose hr {
+	border: 0;
+	border-top: 1px solid hsl(var(--theme-text) / 0.13);
+	margin-block: 2.75rem;
+}
+
+/* --- Emphasis --- */
+.prose strong {
+	color: hsl(var(--theme-accent-2));
+	font-weight: 700;
+}
+
+/* Balance long page/post titles */
+.title {
+	text-wrap: balance;
+}
+
+/* --- Post footnote / colophon: small, muted, centered --- */
+.prose .post-footnote {
+	display: block;
+	margin-top: 3.5rem;
+	padding-top: 1.4rem;
+	border-top: 1px solid hsl(var(--theme-text) / 0.12);
+	font-size: 0.78rem;
+	line-height: 1.7;
+	color: hsl(var(--theme-text) / 0.55);
+	text-align: center;
+	text-wrap: pretty;
+}
+.prose .post-footnote code {
+	font-size: 0.92em;
+	padding: 0.05em 0.32em;
+	background: hsl(var(--theme-text) / 0.05);
+	border-color: hsl(var(--theme-text) / 0.08);
+	color: hsl(var(--theme-text) / 0.7);
+	font-weight: 400;
+}
+.prose .post-footnote a {
+	color: hsl(var(--theme-link));
+	font-weight: 500;
+	background-image: none;
+	text-decoration: underline;
+	text-decoration-color: hsl(var(--theme-link) / 0.45);
+	text-underline-offset: 2px;
+}
+.prose .post-footnote a:hover {
+	text-decoration-color: hsl(var(--theme-link));
 }
