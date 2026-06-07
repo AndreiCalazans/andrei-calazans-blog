@@ -209,6 +209,148 @@
 	text-wrap: balance;
 }
 
+/* --- Keep wide content (data tables) from scrolling the whole page on mobile --- */
+/* Flex items default to min-width:auto and refuse to shrink below their widest
+ * child, which lets a wide table/heading push horizontal scroll onto the whole
+ * page. Allow the main column (and the article flex child on desktop) to shrink. */
+#main {
+	min-width: 0;
+}
+#main article {
+	min-width: 0;
+}
+.prose {
+	overflow-wrap: break-word;
+	max-width: 100%;
+}
+.prose table {
+	display: block;
+	max-width: 100%;
+	overflow-x: auto;
+}
+.prose pre {
+	overflow-x: auto;
+	max-width: 100%;
+}
+
+/* --- Embedded videos / figures --- */
+.prose figure {
+	margin: 1.5rem 0;
+}
+.prose video {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 10px;
+	border: 1px solid hsl(var(--theme-text) / 0.12);
+	background: #000;
+}
+.prose figcaption {
+	margin-top: 0.6rem;
+	font-size: 0.8rem;
+	line-height: 1.6;
+	color: hsl(var(--theme-text) / 0.6);
+}
+
+/*
+ * --- Perf charts, legends & colored figures (cs-*) ---
+ * Plain CSS (not Tailwind utilities) so it's never purged; used via raw HTML
+ * inside markdown posts. Gradient bar colors are fixed to read on both themes.
+ */
+.cs-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 18px;
+	margin: 0.4rem 0 1.1rem;
+	font-size: 0.8rem;
+	color: hsl(var(--theme-text) / 0.7);
+}
+.cs-lib {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	font-weight: 600;
+}
+.cs-dot {
+	width: 11px;
+	height: 11px;
+	border-radius: 3px;
+	display: inline-block;
+	flex: none;
+	vertical-align: middle;
+}
+.cs-chart {
+	margin: 1.25rem 0;
+}
+.cs-cap {
+	font-size: 0.8rem;
+	color: hsl(var(--theme-text) / 0.6);
+	margin-bottom: 0.6rem;
+}
+.cs-row {
+	display: grid;
+	grid-template-columns: minmax(82px, 140px) 1fr max-content;
+	align-items: center;
+	gap: 10px;
+	margin: 6px 0;
+}
+.cs-name {
+	font-size: 0.8rem;
+	color: hsl(var(--theme-text) / 0.8);
+	overflow-wrap: anywhere;
+}
+.cs-bar {
+	height: 17px;
+	border-radius: 6px;
+	min-width: 3px;
+}
+.cs-val {
+	font-size: 0.78rem;
+	color: hsl(var(--theme-text) / 0.62);
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+.cs-grid2 {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 14px 24px;
+}
+@media (max-width: 720px) {
+	.cs-grid2 {
+		grid-template-columns: 1fr;
+	}
+}
+.cs-panel {
+	background: hsl(var(--theme-text) / 0.04);
+	border: 1px solid hsl(var(--theme-text) / 0.1);
+	border-radius: 10px;
+	padding: 14px 16px;
+	margin: 1.2rem 0;
+}
+/* solid legend dots */
+.cs-d-rnn { background: #3fb950; }
+.cs-d-rnav { background: #58a6ff; }
+.cs-d-nav { background: #bc8cff; }
+.cs-d-expo { background: #f0883e; }
+.cs-d-bare { background: #3fb950; }
+.cs-d-exp { background: #e3b341; }
+/* gradient bars */
+.cs-b-rnn { background: linear-gradient(90deg, #2ea043, #3fb950); }
+.cs-b-rnav { background: linear-gradient(90deg, #388bfd, #58a6ff); }
+.cs-b-nav { background: linear-gradient(90deg, #a371f7, #bc8cff); }
+.cs-b-expo { background: linear-gradient(90deg, #db6d28, #f0883e); }
+.cs-b-bare { background: linear-gradient(90deg, #2ea043, #3fb950); }
+.cs-b-mod { background: linear-gradient(90deg, #bb8a1a, #e3b341); }
+.cs-b-exp { background: linear-gradient(90deg, #bb8a1a, #e3b341); }
+/* colored numbers (win / lose / warn), theme-aware */
+.cs-win { color: #1a7f37; font-weight: 700; }
+.cs-lose { color: #cf222e; font-weight: 700; }
+.cs-warnc { color: #9a6700; font-weight: 700; }
+:root.dark .cs-win { color: #3fb950; }
+:root.dark .cs-lose { color: #f85149; }
+:root.dark .cs-warnc { color: #e3b341; }
+
 /* --- Post footnote / colophon: small, muted, centered --- */
 .prose .post-footnote {
 	display: block;
