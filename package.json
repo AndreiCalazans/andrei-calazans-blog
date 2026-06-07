@@ -11,6 +11,12 @@
 		"format": "prettier -w --cache",
 		"check": "astro check"
 	},
+	"pnpm": {
+		"overrides": {
+			"rollup": "4.9.1",
+			"sitemap": "7.1.1"
+		}
+	},
 	"dependencies": {
 		"@astrojs/mdx": "2.0.0",
 		"@astrojs/netlify": "^4.0.2",
