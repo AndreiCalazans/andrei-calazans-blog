@@ -210,18 +210,10 @@
 }
 
 /* --- Keep wide content (data tables) from scrolling the whole page on mobile --- */
-/* Flex items default to min-width:auto and refuse to shrink below their widest
- * child, which lets a wide table/heading push horizontal scroll onto the whole
- * page. Allow the main column (and the article flex child on desktop) to shrink. */
-#main {
-	min-width: 0;
-}
-#main article {
-	min-width: 0;
-}
+/* Wide data tables/code scroll inside their own box instead of pushing
+ * horizontal scroll onto the whole page on narrow screens. */
 .prose {
 	overflow-wrap: break-word;
-	max-width: 100%;
 }
 .prose table {
 	display: block;
