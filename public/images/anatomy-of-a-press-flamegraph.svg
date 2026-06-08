@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -18 960 262"
+  font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">
+
+  <!-- Background -->
+  <rect width="960" height="244" fill="#f6f8fa"/>
+
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0.5 L6,3.5 L0,6.5" fill="none" stroke="#6b7280" stroke-width="1.4"/>
+    </marker>
+    <marker id="arr-pink" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0.5 L6,3.5 L0,6.5" fill="none" stroke="#d946ef" stroke-width="1.4"/>
+    </marker>
+    <clipPath id="c1"><rect x="112" y="56" width="112" height="32"/></clipPath>
+    <clipPath id="c2"><rect x="390" y="56" width="58"  height="32"/></clipPath>
+    <clipPath id="c3"><rect x="500" y="56" width="40"  height="32"/></clipPath>
+    <clipPath id="c4"><rect x="556" y="56" width="56"  height="32"/></clipPath>
+    <clipPath id="c5"><rect x="112" y="90" width="76"  height="26"/></clipPath>
+    <clipPath id="c6"><rect x="216" y="90" width="46"  height="26"/></clipPath>
+    <clipPath id="c7"><rect x="396" y="90" width="34"  height="26"/></clipPath>
+    <clipPath id="c8"><rect x="500" y="90" width="38"  height="26"/></clipPath>
+    <clipPath id="c9"><rect x="556" y="90" width="52"  height="26"/></clipPath>
+    <clipPath id="c10"><rect x="270" y="128" width="104" height="36"/></clipPath>
+    <clipPath id="c11"><rect x="362" y="128" width="148" height="36"/></clipPath>
+    <clipPath id="c12"><rect x="362" y="138" width="148" height="16"/></clipPath>
+    <clipPath id="c13"><rect x="530" y="172" width="52"  height="36"/></clipPath>
+    <clipPath id="c14"><rect x="574" y="172" width="56"  height="36"/></clipPath>
+    <clipPath id="c15"><rect x="650" y="172" width="76"  height="36"/></clipPath>
+    <clipPath id="c16"><rect x="738" y="172" width="76"  height="36"/></clipPath>
+  </defs>
+
+  <!-- ░░ Phase bands ░░ -->
+  <rect x="112" y="40" width="208" height="170" rx="5" fill="#f0883e" fill-opacity=".10"/>
+  <rect x="272" y="40" width="248" height="170" rx="5" fill="#58a6ff" fill-opacity=".10"/>
+  <rect x="392" y="40" width="136" height="170" rx="5" fill="#e3b341" fill-opacity=".10"/>
+  <rect x="512" y="40" width="296" height="170" rx="5" fill="#3fb950" fill-opacity=".08"/>
+
+  <!-- Phase labels -->
+  <text x="216" y="18" text-anchor="middle" fill="#bc4c00" font-size="10.5" font-weight="700" letter-spacing=".05em">① INPUT DISPATCH</text>
+  <text x="396" y="18" text-anchor="middle" fill="#1f6feb" font-size="10.5" font-weight="700" letter-spacing=".05em">② JS EXECUTION</text>
+  <text x="460" y="18" text-anchor="middle" fill="#9a6700" font-size="10.5" font-weight="700" letter-spacing=".04em">③ NATIVE</text>
+  <text x="654" y="18" text-anchor="middle" fill="#1a7f37" font-size="10.5" font-weight="700" letter-spacing=".05em">④ GPU DRAW</text>
+
+  <!-- ░░ Ruler (1 ms = 8 px, x0 = 112) ░░ -->
+  <line x1="112" y1="58" x2="920" y2="58" stroke="#d0d7de" stroke-width=".8"/>
+
+  <line x1="112" y1="55" x2="112" y2="62" stroke="#6b7280" stroke-width="1"/>
+  <text x="112" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">0</text>
+
+  <line x1="192" y1="55" x2="192" y2="62" stroke="#d0d7de" stroke-width=".8"/>
+  <line x1="192" y1="62" x2="192" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="192" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">10</text>
+
+  <line x1="272" y1="55" x2="272" y2="62" stroke="#6b7280" stroke-width="1"/>
+  <line x1="272" y1="62" x2="272" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="272" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">20ms</text>
+
+  <line x1="352" y1="55" x2="352" y2="62" stroke="#6b7280" stroke-width="1"/>
+  <line x1="352" y1="62" x2="352" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="352" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">30</text>
+
+  <line x1="432" y1="55" x2="432" y2="62" stroke="#d0d7de" stroke-width=".8"/>
+  <line x1="432" y1="62" x2="432" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="432" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">40</text>
+
+  <line x1="512" y1="55" x2="512" y2="62" stroke="#6b7280" stroke-width="1"/>
+  <line x1="512" y1="62" x2="512" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="512" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">50ms</text>
+
+  <line x1="592" y1="55" x2="592" y2="62" stroke="#d0d7de" stroke-width=".8"/>
+  <line x1="592" y1="62" x2="592" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="592" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">60</text>
+
+  <line x1="672" y1="55" x2="672" y2="62" stroke="#6b7280" stroke-width="1"/>
+  <line x1="672" y1="62" x2="672" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="672" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">70</text>
+
+  <line x1="752" y1="55" x2="752" y2="62" stroke="#d0d7de" stroke-width=".8"/>
+  <line x1="752" y1="62" x2="752" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="752" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">80ms</text>
+
+  <line x1="832" y1="55" x2="832" y2="62" stroke="#d0d7de" stroke-width=".8"/>
+  <line x1="832" y1="62" x2="832" y2="212" stroke="#e8ecf0" stroke-width=".6"/>
+  <text x="832" y="54" text-anchor="middle" fill="#4b5563" font-size="9.5">90</text>
+
+  <!-- ░░ Lane backgrounds ░░ -->
+  <rect x="0" y="62"  width="960" height="30" fill="#0ea5e9" fill-opacity=".05"/>
+  <rect x="0" y="92"  width="960" height="26" fill="#0ea5e9" fill-opacity=".03"/>
+  <rect x="0" y="128" width="960" height="36" fill="#818cf8" fill-opacity=".06"/>
+  <rect x="0" y="172" width="960" height="36" fill="#22c55e" fill-opacity=".06"/>
+
+  <!-- Lane separators -->
+  <line x1="0" y1="62"  x2="960" y2="62"  stroke="#d0d7de" stroke-width=".7"/>
+  <line x1="0" y1="92"  x2="960" y2="92"  stroke="#e8ecf0" stroke-width=".6" stroke-dasharray="3,3"/>
+  <line x1="0" y1="118" x2="960" y2="118" stroke="#d0d7de" stroke-width=".7"/>
+  <line x1="0" y1="128" x2="960" y2="128" stroke="#d0d7de" stroke-width=".7"/>
+  <line x1="0" y1="164" x2="960" y2="164" stroke="#d0d7de" stroke-width=".7"/>
+  <line x1="0" y1="172" x2="960" y2="172" stroke="#d0d7de" stroke-width=".7"/>
+  <line x1="0" y1="212" x2="960" y2="212" stroke="#d0d7de" stroke-width=".7"/>
+
+  <!-- Thread labels -->
+  <text x="106" y="81"  text-anchor="end" fill="#1f2328" font-size="11.5" font-weight="600">UI thread</text>
+  <text x="106" y="109" text-anchor="end" fill="#57606a" font-size="10">↳ stages</text>
+  <text x="106" y="149" text-anchor="end" fill="#1f2328" font-size="11.5" font-weight="600">JS thread</text>
+  <text x="106" y="161" text-anchor="end" fill="#57606a" font-size="9.5">mqt_v_js</text>
+  <text x="106" y="191" text-anchor="end" fill="#1f2328" font-size="11.5" font-weight="600">RenderThread</text>
+
+  <!-- ░░ UI THREAD — outer row ░░ -->
+  <rect x="112" y="63" width="112" height="28" rx="5" fill="#0ea5e9"/>
+  <text clip-path="url(#c1)" x="117" y="81" fill="#082f49" font-size="11" font-weight="700">deliverInputEvent</text>
+
+  <rect x="288" y="63" width="16" height="28" rx="4" fill="#38bdf8"/>
+  <text x="296" y="81" text-anchor="middle" fill="#082f49" font-size="9" font-weight="700">↑UP</text>
+
+  <rect x="392" y="63" width="40" height="28" rx="5" fill="#7c3aed"/>
+  <text clip-path="url(#c2)" x="396" y="81" fill="#f5f3ff" font-size="11" font-weight="700">doFrame</text>
+
+  <rect x="500" y="63" width="32" height="28" rx="4" fill="#6d28d9"/>
+  <text clip-path="url(#c3)" x="504" y="81" fill="#f5f3ff" font-size="10" font-weight="700">doFrame</text>
+
+  <rect x="556" y="63" width="48" height="28" rx="4" fill="#6d28d9"/>
+  <text clip-path="url(#c4)" x="560" y="81" fill="#f5f3ff" font-size="10" font-weight="700">doFrame</text>
+
+  <rect x="650" y="68" width="4" height="18" rx="2" fill="#7c3aed" fill-opacity=".6"/>
+  <rect x="730" y="68" width="4" height="18" rx="2" fill="#7c3aed" fill-opacity=".5"/>
+  <rect x="810" y="68" width="4" height="18" rx="2" fill="#7c3aed" fill-opacity=".4"/>
+  <text x="820" y="81" fill="#9ca3af" font-size="9.5" font-style="italic">animation doFrames…</text>
+
+  <!-- ░░ UI THREAD — inner stages row ░░ -->
+  <rect x="112" y="93" width="75" height="24" rx="4" fill="#6366f1"/>
+  <text clip-path="url(#c5)" x="115" y="109" fill="#eef2ff" font-size="10.5" font-weight="700">EarlyPostIme</text>
+
+  <rect x="218" y="93" width="44" height="24" rx="4" fill="#8b5cf6"/>
+  <text clip-path="url(#c6)" x="221" y="109" fill="#f5f3ff" font-size="10.5" font-weight="700">ViewPostIme</text>
+
+  <!-- topTouchStart / topTouchEnd dispatch ticks -->
+  <rect x="224" y="95" width="7" height="20" rx="2" fill="#10b981"/>
+  <rect x="300" y="95" width="7" height="20" rx="2" fill="#10b981"/>
+
+  <rect x="397" y="93" width="30" height="24" rx="3" fill="#f59e0b"/>
+  <text clip-path="url(#c7)" x="400" y="109" fill="#431407" font-size="10" font-weight="700">MountItems</text>
+
+  <rect x="500" y="93" width="32" height="24" rx="3" fill="#fbbf24"/>
+  <text clip-path="url(#c8)" x="503" y="109" fill="#431407" font-size="10" font-weight="700">premount</text>
+
+  <rect x="556" y="93" width="44" height="24" rx="3" fill="#fbbf24"/>
+  <text clip-path="url(#c9)" x="559" y="109" fill="#431407" font-size="10" font-weight="700">mountViews</text>
+
+  <rect x="616" y="98" width="5" height="14" rx="2" fill="#10b981" fill-opacity=".6"/>
+  <rect x="644" y="98" width="5" height="14" rx="2" fill="#10b981" fill-opacity=".4"/>
+  <text x="652" y="109" fill="#9ca3af" font-size="9">nav events…</text>
+
+  <!-- ░░ JS THREAD row ░░ -->
+  <rect x="272" y="130" width="96"  height="32" rx="5" fill="#3b82f6"/>
+  <text clip-path="url(#c10)" x="276" y="148" fill="#eff6ff" font-size="11" font-weight="700">Event routing</text>
+  <text clip-path="url(#c10)" x="276" y="159" fill="#bfdbfe" font-size="9.5">→ onPress()</text>
+
+  <rect x="368" y="130" width="144" height="32" rx="5" fill="#ec4899"/>
+  <text clip-path="url(#c11)" x="372" y="147" fill="#fff"    font-size="11" font-weight="700">[HostFunction] completeRoot</text>
+  <text clip-path="url(#c12)" x="372" y="159" fill="#fce7f3" font-size="9.5">synchronous JSI · JS blocked · 16ms</text>
+
+  <!-- ░░ RENDERTHREAD row ░░ -->
+  <rect x="544" y="174" width="36" height="32" rx="5" fill="#22c55e"/>
+  <text clip-path="url(#c13)" x="548" y="193" fill="#052e16" font-size="10.5" font-weight="700">DrawFrame</text>
+
+  <rect x="557" y="176" width="24" height="28" rx="3" fill="#16a34a"/>
+  <text x="569" y="194" text-anchor="middle" fill="#f0fdf4" font-size="9" font-weight="700">eglSwap</text>
+
+  <rect x="580" y="174" width="36" height="32" rx="4" fill="#22c55e"/>
+  <text clip-path="url(#c14)" x="584" y="193" fill="#052e16" font-size="10.5" font-weight="700">DrawFrame</text>
+  <rect x="592" y="176" width="24" height="28" rx="3" fill="#16a34a" fill-opacity=".85"/>
+
+  <rect x="672" y="174" width="67" height="32" rx="4" fill="#22c55e"/>
+  <text clip-path="url(#c15)" x="676" y="193" fill="#052e16" font-size="10.5" font-weight="700">DrawFrame</text>
+  <rect x="690" y="176" width="30" height="28" rx="3" fill="#16a34a" fill-opacity=".85"/>
+
+  <rect x="752" y="174" width="46" height="32" rx="4" fill="#22c55e" fill-opacity=".65"/>
+  <text clip-path="url(#c16)" x="756" y="193" fill="#052e16" font-size="10"  font-weight="700">DrawFrame…</text>
+
+  <rect x="832" y="182" width="6" height="16" rx="2" fill="#22c55e" fill-opacity=".5"/>
+  <rect x="872" y="182" width="6" height="16" rx="2" fill="#22c55e" fill-opacity=".4"/>
+
+  <!-- ░░ Causal flow arrows ░░ -->
+  <!-- FabricEventEmitter → JS wakes up -->
+  <line x1="303" y1="116" x2="303" y2="128"
+        stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr)"/>
+  <!-- completeRoot → MountItems handoff -->
+  <path d="M 512,162 Q 512,168 456,168 Q 392,168 392,162"
+        fill="none" stroke="#d946ef" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arr-pink)"/>
+  <text x="452" y="177" text-anchor="middle" fill="#9333ea" font-size="9" font-weight="600">mutations → UI thread</text>
+
+  <!-- ░░ First-frame annotation ░░ -->
+  <line x1="557" y1="130" x2="557" y2="172" stroke="#d97706" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <text x="558" y="125" fill="#d97706" font-size="10" font-weight="700">⭐ first frame ~62ms</text>
+
+  <!-- ░░ Legend ░░ -->
+  <rect x="112" y="220" width="10" height="10" rx="2" fill="#0ea5e9"/>
+  <text x="125" y="229" fill="#57606a" font-size="10">Input (Android)</text>
+  <rect x="232" y="220" width="10" height="10" rx="2" fill="#6366f1"/>
+  <text x="245" y="229" fill="#57606a" font-size="10">Input stages</text>
+  <rect x="335" y="220" width="10" height="10" rx="2" fill="#10b981"/>
+  <text x="348" y="229" fill="#57606a" font-size="10">Event dispatch</text>
+  <rect x="440" y="220" width="10" height="10" rx="2" fill="#3b82f6"/>
+  <text x="453" y="229" fill="#57606a" font-size="10">JS work</text>
+  <rect x="500" y="220" width="10" height="10" rx="2" fill="#ec4899"/>
+  <text x="513" y="229" fill="#57606a" font-size="10">completeRoot (⚠ blocks JS)</text>
+  <rect x="676" y="220" width="10" height="10" rx="2" fill="#f59e0b"/>
+  <text x="689" y="229" fill="#57606a" font-size="10">Native mount</text>
+  <rect x="764" y="220" width="10" height="10" rx="2" fill="#22c55e"/>
+  <text x="777" y="229" fill="#57606a" font-size="10">GPU draw</text>
+
+</svg>
