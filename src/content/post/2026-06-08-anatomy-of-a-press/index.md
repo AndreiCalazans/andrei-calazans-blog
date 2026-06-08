@@ -181,9 +181,7 @@ After running the [React Native Navigation Benchmarks](/posts/2026-06-05-state-o
 
 A press in React Native crosses **four threads** and three layer boundaries before anything changes on screen. This post traces every hop with real Systrace and Hermes CPU-profile data.
 
-> **Setup:** New Architecture (Fabric + JSI) · Android · Samsung Galaxy A16. Data from
-> `perf-results/_nav/react-navigation-nav.perfetto-trace` + Hermes profile from the
-> [StateOfReactNativeNavigation repo](https://github.com/AndreiCalazans/StateOfReactNativeNavigation).
+> **Android only.** All traces are from a Samsung Galaxy A16 running Android 14. Android gives the richest data for this kind of analysis — Perfetto Systrace captures every thread boundary at microsecond resolution and the Hermes CPU sampler gives a source-mapped JS call stack for the full press burst. Data from `perf-results/_nav/react-navigation-nav.perfetto-trace` + Hermes profile in the [StateOfReactNativeNavigation repo](https://github.com/AndreiCalazans/StateOfReactNativeNavigation).
 
 ## The four threads a press touches
 
