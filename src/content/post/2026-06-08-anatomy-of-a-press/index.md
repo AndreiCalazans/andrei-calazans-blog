@@ -177,18 +177,13 @@ draft: true
 }
 </style>
 
-A press in React Native crosses **four threads** and three layer boundaries before a new pixel
-appears on screen. This post traces every hop — with real Systrace and Hermes CPU-profile data — and
-answers: _where can you accidentally block responsiveness, and how do you instrument it in
-production?_
+After running the [React Native Navigation Benchmarks](/posts/2026-06-05-state-of-rn-navigation/), I got curious about something more fundamental: what is the actual code path for handling a press? The benchmark told me *how long* navigating takes — but I wanted to understand every hop between the user's finger and the new pixel on screen.
+
+A press in React Native crosses **four threads** and three layer boundaries before anything changes on screen. This post traces every hop with real Systrace and Hermes CPU-profile data.
 
 > **Setup:** New Architecture (Fabric + JSI) · Android · Samsung Galaxy A16. Data from
 > `perf-results/_nav/react-navigation-nav.perfetto-trace` + Hermes profile from the
 > [StateOfReactNativeNavigation repo](https://github.com/AndreiCalazans/StateOfReactNativeNavigation).
-
-A tap on `open-details` was recorded inside a Perfetto system trace (atrace + scheduler) while a
-Hermes sampling profile ran in parallel. Everything is measured from the real device. Companions:
-[cold start](/posts/2026-06-06-react-native-navigation-cold-start/) · [cost of navigating](/posts/2026-06-07-the-cost-of-navigating/) · [heavy screen](/posts/2026-06-07-navigating-to-a-heavy-screen/).
 
 ## The four threads a press touches
 
