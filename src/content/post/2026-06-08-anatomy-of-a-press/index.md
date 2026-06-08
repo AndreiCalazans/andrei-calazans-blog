@@ -403,8 +403,7 @@ Data: <code>perf-results/_nav/react-navigation-nav.perfetto-trace</code> (press 
 <code>.perfetto-trace</code> file at <a href="https://ui.perfetto.dev">ui.perfetto.dev</a> and search
 for <code>deliverInputEvent</code> to find the same data interactively. Full research repo:
 <a href="https://github.com/AndreiCalazans/StateOfReactNativeNavigation">StateOfReactNativeNavigation</a>.
-Companions: <a href="/posts/2026-06-06-react-native-navigation-cold-start/">cold start</a> ·
+Companions: <a href="/posts/2026-06-05-state-of-rn-navigation/">React Native Navigation Benchmarks</a> ·
 <a href="/posts/2026-06-07-the-cost-of-navigating/">cost of navigating</a> ·
-<a href="/posts/2026-06-07-navigating-to-a-heavy-screen/">heavy screen</a> ·
 <a href="/posts/2026-06-07-the-cost-of-expo/">cost of Expo</a>.
 </footer>
