@@ -94,19 +94,19 @@ single core. Memory is PSS in MB.
 Same drag, three libraries. Watch the JS-thread numbers, not just the pixels —
 Animated is dragging the value on the JS thread the whole time:
 
-<video controls muted playsinline loop preload="metadata">
+<video controls muted playsinline loop preload="metadata" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 <source src="/videos/rn-anim-animated-scrub.mp4" type="video/mp4" />
 </video>
 
 *Animated — `PanResponder` → `setValue` on the JS thread (29% JS CPU, 26% JS frames dropped).*
 
-<video controls muted playsinline loop preload="metadata">
+<video controls muted playsinline loop preload="metadata" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 <source src="/videos/rn-anim-reanimated-scrub.mp4" type="video/mp4" />
 </video>
 
 *Reanimated — gesture on the UI thread; the JS thread stays free (2.9% JS CPU).*
 
-<video controls muted playsinline loop preload="metadata">
+<video controls muted playsinline loop preload="metadata" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 <source src="/videos/rn-anim-ease-scrub.mp4" type="video/mp4" />
 </video>
 
@@ -123,19 +123,19 @@ Animated is dragging the value on the JS thread the whole time:
 Sixty boxes rotating for 45 seconds. This is where per-node UI-thread cost shows
 up — Reanimated runs a `useAnimatedStyle` mapper per box, per frame:
 
-<video controls muted playsinline loop preload="metadata">
+<video controls muted playsinline loop preload="metadata" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 <source src="/videos/rn-anim-animated-loop.mp4" type="video/mp4" />
 </video>
 
 *Animated — native driver.*
 
-<video controls muted playsinline loop preload="metadata">
+<video controls muted playsinline loop preload="metadata" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 <source src="/videos/rn-anim-reanimated-loop.mp4" type="video/mp4" />
 </video>
 
 *Reanimated — 62% main-thread CPU, 151% process CPU (heaviest of the three).*
 
-<video controls muted playsinline loop preload="metadata">
+<video controls muted playsinline loop preload="metadata" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 <source src="/videos/rn-anim-ease-loop.mp4" type="video/mp4" />
 </video>
 
