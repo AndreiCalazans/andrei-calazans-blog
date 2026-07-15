@@ -17,7 +17,7 @@ So I built a harness and measured it. Everything here is reproducible —
 
 ## The setup
 
-Three approaches, all on the latest versions (Nov 2025):
+Three approaches:
 
 - **Animated** — RN 0.86's `Animated` API with `useNativeDriver: true`
 - **Reanimated** — `react-native-reanimated` 4.5.0 (+ `react-native-worklets` 0.10.0)
@@ -91,6 +91,27 @@ single core. Memory is PSS in MB.
 | **Reanimated** | 0.386 | 57.4 | 0.089 | 86.4 | **2.9**  | **29.7** |
 | Ease           | 0.157 | 87.8 | 0.047 | 86.6 | 13.0 | 42.9 |
 
+Same drag, three libraries. Watch the JS-thread numbers, not just the pixels —
+Animated is dragging the value on the JS thread the whole time:
+
+<video controls muted playsinline loop preload="metadata">
+<source src="/videos/rn-anim-animated-scrub.mp4" type="video/mp4" />
+</video>
+
+*Animated — `PanResponder` → `setValue` on the JS thread (29% JS CPU, 26% JS frames dropped).*
+
+<video controls muted playsinline loop preload="metadata">
+<source src="/videos/rn-anim-reanimated-scrub.mp4" type="video/mp4" />
+</video>
+
+*Reanimated — gesture on the UI thread; the JS thread stays free (2.9% JS CPU).*
+
+<video controls muted playsinline loop preload="metadata">
+<source src="/videos/rn-anim-ease-scrub.mp4" type="video/mp4" />
+</video>
+
+*Ease — a state update per move event (13% JS CPU).*
+
 ### Type 4 — 45s loop (60 boxes rotating)
 
 | lib | UI drop | UI fps | UI cpu% | proc cpu% | PSS MB |
@@ -98,6 +119,27 @@ single core. Memory is PSS in MB.
 | Animated   | 0.298 | 61.7 | 33.5 | 109.9 | 194 |
 | Reanimated | 0.331 | 56.4 | **61.9** | **150.9** | 241 |
 | **Ease**   | **0.184** | **65.8** | **31.0** | **105.2** | 196 |
+
+Sixty boxes rotating for 45 seconds. This is where per-node UI-thread cost shows
+up — Reanimated runs a `useAnimatedStyle` mapper per box, per frame:
+
+<video controls muted playsinline loop preload="metadata">
+<source src="/videos/rn-anim-animated-loop.mp4" type="video/mp4" />
+</video>
+
+*Animated — native driver.*
+
+<video controls muted playsinline loop preload="metadata">
+<source src="/videos/rn-anim-reanimated-loop.mp4" type="video/mp4" />
+</video>
+
+*Reanimated — 62% main-thread CPU, 151% process CPU (heaviest of the three).*
+
+<video controls muted playsinline loop preload="metadata">
+<source src="/videos/rn-anim-ease-loop.mp4" type="video/mp4" />
+</video>
+
+*Ease — native platform animators; fewest dropped frames, lowest CPU.*
 
 ## What the data says
 
