@@ -1,6 +1,6 @@
 ---
 title: "Which React Native Animation Library Should You Use for Performance?"
-description: "I benchmarked Animated (native driver), Reanimated 4, and react-native-ease across four animation types on Android — measuring UI + JS frame drops, per-thread CPU, and memory. The winner depends entirely on whether a gesture is involved."
+description: "I benchmarked Animated (native driver), Reanimated 4, and react-native-ease across four animation types on Android — measuring UI + JS frame drops, per-thread CPU, and memory. The winner depends on whether a gesture is involved — plus what Worklets Bundle Mode does to Reanimated's memory."
 publishDate: "2026-07-15"
 tags: ["react-native", "performance", "android", "reanimated", "animations", "maestro"]
 ---
@@ -164,7 +164,8 @@ free once the animation is going. Scrubbing is the fork in the road:
 **Memory: Reanimated costs ~50 MB more.** It consistently carries a higher PSS,
 almost all of it in the **native heap** (~140 MB vs ~98 MB), from the
 worklets/C++ runtime. **Ease and Animated are tied for lightest** — both are
-thin wrappers with no extra runtime.
+thin wrappers with no extra runtime. *(This turns out to be fixable — see the
+[Bundle Mode update](#update-reanimated-worklets-bundle-mode) below.)*
 
 **At 60 nodes, per-node cost dominates the UI thread.** For touch/state/loop,
 **Ease drops the fewest frames and burns the least CPU**, with **Animated close
@@ -178,8 +179,8 @@ Sixty nodes is sixty times that work.
 There's no universal winner. Pick based on which cost your screen actually pays:
 
 - **A gesture drives the animation (scrub, drag, pinch, swipe)? → Reanimated.**
-  It's the only one that keeps continuous input off the JS thread. Pay the ~50 MB
-  and move on.
+  It's the only one that keeps continuous input off the JS thread. (And with
+  Bundle Mode on, you don't even pay the memory premium — see below.)
 - **Declarative state / enter-exit / looping / touch feedback, and you care
   about memory, CPU, and battery? → react-native-ease.** Lightest, lowest CPU,
   fewest dropped frames in those cases, and it keeps JS nearly idle. Just don't
@@ -204,8 +205,57 @@ At one node, Reanimated is likely the all-round best for anything interactive.
 So take the *JS-thread scrub ranking* as robust and design-independent (Animated
 saturates JS, Reanimated doesn't, Ease is between). Take the *UI-thread loop
 ranking* (Reanimated heaviest) as partly an artifact of 60 nodes, and re-measure
-at your real node count. The memory numbers hold regardless.
+at your real node count.
 
-Full methodology, the native frame observer, the Maestro flows, and every raw
-number are in the repo:
+## Update: Reanimated Worklets Bundle Mode
+
+After I posted this, [T.J. Żelawski](https://x.com/tjzeldev) asked the obvious
+next question: what about Reanimated with [Worklets **Bundle
+Mode**](https://docs.swmansion.com/react-native-worklets/docs/bundleMode/setup)
+enabled? Instead of serializing every worklet as a string that the UI runtime
+compiles at runtime, Bundle Mode compiles worklets into a separate bundle. Good
+call — so I rebuilt the app with it on and re-measured.
+
+To keep it honest I also re-ran a **fresh non-bundle baseline in the same
+session** on the same device (PSS drifts between sessions, so both arms were
+measured back-to-back). Median of 3 runs each. The result is striking:
+
+| test | PSS off | PSS on | Δ PSS | native heap off | native heap on |
+|---|--:|--:|--:|--:|--:|
+| touch | 231 MB | 121 MB | **−110 MB** | 145 MB | 32 MB |
+| state | 227 MB | 123 MB | **−104 MB** | 139 MB | 32 MB |
+| scrub | 239 MB | 129 MB | **−110 MB** | 143 MB | 31 MB |
+| loop  | 237 MB | 137 MB | **−100 MB** | 141 MB | 34 MB |
+
+**Bundle Mode cuts Reanimated's memory by ~100 MB (~45%)**, essentially all of
+it native heap (~142 MB → ~32 MB). That's not a tweak — it **erases the ~50 MB
+premium** Reanimated had over Animated and Ease, and then some. With Bundle Mode
+on, Reanimated is no longer the memory-heavy choice.
+
+And frame rate / CPU? **Unchanged**, within run-to-run noise:
+
+| test | UI drop off→on | UI fps off→on | JS cpu% off→on | proc cpu% off→on |
+|---|--:|--:|--:|--:|
+| touch | 0.067→0.057 | 74→77 | 4.6→4.7 | 47→45 |
+| scrub | 0.382→0.365 | 58→59 | 2.8→2.8 | 30→30 |
+| loop  | 0.323→0.319 | 59→58 | 2.9→2.9 | 152→151 |
+
+That makes sense: Bundle Mode changes how worklets are *loaded* (memory, and
+startup — which I didn't measure here), not how they *execute* per frame. So the
+60-node UI-thread cost is untouched, but the memory objection to Reanimated
+largely goes away.
+
+**Revised bottom line:** if you're on Reanimated, turn Bundle Mode on — it's a
+build-config change (babel `bundleMode` + a Metro config wrapper) that buys ~100
+MB for free. And it weakens the main reason I'd previously steer memory-sensitive
+screens away from Reanimated.
+
+> Setup gotcha I hit: Bundle Mode writes generated worklet files into
+> `node_modules/react-native-worklets/.worklets/`, and Metro's first build can
+> fail with a *"Failed to get the SHA-1"* error because those files didn't exist
+> when Metro built its file map. Running the bundle once populates them; the
+> next build succeeds.
+
+Full methodology, the native frame observer, the Maestro flows, the bundle-mode
+comparison, and every raw number are in the repo:
 [**AndreiCalazans/react-native-animation-performance**](https://github.com/AndreiCalazans/react-native-animation-performance).
