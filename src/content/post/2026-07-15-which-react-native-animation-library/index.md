@@ -3,7 +3,6 @@ title: "Which React Native Animation Library Should You Use for Performance?"
 description: "I benchmarked Animated (native driver), Reanimated 4, and react-native-ease across four animation types on Android — measuring UI + JS frame drops, per-thread CPU, and memory. The winner depends entirely on whether a gesture is involved."
 publishDate: "2026-07-15"
 tags: ["react-native", "performance", "android", "reanimated", "animations", "maestro"]
-draft: true
 ---
 
 React Native's animation story is fragmented. You can reach for the built-in
