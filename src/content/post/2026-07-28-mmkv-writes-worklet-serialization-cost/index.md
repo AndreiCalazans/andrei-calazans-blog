@@ -3,7 +3,6 @@ title: "Why We Did Not Move MMKV Writes to a Worklet: The Serialization Cost"
 description: "We wanted to move an expensive GraphQL store write off the JS thread. A background worklet looked like the answer. But the cost to serialize the data into the worklet made it a no-go. Here is the experiment."
 publishDate: "2026-07-28"
 tags: ["react-native", "performance", "worklets", "mmkv", "hermes"]
-draft: true
 ---
 
 We use [MMKV](https://github.com/mrousavy/react-native-mmkv) for persistence. We
