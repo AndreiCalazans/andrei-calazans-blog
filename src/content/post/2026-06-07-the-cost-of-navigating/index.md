@@ -3,7 +3,6 @@ title: "React Native Navigation Benchmarks: What Does Navigating to a Screen Cos
 description: "Press → paint measured across four libraries on a trivial screen and a heavy 24-row list. JS call stacks reveal each library's architecture — and why 'first frame' means very different things when the destination actually has work to do."
 publishDate: "2026-06-07"
 tags: ["react-native", "performance", "android", "navigation", "systrace"]
-draft: true
 ---
 
 Part of [the series](/posts/2026-06-05-state-of-rn-navigation/). Cold start data doesn't include any taps, so I captured fresh traces: cold-launch each app, let Home settle, then `input tap` the shared button while Perfetto Systrace + Hermes record.

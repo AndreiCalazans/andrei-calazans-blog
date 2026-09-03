@@ -3,7 +3,6 @@ title: "React Native Navigation Benchmarks: What's the Expo Tax?"
 description: "A bare RN app vs a blank Expo app — the fixed cost of adopting Expo is ~36 ms and ~13 MB RAM. Then what each extra Expo module adds, and why the Hermes profiler over-attributes 100–240 ms to @expo."
 publishDate: "2026-06-07"
 tags: ["react-native", "expo", "performance", "android", "bundling"]
-draft: true
 ---
 
 Part of [the series](/posts/2026-06-05-state-of-rn-navigation/). The [deep dive](/posts/2026-06-06-react-native-navigation-cold-start/) showed the Hermes profiler attributing up to 241 ms of JS-thread CPU to `@expo`/`expo-modules-core` at startup. Here I run the actual control to separate the real Expo overhead from the noise.

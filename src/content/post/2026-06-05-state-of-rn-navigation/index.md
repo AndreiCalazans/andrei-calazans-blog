@@ -3,7 +3,6 @@ title: "React Native Navigation Benchmarks"
 description: "Four navigation libraries, one identical app, benchmarked on Android with Perfetto Systrace and the Hermes CPU profiler. Cold start, RAM, press-to-paint — and what's actually behind the numbers."
 publishDate: "2026-06-05"
 tags: ["react-native", "performance", "android", "navigation", "systrace"]
-draft: true
 ---
 
 I'm trying to figure out how to build the fastest possible React Native app. A big piece of that is understanding what navigation costs — it runs at startup, it runs on every screen transition, and most teams pick a library without knowing the real numbers.
@@ -60,9 +59,9 @@ Cold start = median of 3 runs; RAM = Flashlight peak over the navigate flow. All
 
 **Expo Router is ~3× the cold start — but Reanimated isn't the main reason.** The Expo Router template ships `react-native-reanimated@4` and `react-native-worklets`, which none of the others do. But a controlled experiment showed Reanimated adds only ~62 ms to cold start. The bulk of the gap is the 2× bigger bundle and the router-on-top-of-React-Navigation layering that evaluates 106 JS modules at boot vs 36–43 for the others.
 
-**Reanimated *is* the RAM story.** Adding only Reanimated to the leanest app (rn-navigation) reproduced Expo Router's entire RAM premium: +125 MB, almost entirely anonymous heap from the second Hermes runtime Worklets spins up.
+**Reanimated *is* the RAM story.** Adding only Reanimated to the leanest app (rn-navigation) reproduced Expo Router's entire RAM premium: +125 MB, almost entirely anonymous heap from the second Hermes runtime Worklets spins up. [Bundle mode is supposed to fix this](/posts/2026-07-15-which-react-native-animation-library/#update-reanimated-worklets-bundle-mode) but it actually [regress your cold start given it must parse your entire bundle](https://github.com/software-mansion/react-native-reanimated/issues/10437).
 
-**rn-navigation wins because navigation is native.** Its JS bundle evaluates in 55 ms. The tabs and stack are Kotlin views — the JS thread barely runs at startup. React Navigation's JS bundle takes 168 ms because it builds a real component tree reconciled by Fabric.
+**rn-navigation wins because navigation is native.** Its JS bundle evaluates in 55 ms. The tabs and stack are Kotlin views — the JS thread barely runs at startup. React Navigation's JS bundle takes 168 ms because it builds a real component tree reconciled by Fabric. But it's not all flowers, rn-navigation's approach also means it [will choke on large screens and drop many frames](/posts/2026-06-07-the-cost-of-navigating/#heavy-screen-what-changes-with-real-content).
 
 ## The series
 

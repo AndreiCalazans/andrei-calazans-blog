@@ -3,7 +3,6 @@ title: "React Native Navigation Benchmarks: Deep Diving Where Time Is Spent"
 description: "Why Expo Router costs 3× cold start and RAM, what React Navigation adds on top of rn-navigation, the Hermes hot-function breakdown for each library, and a controlled experiment isolating Reanimated."
 publishDate: "2026-06-06"
 tags: ["react-native", "performance", "android", "systrace", "navigation"]
-draft: true
 ---
 
 Part of [the series](/posts/2026-06-05-state-of-rn-navigation/). The [intro](/posts/2026-06-05-state-of-rn-navigation/) has the headline numbers — here I go into the traces to explain them.
