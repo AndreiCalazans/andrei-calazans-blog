@@ -335,6 +335,7 @@
 .cs-b-bare { background: linear-gradient(90deg, #2ea043, #3fb950); }
 .cs-b-mod { background: linear-gradient(90deg, #bb8a1a, #e3b341); }
 .cs-b-exp { background: linear-gradient(90deg, #bb8a1a, #e3b341); }
+.cs-b-cmp { background: linear-gradient(90deg, #388bfd, #58a6ff); }
 /* colored numbers (win / lose / warn), theme-aware */
 .cs-win { color: #1a7f37; font-weight: 700; }
 .cs-lose { color: #cf222e; font-weight: 700; }
@@ -342,6 +343,57 @@
 :root.dark .cs-win { color: #3fb950; }
 :root.dark .cs-lose { color: #f85149; }
 :root.dark .cs-warnc { color: #e3b341; }
+
+/*
+ * --- Responsive SVG scatter (sc-*) ---
+ * Scales to any column width via viewBox; theme-aware via currentColor.
+ */
+.sc-fig {
+	background: hsl(var(--theme-text) / 0.04);
+	border: 1px solid hsl(var(--theme-text) / 0.1);
+	border-radius: 10px;
+	padding: 14px 16px 8px;
+	margin: 1.4rem 0;
+}
+.sc-fig svg { display: block; width: 100%; height: auto; }
+.sc-axis { stroke: hsl(var(--theme-text) / 0.35); stroke-width: 1.5; }
+.sc-grid { stroke: hsl(var(--theme-text) / 0.1); stroke-width: 1; }
+.sc-trend { stroke: hsl(var(--theme-text) / 0.35); stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; }
+.sc-dot { fill: #f0883e; stroke: hsl(var(--theme-bg, 0 0% 100%)); stroke-width: 1.5; }
+.sc-tick { fill: hsl(var(--theme-text) / 0.55); font-size: 15px; font-family: var(--font-mono, monospace); }
+.sc-lab { fill: hsl(var(--theme-text) / 0.85); font-size: 15px; font-weight: 600; }
+.sc-axtitle { fill: hsl(var(--theme-text) / 0.6); font-size: 14px; }
+
+/*
+ * --- Flow diagram (fg-*) for the build task graph ---
+ * Reflows instead of breaking like fixed-width ASCII.
+ */
+.fg {
+	background: hsl(var(--theme-text) / 0.04);
+	border: 1px solid hsl(var(--theme-text) / 0.1);
+	border-radius: 10px;
+	padding: 16px;
+	margin: 1.4rem 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	text-align: center;
+}
+.fg-box {
+	width: 100%;
+	max-width: 560px;
+	border: 1px solid hsl(var(--theme-text) / 0.14);
+	border-radius: 8px;
+	padding: 10px 12px;
+	background: hsl(var(--theme-text) / 0.03);
+}
+.fg-box code { background: none; border: none; padding: 0; font-size: 0.82rem; overflow-wrap: anywhere; }
+.fg-note { font-size: 0.74rem; color: hsl(var(--theme-text) / 0.55); margin-top: 3px; }
+.fg-arrow { color: hsl(var(--theme-text) / 0.4); font-size: 1.1rem; line-height: 1; }
+.fg-link { border-color: #f0883e; background: hsl(30 90% 55% / 0.08); }
+.fg-link .fg-tag { color: #db6d28; font-weight: 700; font-size: 0.74rem; }
+:root.dark .fg-link .fg-tag { color: #f0883e; }
 
 /* --- Post footnote / colophon: small, muted, centered --- */
 .prose .post-footnote {
