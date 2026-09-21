@@ -299,6 +299,122 @@ few facades you deliberately hold; and keep those Objects **few and long-lived**
 closing screen-scoped ones in one place with a base `RustViewModel` so it is not
 per-developer discipline.
 
+## 6. Streams: the one glue layer Rust keeps
+
+F2 was the one job the table marked "caveat for streams," and it is worth
+opening because a real reactive core hits it every day. A KMP
+`observe(): Flow<…>` has no direct UniFFI equivalent — **UniFFI has no native
+`Flow`, `AsyncStream`, or `AsyncIterator` type.** Its async support stops at the
+request/response shape: an `async fn` maps to `async throws` and `suspend`, but a
+function cannot *return* a continuous stream across the C ABI.
+
+So you drive values the other way. Instead of returning a stream, Rust **pushes**
+values into a foreign callback, and each platform wraps that callback in its own
+reactive idiom. The key difference from the KMP bridge: this is written **once
+per stream shape**, not once per domain — and the mapping is trivial, because the
+values crossing the boundary are already generated native types (no F3).
+
+### The Rust side: a callback interface plus a cancel handle
+
+You export a *foreign trait* with `callback_interface`. Rust calls its methods to
+emit; the foreign side implements them. You also return a `uniffi::Object` handle
+so the collector can tell Rust to stop — this is the one place a stream reuses the
+Object lifecycle from section 5.
+
+```rust
+#[derive(uniffi::Record)]
+pub struct AssetPrice { pub symbol: String, pub price_usd: String }
+
+// The foreign side (Swift/Kotlin) implements this; Rust calls it to emit.
+#[uniffi::export(callback_interface)]
+pub trait PriceObserver: Send + Sync {
+    fn on_next(&self, price: AssetPrice);
+    fn on_error(&self, message: String);
+    fn on_complete(&self);
+}
+
+// Returned to the collector so it can stop the stream on teardown.
+#[derive(uniffi::Object)]
+pub struct Subscription { cancelled: Arc<AtomicBool> }
+
+#[uniffi::export]
+impl Subscription {
+    pub fn cancel(&self) { self.cancelled.store(true, Ordering::SeqCst); }
+}
+
+#[uniffi::export]
+pub fn observe_price(symbol: String, observer: Box<dyn PriceObserver>) -> Arc<Subscription> {
+    let cancelled = Arc::new(AtomicBool::new(false));
+    let flag = cancelled.clone();
+    spawn_on_runtime(async move {
+        // …emit observer.on_next(price) as prices arrive…
+        // …check flag between emits, then observer.on_complete()…
+    });
+    Arc::new(Subscription { cancelled })
+}
+```
+
+### Swift: wrap the callback in an `AsyncStream`
+
+The generated `PriceObserver` protocol is native Swift. You implement it once and
+forward into an `AsyncStream` continuation, wiring `onTermination` back to
+`cancel()` so a dropped collector stops Rust. This is the *reduced* F2 — a
+continuation and a `Task`, but no per-field type mapping.
+
+```swift
+func priceStream(symbol: String) -> AsyncThrowingStream<AssetPrice, Error> {
+    AsyncThrowingStream { continuation in
+        final class Observer: PriceObserver {
+            let c: AsyncThrowingStream<AssetPrice, Error>.Continuation
+            init(_ c: AsyncThrowingStream<AssetPrice, Error>.Continuation) { self.c = c }
+            func onNext(price: AssetPrice) { c.yield(price) }        // native type, no map
+            func onError(message: String) { c.finish(throwing: CoreError.stream(message)) }
+            func onComplete() { c.finish() }
+        }
+        let sub = observePrice(symbol: symbol, observer: Observer(continuation))
+        continuation.onTermination = { _ in sub.cancel() }   // teardown → Rust stop
+    }
+}
+
+// The feature collects it with plain Swift concurrency:
+for try await price in priceStream(symbol: "BTC") { render(price) }
+```
+
+### Kotlin: wrap the same callback in `callbackFlow`
+
+Kotlin gets the identical generated `PriceObserver` interface and adapts it with
+`callbackFlow`, whose `awaitClose` plays the role Swift's `onTermination` does.
+The result is a real `Flow` the ViewModel collects with `stateIn` — the same
+shape KMP gave for free, now built once here.
+
+```kotlin
+fun priceFlow(symbol: String): Flow<AssetPrice> = callbackFlow {
+    val observer = object : PriceObserver {
+        override fun onNext(price: AssetPrice) { trySend(price) }   // native data class
+        override fun onError(message: String) { close(CoreException(message)) }
+        override fun onComplete() { close() }
+    }
+    val sub = observePrice(symbol, observer)
+    awaitClose { sub.cancel() }        // collector cancels → Rust stop
+}
+
+// The ViewModel collects it exactly like the KMP version:
+val state = priceFlow("BTC")
+    .map { render(it) }
+    .stateIn(viewModelScope, WhileSubscribed(), Loading)
+```
+
+### What this costs versus what KMP charged
+
+Line this up against the KMP bridge and the difference is the *unit of work*.
+
+| Concern | KMP bridge (F2) | Rust callback adapter |
+|---|---|---|
+| **Written how often** | Per domain, on iOS | Once per stream *shape*, both platforms |
+| **Type mapping inside** | Full F3 re-map per value | None — values are generated native types |
+| **Cancellation** | Owned `Task` + `continuation.finish()` | `onTermination` / `awaitClose` → `cancel()` |
+| **Kotlin cost** | Zero (uses the Flow directly) | Small — same adapter as iOS |
+
 ## Verdict
 
 The KMP bridge layer is a repair crew for damage done by Objective-C export.
